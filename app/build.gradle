@@ -1,0 +1,100 @@
+import dependencies.AndroidDependencies
+import dependencies.DevelopmentDependencies
+import dependencies.TestDependencies
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'androidx.navigation.safeargs'
+    id 'com.google.devtools.ksp' version "$google_ksp_version"
+}
+apply plugin: 'kotlin-kapt'
+apply from: '../config/detekt/detekt.gradle'
+
+android {
+    namespace 'com.marcelo.marvelheroes'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.marcelo.marvelheroes"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    applicationVariants.configureEach { variant ->
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation AndroidDependencies.androidx_core
+    implementation AndroidDependencies.androidx_appcompat
+    implementation AndroidDependencies.androidx_constraint_layout
+    implementation AndroidDependencies.android_material_design
+
+    implementation DevelopmentDependencies.koin
+    implementation DevelopmentDependencies.koin_annotations
+    ksp DevelopmentDependencies.koin_compiler
+    api(platform(DevelopmentDependencies.ok_http_bom))
+    implementation DevelopmentDependencies.ok_http
+    implementation DevelopmentDependencies.ok_http_interceptor
+    implementation DevelopmentDependencies.retrofit
+    implementation DevelopmentDependencies.retrofit_converter_gson
+    implementation DevelopmentDependencies.gson
+    implementation DevelopmentDependencies.paging_3
+    implementation DevelopmentDependencies.coroutines
+    implementation DevelopmentDependencies.coroutines_core
+    implementation DevelopmentDependencies.glide
+    kapt DevelopmentDependencies.glide_compiler
+    implementation DevelopmentDependencies.shimmer
+    implementation DevelopmentDependencies.room_ktx
+    implementation DevelopmentDependencies.room_runtime
+    kapt DevelopmentDependencies.room_compiler
+    implementation DevelopmentDependencies.datastore_preferences
+    implementation DevelopmentDependencies.navigation_fragment
+    implementation DevelopmentDependencies.navigation_ui
+    implementation DevelopmentDependencies.lifecycle_view_model
+    implementation DevelopmentDependencies.lifecycle_live_data
+    implementation DevelopmentDependencies.lifecycle_runtime
+
+    testImplementation TestDependencies.junit
+    androidTestImplementation TestDependencies.androidx_junit
+    androidTestImplementation TestDependencies.androidx_espresso
+    androidTestImplementation TestDependencies.androidx_espresso_core
+    androidTestImplementation TestDependencies.androidx_test_runner
+    androidTestImplementation TestDependencies.androidx_test_orchestrator
+    androidTestImplementation TestDependencies.ok_http_mock_test
+    androidTestImplementation TestDependencies.coroutines_test
+    androidTestImplementation TestDependencies.koin_test
+    androidTestImplementation TestDependencies.koin_test_junit
+}
