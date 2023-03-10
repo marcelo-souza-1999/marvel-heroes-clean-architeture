@@ -9,6 +9,6 @@
     <fragment
         android:id="@+id/heroesFragment"
         android:name="com.marcelo.marvelheroes.presentation.ui.fragments.heroes.HeroesFragment"
-        android:label="Heroes"
+        android:label="@string/title_heroes_fragment"
         tools:layout="@layout/fragment_heroes" />
 </navigation>

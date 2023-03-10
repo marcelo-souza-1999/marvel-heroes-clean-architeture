@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.marcelo.marvelheroes.R
-
 class FavoritesFragment : Fragment() {
 
     override fun onCreateView(

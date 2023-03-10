@@ -9,6 +9,6 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.marcelo.marvelheroes.presentation.ui.fragments.favorites.FavoritesFragment"
-        android:label="Favorites"
+        android:label="@string/title_favorites_fragment"
         tools:layout="@layout/fragment_favorites" />
 </navigation>
