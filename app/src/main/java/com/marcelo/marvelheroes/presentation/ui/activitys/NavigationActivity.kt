@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.databinding.ActivityNavigationBinding.inflate
-
 class NavigationActivity : AppCompatActivity() {
 
     private val binding by lazy { inflate(layoutInflater).apply { setContentView(root) } }
@@ -24,6 +24,7 @@ class NavigationActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostContainer) as NavHostFragment
 
         navController = navHostFragment.navController
+        binding.bottomNavigation.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(
             setOf()
         )
