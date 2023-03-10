@@ -48,11 +48,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
+    kotlinOptions{
         jvmTarget = '1.8'
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
-    dataBinding {
-        enabled = true
+    buildFeatures{
+        viewBinding true
     }
 }
 
@@ -65,24 +66,34 @@ dependencies {
     implementation DevelopmentDependencies.koin
     implementation DevelopmentDependencies.koin_annotations
     ksp DevelopmentDependencies.koin_compiler
+
     api(platform(DevelopmentDependencies.ok_http_bom))
     implementation DevelopmentDependencies.ok_http
     implementation DevelopmentDependencies.ok_http_interceptor
+
     implementation DevelopmentDependencies.retrofit
     implementation DevelopmentDependencies.retrofit_converter_gson
     implementation DevelopmentDependencies.gson
+
     implementation DevelopmentDependencies.paging_3
+
     implementation DevelopmentDependencies.coroutines
     implementation DevelopmentDependencies.coroutines_core
+
     implementation DevelopmentDependencies.glide
     kapt DevelopmentDependencies.glide_compiler
+
     implementation DevelopmentDependencies.shimmer
+
     implementation DevelopmentDependencies.room_ktx
     implementation DevelopmentDependencies.room_runtime
     kapt DevelopmentDependencies.room_compiler
+
     implementation DevelopmentDependencies.datastore_preferences
+
     implementation DevelopmentDependencies.navigation_fragment
     implementation DevelopmentDependencies.navigation_ui
+
     implementation DevelopmentDependencies.lifecycle_view_model
     implementation DevelopmentDependencies.lifecycle_live_data
     implementation DevelopmentDependencies.lifecycle_runtime
