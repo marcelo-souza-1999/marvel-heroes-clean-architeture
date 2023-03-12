@@ -8,7 +8,7 @@ object Versions {
 
     const val kotlin = "1.8.0"
     const val detekt = "1.22.0"
-    const val google_ksp = "1.8.0-1.0.8"
+    const val google_ksp = "1.8.0-1.0.9"
     const val koin = "3.3.2"
     const val koin_annotations = "1.1.1"
     const val gradle = "7.4.0"
