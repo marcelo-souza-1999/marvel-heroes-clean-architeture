@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "999423885278",
+    "project_id": "marvel-clean-architeture",
+    "storage_bucket": "marvel-clean-architeture.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999423885278:android:04fa177e666948c955e74f",
+        "android_client_info": {
+          "package_name": "com.marcelo.marvelheroes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999423885278-bj818esifu01i79n74j3c27ttbo25fml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAohpNOnoBXY32dKmO-ZTyniGZ7tLw0Gg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999423885278-bj818esifu01i79n74j3c27ttbo25fml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999423885278:android:407a84f2ad6cfa8155e74f",
+        "android_client_info": {
+          "package_name": "com.marcelo.marvelheroes.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999423885278-bj818esifu01i79n74j3c27ttbo25fml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAohpNOnoBXY32dKmO-ZTyniGZ7tLw0Gg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999423885278-bj818esifu01i79n74j3c27ttbo25fml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999423885278:android:c61389d815207a9155e74f",
+        "android_client_info": {
+          "package_name": "com.marcelo.marvelheroes.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999423885278-bj818esifu01i79n74j3c27ttbo25fml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAohpNOnoBXY32dKmO-ZTyniGZ7tLw0Gg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999423885278-bj818esifu01i79n74j3c27ttbo25fml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

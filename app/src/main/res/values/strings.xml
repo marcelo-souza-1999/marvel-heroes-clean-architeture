@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Marvel Heroes</string>
+
+    <string name="app_menu_heroes">Heroes</string>
+    <string name="app_menu_favorites">Favorites</string>
+    <string name="app_menu_about">About</string>
+
+    <string name="title_heroes_fragment">Heroes</string>
+    <string name="title_favorites_fragment">Favorites</string>
+    <string name="title_about_fragment">About</string>
+
+    <string name="tools_sample_name_heroes">Scarlet Witch</string>
+
+    <string name="error_loading_heroes">Houve um erro ao tentar carregar os Heróis!</string>
+    <string name="try_again_loading">Tente novamente</string>
+    <string name="error_loading_page_heroes">Houve um erro ao tentar carregar heróis da proxima página. Tente novamente</string>
+</resources>
