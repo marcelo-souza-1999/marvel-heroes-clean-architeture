@@ -15,7 +15,7 @@ object Versions {
     const val coroutines = "1.6.4"
     const val navigation = "2.4.1"
     const val google_services = "4.3.15"
-    const val firebase_bom = "31.3.0"
+    const val firebase_bom = "29.0.1"
     const val lifecycle = "2.4.0"
     const val room = "2.4.2"
     const val paging3 = "3.1.0"
