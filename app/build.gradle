@@ -1,6 +1,6 @@
 import dependencies.AndroidDependencies
-import dependencies.FirebaseDependencies
 import dependencies.DevelopmentDependencies
+import dependencies.FirebaseDependencies
 import dependencies.TestDependencies
 
 plugins {
@@ -140,12 +140,17 @@ dependencies {
     testImplementation TestDependencies.mockito_kotlin
     testImplementation TestDependencies.androidx_junit
     testImplementation TestDependencies.androidx_core_testing
-    testImplementation TestDependencies.androidx_espresso
-    testImplementation TestDependencies.androidx_test_runner
-    testImplementation TestDependencies.androidx_test_orchestrator
-    testImplementation TestDependencies.ok_http_mock_test
     testImplementation TestDependencies.coroutines_test
     testImplementation TestDependencies.koin_test
-    testImplementation TestDependencies.koin_test_junit
-    testImplementation TestDependencies.androidx_espresso_core
+
+    androidTestImplementation TestDependencies.koin_test
+    androidTestImplementation TestDependencies.koin_test_junit
+    androidTestImplementation TestDependencies.junit
+    androidTestImplementation TestDependencies.androidx_core_testing
+    androidTestImplementation TestDependencies.androidx_test_runner
+    androidTestImplementation TestDependencies.androidx_espresso
+    androidTestImplementation TestDependencies.androidx_espresso_core
+    androidTestImplementation TestDependencies.ok_http_mock_test
+    androidTestUtil TestDependencies.androidx_test_orchestrator
+    debugImplementation TestDependencies.fragment_testing
 }
