@@ -43,9 +43,14 @@ android {
         archivesBaseName = "Marvel Heroes"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         buildConfigField "String", "PUBLIC_KEY", apikeyProperties['PUBLIC_KEY']
         buildConfigField "String", "PRIVATE_KEY", apikeyProperties['PRIVATE_KEY']
         buildConfigField "String", "BASE_URL_API", apikeyProperties['BASE_URL_API']
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     sourceSets {
@@ -148,7 +153,7 @@ dependencies {
     androidTestImplementation TestDependencies.junit
     androidTestImplementation TestDependencies.androidx_core_testing
     androidTestImplementation TestDependencies.androidx_test_runner
-    androidTestImplementation TestDependencies.androidx_espresso
+    androidTestImplementation TestDependencies.androidx_espresso_contrib
     androidTestImplementation TestDependencies.androidx_espresso_core
     androidTestImplementation TestDependencies.ok_http_mock_test
     androidTestUtil TestDependencies.androidx_test_orchestrator

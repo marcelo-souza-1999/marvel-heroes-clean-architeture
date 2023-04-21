@@ -7,7 +7,7 @@ object TestDependencies {
     const val mockito_kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockito_kotlin}"
     const val androidx_junit = "androidx.test.ext:junit:${Versions.androidx_junit}"
     const val androidx_core_testing = "androidx.arch.core:core-testing:${Versions.androidx_core_testing}"
-    const val androidx_espresso = "androidx.test.espresso:espresso-contrib:${Versions.androidx_espresso}"
+    const val androidx_espresso_contrib = "androidx.test.espresso:espresso-contrib:${Versions.androidx_espresso}"
     const val androidx_espresso_core = "androidx.test.espresso:espresso-core:${Versions.androidx_espresso_core}"
     const val fragment_testing = "androidx.fragment:fragment-testing:${Versions.fragment_testing}"
     const val androidx_test_runner = "androidx.test:runner:${Versions.androidx_test_runner}"
