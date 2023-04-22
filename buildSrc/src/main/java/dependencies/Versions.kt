@@ -33,6 +33,7 @@ object Versions {
     const val androidx_core_testing = "2.1.0"
     const val androidx_espresso = "3.4.0"
     const val androidx_espresso_core = "3.4.0"
+    const val fragment_testing = "1.5.5"
     const val androidx_test_runner = "1.4.0"
     const val androidx_test_orchestrator = "1.4.1"
     const val test_mock = "4.9.3"
