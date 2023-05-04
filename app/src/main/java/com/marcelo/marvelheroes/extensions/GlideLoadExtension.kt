@@ -6,7 +6,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.marcelo.marvelheroes.R
 
-fun ImageView.loadImage(url: String?) {
+fun ImageView.loadImage(url: String) {
     Glide.with(this)
         .load(url)
         .error(R.drawable.ic_img_loading_error)

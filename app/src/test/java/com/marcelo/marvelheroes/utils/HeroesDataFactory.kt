@@ -2,12 +2,8 @@ package com.marcelo.marvelheroes.utils
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.marcelo.marvelheroes.data.remote.model.DataContainerHeroesResponse
-import com.marcelo.marvelheroes.data.remote.model.DataContainerResponse
-import com.marcelo.marvelheroes.data.remote.model.HeroesResponse
-import com.marcelo.marvelheroes.data.remote.model.ThumbnailResponse
+import com.marcelo.marvelheroes.domain.model.HeroesPagingViewData
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
-import com.marcelo.marvelheroes.extensions.emptyString
 
 val getHeroesFactory = HeroesViewData(
     name = "Scarlet Witch",
@@ -27,20 +23,13 @@ val getPagingSourceFactory = object : PagingSource<Int, HeroesViewData>() {
     }
 }
 
-val getDataContainerResponseFactory = DataContainerResponse(
-    copyright = emptyString(),
-    dataContainerHeroes = DataContainerHeroesResponse(
-        offset = 0,
-        total = 1,
-        results = listOf(
-            HeroesResponse(
-                id = emptyString(),
-                name = "Scarlet Witch",
-                thumbnail = ThumbnailResponse(
-                    path = "http://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b",
-                    extension = "jpg"
-                )
-            )
+val getHeroesPagingViewData = HeroesPagingViewData(
+    offset = 0,
+    total = 1,
+    heroesList = listOf(
+        HeroesViewData(
+            name = "Scarlet Witch",
+            imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg"
         )
     )
 )

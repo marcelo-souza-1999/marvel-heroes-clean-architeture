@@ -6,7 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl.Companion.GetHeroesParams
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesGetHeroesUseCaseImpl.Companion.GetHeroesParams
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel

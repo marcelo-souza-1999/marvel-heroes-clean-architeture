@@ -1,7 +1,7 @@
 package com.marcelo.marvelheroes.di.modules
 
 import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesGetHeroesUseCaseImpl
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
@@ -20,7 +20,7 @@ class UseCaseModuleTest : KoinTest {
     private val getHeroesUseCase: GetHeroesUseCase by inject()
 
     private val setupModule = module {
-        single<GetHeroesUseCase> { GetHeroesUseCaseImpl(mockHeroesRepository) }
+        single<GetHeroesUseCase> { GetHeroesGetHeroesUseCaseImpl(mockHeroesRepository) }
     }
 
     @Before
@@ -35,7 +35,7 @@ class UseCaseModuleTest : KoinTest {
 
     @Test
     fun `test provideGetHeroesUseCase`() {
-        val expected = GetHeroesUseCaseImpl(mockHeroesRepository)
+        val expected = GetHeroesGetHeroesUseCaseImpl(mockHeroesRepository)
 
         val actual = getHeroesUseCase
 

@@ -2,7 +2,7 @@ package com.marcelo.marvelheroes.domain.usecases
 
 import androidx.paging.PagingConfig
 import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl.Companion.GetHeroesParams
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesGetHeroesUseCaseImpl.Companion.GetHeroesParams
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.PAGING_SIZE
@@ -33,7 +33,7 @@ class GetHeroesUseCaseImplTest {
     @Before
     fun setup() {
         repository = mock()
-        getHeroesUseCase = GetHeroesUseCaseImpl(
+        getHeroesUseCase = GetHeroesGetHeroesUseCaseImpl(
             heroesRepository = repository
         )
     }
