@@ -7,5 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class DetailsHeroesArgViewData(
-    val name: String, val imageUrl: String
+    val heroeId: Int,
+    val name: String,
+    val imageUrl: String
 ) : Parcelable

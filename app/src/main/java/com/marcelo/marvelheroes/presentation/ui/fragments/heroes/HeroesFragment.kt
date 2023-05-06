@@ -103,8 +103,9 @@ class HeroesFragment : Fragment() {
         val directions = HeroesFragmentDirections.actionOpenDetailsFragment(
             heroesData.name,
             DetailsHeroesArgViewData(
-                heroesData.name,
-                heroesData.imageUrl
+                heroeId = heroesData.id,
+                name = heroesData.name,
+                imageUrl = heroesData.imageUrl
             )
         )
 

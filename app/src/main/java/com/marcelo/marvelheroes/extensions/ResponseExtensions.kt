@@ -9,6 +9,7 @@ private const val HTTP = "http"
 private const val HTTPS = "https"
 
 fun HeroesResponse.toHeroesViewData() = HeroesViewData(
+    id = id,
     name = name,
     imageUrl = "${thumbnail.path}.${thumbnail.extension}".replace(HTTP, HTTPS)
 )

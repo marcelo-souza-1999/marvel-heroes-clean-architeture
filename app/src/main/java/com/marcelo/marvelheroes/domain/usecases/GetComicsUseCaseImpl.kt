@@ -13,7 +13,6 @@ class GetComicsUseCaseImpl(
     private val repository: HeroesRepository
 ) : BaseUseCase<GetComicsParams, List<ComicsViewData>>(), GetComicsUseCase {
 
-
     override suspend fun runUseCase(params: GetComicsParams): ResultStatus<List<ComicsViewData>> {
         val comics = repository.getComics(params.heroeId)
         return ResultStatus.Success(comics)
