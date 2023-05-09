@@ -9,6 +9,7 @@ import com.marcelo.marvelheroes.R
 fun ImageView.loadImage(url: String) {
     Glide.with(this)
         .load(url)
+        .placeholder(R.drawable.ic_loading)
         .error(R.drawable.ic_img_loading_error)
         .transition(DrawableTransitionOptions.withCrossFade())
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

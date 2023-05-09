@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.marcelo.marvelheroes.databinding.FragmentDetailsBinding
 import com.marcelo.marvelheroes.databinding.FragmentDetailsBinding.inflate
+import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.extensions.loadImage
+import com.marcelo.marvelheroes.presentation.adapters.DetailParentAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel
 import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.DetailsViewModelState.Error
 import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.DetailsViewModelState.Loading
@@ -71,10 +74,16 @@ class DetailsFragment : Fragment() {
                     Log.d(DetailsFragment::class.simpleName, "Error")
                 }
 
-                is Success -> {
-                    Log.d(DetailsFragment::class.simpleName, "Sucesso: ${state.comics}")
-                }
+                is Success -> handleSuccessState(state.data)
             }
         }
     }
+
+    private fun handleSuccessState(data: List<DetailParentViewData>) =
+        with(binding.rvParentDetails) {
+            setHasFixedSize(true)
+            val layoutManager = LinearLayoutManager(requireContext())
+            this.layoutManager = layoutManager
+            adapter = DetailParentAdapter(data)
+        }
 }

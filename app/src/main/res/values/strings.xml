@@ -15,4 +15,7 @@
     <string name="error_loading_heroes">Houve um erro ao tentar carregar os Heróis!</string>
     <string name="try_again_loading">Tente novamente</string>
     <string name="error_loading_page_heroes">Houve um erro ao tentar carregar heróis da proxima página. Tente novamente</string>
+
+    <string name="details_comics_category">Comics</string>
+    <string name="details_events_category">Events</string>
 </resources>
