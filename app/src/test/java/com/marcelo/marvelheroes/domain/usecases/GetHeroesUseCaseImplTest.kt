@@ -6,7 +6,7 @@ import com.marcelo.marvelheroes.domain.usecases.GetHeroesGetHeroesUseCaseImpl.Co
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.PAGING_SIZE
-import com.marcelo.marvelheroes.utils.SetupCoroutinesTest
+import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getPagingSourceFactory
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -24,7 +24,7 @@ import kotlin.test.assertNotNull
 class GetHeroesUseCaseImplTest {
 
     @get:Rule
-    var setupCoroutineRule = SetupCoroutinesTest()
+    var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var repository: HeroesRepository
 

@@ -2,6 +2,7 @@ package com.marcelo.marvelheroes.data.remote.api
 
 import com.marcelo.marvelheroes.data.remote.model.ComicsResponse
 import com.marcelo.marvelheroes.data.remote.model.DataContainerResponse
+import com.marcelo.marvelheroes.data.remote.model.EventsResponse
 import com.marcelo.marvelheroes.data.remote.model.HeroesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,9 +22,16 @@ interface MarvelApi {
         characterId: Int
     ): DataContainerResponse<ComicsResponse>
 
+    @GET(GET_EVENTS)
+    suspend fun getEvents(
+        @Path(GET_HEROES_ID)
+        characterId: Int
+    ): DataContainerResponse<EventsResponse>
+
     private companion object {
         const val GET_HEROES_ID = "characterId"
         const val GET_HEROES = "characters"
         const val GET_COMICS = "characters/{characterId}/comics"
+        const val GET_EVENTS = "characters/{characterId}/events"
     }
 }

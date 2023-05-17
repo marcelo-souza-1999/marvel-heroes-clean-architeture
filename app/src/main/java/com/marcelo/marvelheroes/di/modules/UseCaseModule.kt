@@ -1,8 +1,8 @@
 package com.marcelo.marvelheroes.di.modules
 
-import com.marcelo.marvelheroes.domain.usecases.GetComicsUseCaseImpl
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl
 import com.marcelo.marvelheroes.domain.usecases.GetHeroesGetHeroesUseCaseImpl
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsUseCase
+import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
@@ -16,7 +16,7 @@ class UseCaseModule {
     }
 
     @Single
-    fun provideGetComicsUseCase(getComicsUseCaseImpl: GetComicsUseCaseImpl): GetComicsUseCase {
-        return getComicsUseCaseImpl
+    fun provideGetComicsUseCase(getComicsEventsUseCaseImpl: GetComicsEventsEventsUseCaseImpl): GetComicsEventsUseCase {
+        return getComicsEventsUseCaseImpl
     }
 }

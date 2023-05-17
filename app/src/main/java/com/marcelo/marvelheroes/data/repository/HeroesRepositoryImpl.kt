@@ -12,5 +12,5 @@ class HeroesRepositoryImpl(
 
     override fun getHeroes(query: String) = HeroesPagingSource(remoteDataSource, query)
     override suspend fun getComics(heroeId: Int) = remoteDataSource.fetchComics(heroeId)
-
+    override suspend fun getEvents(heroeId: Int) = remoteDataSource.fetchEvents(heroeId)
 }

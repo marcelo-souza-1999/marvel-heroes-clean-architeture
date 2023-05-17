@@ -6,7 +6,7 @@ import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.ONE
 import com.marcelo.marvelheroes.utils.PAGING_SIZE
-import com.marcelo.marvelheroes.utils.SetupCoroutinesTest
+import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getHeroesFactory
 import com.marcelo.marvelheroes.utils.getHeroesPagingViewData
 import com.nhaarman.mockitokotlin2.any
@@ -23,7 +23,7 @@ import org.junit.Test
 class HeroesPagingSourceTest {
 
     @get:Rule
-    var setupCoroutineRule = SetupCoroutinesTest()
+    var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var heroesPagingSource: HeroesPagingSource
 

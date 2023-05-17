@@ -6,8 +6,9 @@ import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.domain.model.ComicsViewData
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
-import com.marcelo.marvelheroes.domain.usecases.GetComicsUseCaseImpl.Companion.GetComicsParams
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsUseCase
+import com.marcelo.marvelheroes.domain.model.EventsViewData
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsParams
+import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.states.ResultStatus
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Error
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Loading
@@ -22,40 +23,51 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class DetailsViewModel(
-    private val getComicsUseCase: GetComicsUseCase
+    private val getComicsEventsUseCase: GetComicsEventsUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow<DetailsViewModelState>(DetailsViewModelState.Loading)
     val viewState = _viewState.asStateFlow()
 
     fun getComics(heroeId: Int) = viewModelScope.launch {
-        getComicsUseCase(GetComicsParams(heroeId))
+        getComicsEventsUseCase(GetComicsParams(heroeId))
             .observeStatus()
     }
 
-    private fun Flow<ResultStatus<List<ComicsViewData>>>.observeStatus() =
+    private fun Flow<ResultStatus<Pair<List<ComicsViewData>, List<EventsViewData>>>>.observeStatus() =
         onEach { status ->
             _viewState.value = when (status) {
                 is Loading -> DetailsViewModelState.Loading
                 is Error -> DetailsViewModelState.Error
                 is Success -> {
-                    val detailChildList = createDetailChildList(status.data)
-                    val detailParentList = createDetailParentList(detailChildList)
+                    val detailParentList = mutableListOf<DetailParentViewData>()
+
+                    status.data.first.map { comics ->
+                        DetailChildViewData(comics.id, comics.imageUrl)
+                    }.takeIf { it.isNotEmpty() }?.let {
+                        detailParentList.add(
+                            DetailParentViewData(
+                                categoriesResId = R.string.details_comics_category,
+                                detailChildList = it
+                            )
+                        )
+                    }
+
+                    status.data.second.map { events ->
+                        DetailChildViewData(events.id, events.imageUrl)
+                    }.takeIf { it.isNotEmpty() }?.let {
+                        detailParentList.add(
+                            DetailParentViewData(
+                                categoriesResId = R.string.details_events_category,
+                                detailChildList = it
+                            )
+                        )
+                    }
+
                     DetailsViewModelState.Success(detailParentList)
                 }
             }
         }.launchIn(viewModelScope)
-
-
-    private fun createDetailChildList(data: List<ComicsViewData>) =
-        data.map { DetailChildViewData(id = it.id, imageUrl = it.imageUrl) }
-
-    private fun createDetailParentList(childList: List<DetailChildViewData>) = listOf(
-        DetailParentViewData(
-            categoriesResId = R.string.details_comics_category,
-            detailChildList = childList
-        )
-    )
 
     sealed class DetailsViewModelState {
         object Loading : DetailsViewModelState()
