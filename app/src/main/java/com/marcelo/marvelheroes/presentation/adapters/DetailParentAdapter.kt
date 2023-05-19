@@ -3,7 +3,7 @@ package com.marcelo.marvelheroes.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.marcelo.marvelheroes.databinding.LayoutrItemParentDetailBinding
+import com.marcelo.marvelheroes.databinding.LayoutItemParentDetailBinding
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.presentation.adapters.DetailParentAdapter.Companion.DetailParentViewHolder
 
@@ -12,7 +12,7 @@ class DetailParentAdapter(
 ) : RecyclerView.Adapter<DetailParentViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailParentViewHolder {
-        val itemBinding = LayoutrItemParentDetailBinding.inflate(
+        val itemBinding = LayoutItemParentDetailBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
 
@@ -28,7 +28,7 @@ class DetailParentAdapter(
     companion object {
 
         class DetailParentViewHolder(
-            private val itemBinding: LayoutrItemParentDetailBinding
+            private val itemBinding: LayoutItemParentDetailBinding
         ) : RecyclerView.ViewHolder(itemBinding.root) {
 
             private lateinit var childAdapter: DetailChildAdapter

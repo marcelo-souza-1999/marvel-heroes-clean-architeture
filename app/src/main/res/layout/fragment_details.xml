@@ -6,12 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.fragments.details.DetailsFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutShimmer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageHeroe">
+
+        <include
+            android:id="@+id/includeShimmer"
+            layout="@layout/layout_view_shimmer_details" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutErrorView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_4"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageHeroe">
+
+        <include
+            android:id="@+id/includeErrorView"
+            layout="@layout/layout_view_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutErrorEmpty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/margin_4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageHeroe">
+
+        <include
+            android:id="@+id/includeErrorEmpty"
+            layout="@layout/layout_view_error_details_empty" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/imageHeroe"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_200"
         android:importantForAccessibility="no"
         android:scaleType="fitXY"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,14 +78,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:padding="@dimen/padding_16"
         android:orientation="vertical"
+        android:padding="@dimen/padding_16"
         android:scrollbars="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageHeroe"
         tools:itemCount="2"
-        tools:listitem="@layout/layoutr_item_parent_detail" />
+        tools:listitem="@layout/layout_item_parent_detail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

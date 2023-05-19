@@ -19,7 +19,7 @@
 
         <include
             android:id="@+id/includeShimmer"
-            layout="@layout/layout_view_shimmer" />
+            layout="@layout/layout_view_shimmer_heroes" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
