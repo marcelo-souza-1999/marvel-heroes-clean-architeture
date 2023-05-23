@@ -7,7 +7,8 @@ import com.marcelo.marvelheroes.domain.model.HeroesViewData
 
 val getHeroesFactory = HeroesViewData(
     name = "Scarlet Witch",
-    imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg"
+    imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg",
+    id = 0
 )
 
 val getPagingSourceFactory = object : PagingSource<Int, HeroesViewData>() {
@@ -29,7 +30,8 @@ val getHeroesPagingViewData = HeroesPagingViewData(
     heroesList = listOf(
         HeroesViewData(
             name = "Scarlet Witch",
-            imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg"
+            imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg",
+            id = 0
         )
     )
 )
