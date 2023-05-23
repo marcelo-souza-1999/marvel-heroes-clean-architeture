@@ -8,10 +8,15 @@
     <string name="title_heroes_fragment">Heroes</string>
     <string name="title_favorites_fragment">Favorites</string>
     <string name="title_about_fragment">About</string>
+    <string name="title_comics">Comics</string>
 
     <string name="tools_sample_name_heroes">Scarlet Witch</string>
 
-    <string name="error_loading_heroes">Houve um erro ao tentar carregar os Heróis!</string>
+    <string name="error_loading_data">Houve um erro ao tentar carregar os dados!</string>
+    <string name="error_loading_dat_empty_data">Não foi encontrado resultados!</string>
     <string name="try_again_loading">Tente novamente</string>
     <string name="error_loading_page_heroes">Houve um erro ao tentar carregar heróis da proxima página. Tente novamente</string>
+
+    <string name="details_comics_category">Comics</string>
+    <string name="details_events_category">Events</string>
 </resources>

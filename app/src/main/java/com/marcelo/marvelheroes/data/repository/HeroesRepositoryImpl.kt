@@ -8,7 +8,9 @@ import org.koin.core.annotation.Single
 @Single
 class HeroesRepositoryImpl(
     private val remoteDataSource: HeroesRemoteDataSource
-) : HeroesRepository{
+) : HeroesRepository {
 
     override fun getHeroes(query: String) = HeroesPagingSource(remoteDataSource, query)
+    override suspend fun getComics(heroeId: Int) = remoteDataSource.fetchComics(heroeId)
+    override suspend fun getEvents(heroeId: Int) = remoteDataSource.fetchEvents(heroeId)
 }
