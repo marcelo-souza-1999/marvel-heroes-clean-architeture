@@ -48,11 +48,13 @@ class HeroesViewModelTest {
     @Test
     fun `should validate the paging data object values when calling getPagingHeroes`() =
         runTest {
-            whenever(getHeroesUseCase.invoke(any())).thenReturn(
-                flowOf(
-                    pagingDataHeroes,
+
+            whenever(getHeroesUseCase.invoke(any()))
+                .thenReturn(
+                    flowOf(
+                        pagingDataHeroes,
+                    )
                 )
-            )
 
             val result = heroesViewModel.getPagingHeroes(emptyString())
 
@@ -62,6 +64,7 @@ class HeroesViewModelTest {
     @Test(expected = RuntimeException::class)
     fun `should return null when there's an error in getPagingHeroes`() =
         runTest {
+
             whenever(getHeroesUseCase.invoke(any())).thenThrow(RuntimeException())
 
             val result = heroesViewModel.getPagingHeroes(emptyString())

@@ -28,24 +28,26 @@ class GetHeroesUseCaseImplTest {
 
     private lateinit var repository: HeroesRepository
 
-    private lateinit var getHeroesUseCase: GetHeroesUseCase
+    private lateinit var useCase: GetHeroesUseCase
 
     @Before
     fun setup() {
         repository = mock()
-        getHeroesUseCase = GetHeroesGetHeroesUseCaseImpl(
-            heroesRepository = repository
+        useCase = GetHeroesGetHeroesUseCaseImpl(
+            repository = repository
         )
     }
 
     @Test
     fun `should validate flow paging data creation when invoke from use case is called`() =
         runTest {
-            whenever(repository.getHeroes(emptyString())).thenReturn(
-                getPagingSourceFactory
-            )
 
-            val result = getHeroesUseCase.invoke(
+            whenever(repository.getHeroes(emptyString()))
+                .thenReturn(
+                    getPagingSourceFactory
+                )
+
+            val result = useCase.invoke(
                 GetHeroesParams(emptyString(), PagingConfig(PAGING_SIZE))
             )
 
@@ -56,11 +58,12 @@ class GetHeroesUseCaseImplTest {
 
     @Test
     fun `should throw exception when repository fails to provide paging data source`() = runTest {
+
         val errorMsg = "Failed to get paging data source"
         whenever(repository.getHeroes(emptyString())).thenThrow(RuntimeException(errorMsg))
 
-        val result = kotlin.runCatching {
-            getHeroesUseCase.invoke(
+        val result = runCatching {
+            useCase.invoke(
                 GetHeroesParams(emptyString(), PagingConfig(PAGING_SIZE))
             ).first()
         }

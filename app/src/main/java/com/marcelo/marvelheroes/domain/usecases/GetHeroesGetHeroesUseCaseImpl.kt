@@ -13,11 +13,11 @@ import org.koin.core.annotation.Single
 
 @Single
 class GetHeroesGetHeroesUseCaseImpl(
-    private val heroesRepository: HeroesRepository
+    private val repository: HeroesRepository
 ) : PagingUseCase<GetHeroesParams, HeroesViewData>(), GetHeroesUseCase {
 
     override fun createFlowObservable(params: GetHeroesParams): Flow<PagingData<HeroesViewData>> {
-        val heroesPagingSource = heroesRepository.getHeroes(params.query)
+        val heroesPagingSource = repository.getHeroes(params.query)
         return Pager(config = params.pagingConfig) {
             heroesPagingSource
         }.flow

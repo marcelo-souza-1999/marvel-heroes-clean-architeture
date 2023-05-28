@@ -2,12 +2,11 @@ package com.marcelo.marvelheroes.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.domain.model.ComicsViewData
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.domain.model.EventsViewData
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsParams
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsEventsParams
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.states.ResultStatus
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Error
@@ -29,51 +28,66 @@ class DetailsViewModel(
     private val _viewState = MutableStateFlow<DetailsViewModelState>(DetailsViewModelState.Loading)
     val viewState = _viewState.asStateFlow()
 
-    fun getComics(heroeId: Int) = viewModelScope.launch {
-        getComicsEventsUseCase(GetComicsParams(heroeId))
+    fun getHeroesDetails(heroeId: Int) = viewModelScope.launch {
+        getComicsEventsUseCase
+            .invoke(GetComicsEventsParams(heroeId))
             .observeStatus()
     }
 
     private fun Flow<ResultStatus<Pair<List<ComicsViewData>, List<EventsViewData>>>>.observeStatus() =
         onEach { status ->
-            _viewState.value = when (status) {
-                is Loading -> DetailsViewModelState.Loading
-                is Error -> DetailsViewModelState.Error
+            val detailParentList = mutableListOf<DetailParentViewData>()
+
+            when (status) {
+                is Loading -> _viewState.value = DetailsViewModelState.Loading
+                is Error -> _viewState.value = DetailsViewModelState.Error
                 is Success -> {
-                    val detailParentList = mutableListOf<DetailParentViewData>()
 
-                    status.data.first.map { comics ->
+                    val comicsList = status.data.first.map { comics ->
                         DetailChildViewData(comics.id, comics.imageUrl)
-                    }.takeIf { it.isNotEmpty() }?.let {
-                        detailParentList.add(
-                            DetailParentViewData(
-                                categoriesResId = R.string.details_comics_category,
-                                detailChildList = it
-                            )
-                        )
-                    }
+                    }.takeIf { it.isNotEmpty() }
 
-                    status.data.second.map { events ->
+                    val eventsList = status.data.second.map { events ->
                         DetailChildViewData(events.id, events.imageUrl)
-                    }.takeIf { it.isNotEmpty() }?.let {
+                    }.takeIf { it.isNotEmpty() }
+
+                    comicsList?.let {
                         detailParentList.add(
                             DetailParentViewData(
-                                categoriesResId = R.string.details_events_category,
+                                categories = COMICS,
                                 detailChildList = it
                             )
                         )
                     }
 
-                    DetailsViewModelState.Success(detailParentList)
+                    eventsList?.let {
+                        detailParentList.add(
+                            DetailParentViewData(
+                                categories = EVENTS,
+                                detailChildList = it
+                            )
+                        )
+                    }
+
+                    if (detailParentList.isNotEmpty()) _viewState.value =
+                        DetailsViewModelState.Success(detailParentList)
+                    else _viewState.value = DetailsViewModelState.Empty
                 }
             }
         }.launchIn(viewModelScope)
 
-    sealed class DetailsViewModelState {
-        object Loading : DetailsViewModelState()
-        data class Success(val data: List<DetailParentViewData>) :
-            DetailsViewModelState()
 
-        object Error : DetailsViewModelState()
+    companion object {
+        sealed class DetailsViewModelState {
+            object Loading : DetailsViewModelState()
+            object Empty : DetailsViewModelState()
+            data class Success(val data: List<DetailParentViewData>) :
+                DetailsViewModelState()
+
+            object Error : DetailsViewModelState()
+        }
+
+        private const val COMICS = "Comics"
+        private const val EVENTS = "Events"
     }
 }

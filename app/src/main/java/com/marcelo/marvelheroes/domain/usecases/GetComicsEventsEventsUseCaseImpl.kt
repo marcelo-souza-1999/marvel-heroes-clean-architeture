@@ -3,7 +3,7 @@ package com.marcelo.marvelheroes.domain.usecases
 import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
 import com.marcelo.marvelheroes.domain.model.ComicsViewData
 import com.marcelo.marvelheroes.domain.model.EventsViewData
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsParams
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsEventsParams
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.coroutines.CoroutinesDispatchers
 import com.marcelo.marvelheroes.utils.states.ResultStatus
@@ -16,11 +16,12 @@ import org.koin.core.annotation.Single
 class GetComicsEventsEventsUseCaseImpl(
     private val repository: HeroesRepository,
     private val dispatcher: CoroutinesDispatchers
-) : BaseUseCase<GetComicsParams, Pair<List<ComicsViewData>, List<EventsViewData>>>(),
+) : BaseUseCase<GetComicsEventsParams, Pair<List<ComicsViewData>, List<EventsViewData>>>(),
     GetComicsEventsUseCase {
 
-    override suspend fun runUseCase(params: GetComicsParams): ResultStatus<Pair<List<ComicsViewData>, List<EventsViewData>>> {
+    override suspend fun runUseCase(params: GetComicsEventsParams): ResultStatus<Pair<List<ComicsViewData>, List<EventsViewData>>> {
         return withContext(dispatcher.io()) {
+
             val comicsAsync = async { repository.getComics(params.heroeId) }
             val eventsAsync = async { repository.getEvents(params.heroeId) }
 
@@ -33,6 +34,6 @@ class GetComicsEventsEventsUseCaseImpl(
     }
 
     companion object {
-        data class GetComicsParams(val heroeId: Int)
+        data class GetComicsEventsParams(val heroeId: Int)
     }
 }

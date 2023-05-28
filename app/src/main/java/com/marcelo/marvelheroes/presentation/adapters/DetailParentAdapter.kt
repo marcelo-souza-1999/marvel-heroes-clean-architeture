@@ -35,7 +35,7 @@ class DetailParentAdapter(
 
             fun bind(detailParentData: DetailParentViewData) = with(itemBinding) {
 
-                txtTitleCategory.text = itemView.context.getString(detailParentData.categoriesResId)
+                txtTitleCategory.text = detailParentData.categories
                 childAdapter = DetailChildAdapter(detailParentData.detailChildList)
                 rvChildDetails.apply {
                     setHasFixedSize(true)
