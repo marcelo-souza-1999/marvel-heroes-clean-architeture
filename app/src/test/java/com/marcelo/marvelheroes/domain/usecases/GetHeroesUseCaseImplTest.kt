@@ -2,11 +2,11 @@ package com.marcelo.marvelheroes.domain.usecases
 
 import androidx.paging.PagingConfig
 import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl.Companion.GetHeroesParams
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesGetHeroesUseCaseImpl.Companion.GetHeroesParams
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.PAGING_SIZE
-import com.marcelo.marvelheroes.utils.SetupCoroutinesTest
+import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getPagingSourceFactory
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -24,28 +24,30 @@ import kotlin.test.assertNotNull
 class GetHeroesUseCaseImplTest {
 
     @get:Rule
-    var setupCoroutineRule = SetupCoroutinesTest()
+    var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var repository: HeroesRepository
 
-    private lateinit var getHeroesUseCase: GetHeroesUseCase
+    private lateinit var useCase: GetHeroesUseCase
 
     @Before
     fun setup() {
         repository = mock()
-        getHeroesUseCase = GetHeroesUseCaseImpl(
-            heroesRepository = repository
+        useCase = GetHeroesGetHeroesUseCaseImpl(
+            repository = repository
         )
     }
 
     @Test
     fun `should validate flow paging data creation when invoke from use case is called`() =
         runTest {
-            whenever(repository.getHeroes(emptyString())).thenReturn(
-                getPagingSourceFactory
-            )
 
-            val result = getHeroesUseCase.invoke(
+            whenever(repository.getHeroes(emptyString()))
+                .thenReturn(
+                    getPagingSourceFactory
+                )
+
+            val result = useCase.invoke(
                 GetHeroesParams(emptyString(), PagingConfig(PAGING_SIZE))
             )
 
@@ -56,11 +58,12 @@ class GetHeroesUseCaseImplTest {
 
     @Test
     fun `should throw exception when repository fails to provide paging data source`() = runTest {
+
         val errorMsg = "Failed to get paging data source"
         whenever(repository.getHeroes(emptyString())).thenThrow(RuntimeException(errorMsg))
 
-        val result = kotlin.runCatching {
-            getHeroesUseCase.invoke(
+        val result = runCatching {
+            useCase.invoke(
                 GetHeroesParams(emptyString(), PagingConfig(PAGING_SIZE))
             ).first()
         }

@@ -6,6 +6,8 @@ import dependencies.TestDependencies
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs'
     id 'com.google.devtools.ksp' version "$google_ksp_version"

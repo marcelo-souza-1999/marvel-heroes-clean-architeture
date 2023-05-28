@@ -13,7 +13,7 @@ object Versions {
     const val koin_annotations = "1.1.1"
     const val gradle = "7.4.0"
     const val coroutines = "1.6.4"
-    const val navigation = "2.4.1"
+    const val navigation = "2.5.2"
     const val google_services = "4.3.15"
     const val firebase_bom = "31.3.0"
     const val lifecycle = "2.4.0"

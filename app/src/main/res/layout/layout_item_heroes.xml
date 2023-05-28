@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageCharacter"
+            android:id="@+id/imageHeroe"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_170"
             android:importantForAccessibility="no"
@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageCharacter"
+            app:layout_constraintTop_toBottomOf="@+id/imageHeroe"
             tools:text="@string/tools_sample_name_heroes" />
 
 

@@ -8,11 +8,15 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding.inflate
+import com.marcelo.marvelheroes.domain.model.DetailsHeroesArgViewData
+import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.presentation.adapters.HeroesAdapter
 import com.marcelo.marvelheroes.presentation.adapters.HeroesLoadMoreAdapter
@@ -25,7 +29,7 @@ class HeroesFragment : Fragment() {
 
     private lateinit var binding: FragmentHeroesBinding
 
-    private val heroesAdapter by lazy { HeroesAdapter() }
+    private val heroesAdapter by lazy { HeroesAdapter(::onHeroClicked) }
 
     private val viewModel: HeroesViewModel by viewModel()
 
@@ -40,14 +44,13 @@ class HeroesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initHeroesAdapter()
         fetchRequestHeroesPaging()
         handleHeroesPaging()
     }
 
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
-        scrollToPosition(INITIAL_POSITION)
+        scrollToPosition(HEROES_INITIAL_POSITION)
         setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(requireContext())
         this.layoutManager = layoutManager
@@ -74,9 +77,8 @@ class HeroesFragment : Fragment() {
 
     private fun showShimmer(isVisibility: Boolean) = with(binding.includeShimmer.shimmerHeroes) {
         isVisible = isVisibility
-        if (isVisibility) {
-            startShimmer()
-        } else {
+        if (isVisibility) startShimmer()
+        else {
             stopShimmer()
             binding.layoutShimmer.isVisible = false
             binding.rvHeroes.isGone = false
@@ -88,11 +90,30 @@ class HeroesFragment : Fragment() {
             layoutShimmer.isVisible = false
             layoutError.isVisible = true
             binding.includeError.btnRetryLoading.setOnClickListener {
-                heroesAdapter.refresh()
+                heroesAdapter.retry()
+                layoutShimmer.isVisible = true
+                layoutError.isVisible = false
             }
         }
 
+    private fun onHeroClicked(heroesData: HeroesViewData, view: View) {
+        val extras = FragmentNavigatorExtras(
+            view to heroesData.name
+        )
+
+        val directions = HeroesFragmentDirections.actionOpenDetailsFragment(
+            heroesData.name,
+            DetailsHeroesArgViewData(
+                heroeId = heroesData.id,
+                name = heroesData.name,
+                imageUrl = heroesData.imageUrl
+            )
+        )
+
+        findNavController().navigate(directions, extras)
+    }
+
     companion object {
-        private const val INITIAL_POSITION = 0
+        private const val HEROES_INITIAL_POSITION = 0
     }
 }
