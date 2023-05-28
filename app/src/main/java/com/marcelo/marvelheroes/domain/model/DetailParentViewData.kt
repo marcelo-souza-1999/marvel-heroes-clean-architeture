@@ -1,9 +1,6 @@
 package com.marcelo.marvelheroes.domain.model
 
-import androidx.annotation.StringRes
-
 data class DetailParentViewData(
-    @StringRes
-    val categoriesResId: Int,
+    val categories: String,
     val detailChildList: List<DetailChildViewData>,
 )

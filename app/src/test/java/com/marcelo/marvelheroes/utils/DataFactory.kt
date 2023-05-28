@@ -2,13 +2,39 @@ package com.marcelo.marvelheroes.utils
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.marcelo.marvelheroes.domain.model.ComicsViewData
+import com.marcelo.marvelheroes.domain.model.EventsViewData
 import com.marcelo.marvelheroes.domain.model.HeroesPagingViewData
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 
 val getHeroesFactory = HeroesViewData(
     name = "Scarlet Witch",
     imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg",
-    id = 0
+    id = 1009562
+)
+
+val getEventsFactoryList = listOf(
+    EventsViewData(
+        id = 1009562,
+        imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/9/40/51ca10d996b8b,jpg"
+    )
+)
+
+val getEventsFactory = EventsViewData(
+    id = 1009562,
+    imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/9/40/51ca10d996b8b,jpg"
+)
+
+val getComicsFactoryList = listOf(
+    ComicsViewData(
+        id = 1009562,
+        imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35,jpg"
+    )
+)
+
+val getComicsFactory = ComicsViewData(
+    id = 1009562,
+    imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35,jpg"
 )
 
 val getPagingSourceFactory = object : PagingSource<Int, HeroesViewData>() {
@@ -27,13 +53,7 @@ val getPagingSourceFactory = object : PagingSource<Int, HeroesViewData>() {
 val getHeroesPagingViewData = HeroesPagingViewData(
     offset = 0,
     total = 1,
-    heroesList = listOf(
-        HeroesViewData(
-            name = "Scarlet Witch",
-            imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b.jpg",
-            id = 0
-        )
-    )
+    heroesList = listOf(getHeroesFactory)
 )
 
 const val ONE = 1

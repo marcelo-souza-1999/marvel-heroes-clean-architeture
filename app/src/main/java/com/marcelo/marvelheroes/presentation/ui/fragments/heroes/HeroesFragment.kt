@@ -77,9 +77,8 @@ class HeroesFragment : Fragment() {
 
     private fun showShimmer(isVisibility: Boolean) = with(binding.includeShimmer.shimmerHeroes) {
         isVisible = isVisibility
-        if (isVisibility) {
-            startShimmer()
-        } else {
+        if (isVisibility) startShimmer()
+        else {
             stopShimmer()
             binding.layoutShimmer.isVisible = false
             binding.rvHeroes.isGone = false
@@ -91,7 +90,9 @@ class HeroesFragment : Fragment() {
             layoutShimmer.isVisible = false
             layoutError.isVisible = true
             binding.includeError.btnRetryLoading.setOnClickListener {
-                heroesAdapter.refresh()
+                heroesAdapter.retry()
+                layoutShimmer.isVisible = true
+                layoutError.isVisible = false
             }
         }
 
