@@ -14,6 +14,5 @@ abstract class BaseUseCase<in Params, out Return> {
         emit(ResultStatus.Error(throwable))
     }
 
-    @Throws(Exception::class)
     protected abstract suspend fun runUseCase(params: Params): ResultStatus<Return>
 }
