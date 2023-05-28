@@ -5,11 +5,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.presentation.adapters.viewholder.HeroesViewHolder
+import com.marcelo.marvelheroes.utils.alias.OnHeroeItemClick
 
-class HeroesAdapter : PagingDataAdapter<HeroesViewData, HeroesViewHolder>(adapter_callback) {
+class HeroesAdapter(
+    private val onItemClick: OnHeroeItemClick
+) : PagingDataAdapter<HeroesViewData, HeroesViewHolder>(adapter_callback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        HeroesViewHolder.create(parent)
+        HeroesViewHolder.create(parent, onItemClick)
 
     override fun onBindViewHolder(holder: HeroesViewHolder, position: Int) {
         getItem(position)?.let {
@@ -18,6 +21,7 @@ class HeroesAdapter : PagingDataAdapter<HeroesViewData, HeroesViewHolder>(adapte
     }
 
     companion object {
+
         private val adapter_callback = object : DiffUtil.ItemCallback<HeroesViewData>() {
             override fun areItemsTheSame(
                 oldItem: HeroesViewData,

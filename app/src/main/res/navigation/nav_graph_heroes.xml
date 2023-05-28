@@ -10,5 +10,23 @@
         android:id="@+id/heroesFragment"
         android:name="com.marcelo.marvelheroes.presentation.ui.fragments.heroes.HeroesFragment"
         android:label="@string/title_heroes_fragment"
-        tools:layout="@layout/fragment_heroes" />
+        tools:layout="@layout/fragment_heroes">
+        <action
+            android:id="@+id/action_open_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.marcelo.marvelheroes.presentation.ui.fragments.details.DetailsFragment"
+        android:label="{toolbarTitle}"
+        tools:layout="@layout/fragment_details">
+
+        <argument
+            android:name="toolbarTitle"
+            app:argType="string" />
+        <argument
+            android:name="detailsHeroesArg"
+            app:argType="com.marcelo.marvelheroes.domain.model.DetailsHeroesArgViewData" />
+    </fragment>
 </navigation>

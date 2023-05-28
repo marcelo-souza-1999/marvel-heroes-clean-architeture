@@ -6,6 +6,7 @@ import com.marcelo.marvelheroes.data.remote.interceptor.AuthorizationInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import retrofit2.Retrofit
@@ -46,10 +47,11 @@ class NetworkModule : KoinComponent {
     @Single
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory
+        converterFactory: GsonConverterFactory,
+        @Named("baseUrl") baseUrl: String
     ): MarvelApi {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL_API)
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .build()

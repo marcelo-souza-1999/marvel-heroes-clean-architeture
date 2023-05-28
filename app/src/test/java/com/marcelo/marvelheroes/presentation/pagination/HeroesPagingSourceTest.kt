@@ -4,7 +4,11 @@ import androidx.paging.PagingSource
 import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRemoteDataSource
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
-import com.marcelo.marvelheroes.utils.*
+import com.marcelo.marvelheroes.utils.ONE
+import com.marcelo.marvelheroes.utils.PAGING_SIZE
+import com.marcelo.marvelheroes.utils.SetupCoroutines
+import com.marcelo.marvelheroes.utils.getHeroesFactory
+import com.marcelo.marvelheroes.utils.getHeroesPagingViewData
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
@@ -19,7 +23,7 @@ import org.junit.Test
 class HeroesPagingSourceTest {
 
     @get:Rule
-    var setupCoroutineRule = SetupCoroutinesTest()
+    var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var heroesPagingSource: HeroesPagingSource
 
@@ -37,7 +41,7 @@ class HeroesPagingSourceTest {
     @Test
     fun `should return success first load result when load is called`() = runTest {
         whenever(remoteDataSource.fetchHeroes(any())).thenReturn(
-            getDataContainerResponseFactory
+            getHeroesPagingViewData
         )
 
         val result = heroesPagingSource.load(

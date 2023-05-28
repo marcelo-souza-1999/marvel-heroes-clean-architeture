@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRemoteDataSource
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
-import com.marcelo.marvelheroes.extensions.toHeroesViewData
 
 class HeroesPagingSource(
     private val remoteDataSource: HeroesRemoteDataSource,
@@ -24,12 +23,11 @@ class HeroesPagingSource(
 
         return try {
             val response = remoteDataSource.fetchHeroes(queries)
-
-            val requestOffSet = response.dataContainerHeroes.offset
-            val totalHeroes = response.dataContainerHeroes.total
+            val requestOffSet = response.offset
+            val totalHeroes = response.total
 
             LoadResult.Page(
-                data = response.dataContainerHeroes.results.map { it.toHeroesViewData() },
+                data = response.heroesList,
                 prevKey = null,
                 nextKey = if (requestOffSet < totalHeroes) requestOffSet + LIMIT_HEROES else null
             )
