@@ -12,14 +12,13 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding.inflate
 import com.marcelo.marvelheroes.domain.model.DetailsHeroesArgViewData
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
-import com.marcelo.marvelheroes.presentation.adapters.HeroesAdapter
-import com.marcelo.marvelheroes.presentation.adapters.HeroesLoadMoreAdapter
+import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesAdapter
+import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesLoadMoreAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.HeroesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,8 +51,6 @@ class HeroesFragment : Fragment() {
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
         scrollToPosition(HEROES_INITIAL_POSITION)
         setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(requireContext())
-        this.layoutManager = layoutManager
         adapter = heroesAdapter.withLoadStateFooter(
             footer = HeroesLoadMoreAdapter(retryLoad = heroesAdapter::retry)
         )
@@ -104,7 +101,7 @@ class HeroesFragment : Fragment() {
         val directions = HeroesFragmentDirections.actionOpenDetailsFragment(
             heroesData.name,
             DetailsHeroesArgViewData(
-                heroeId = heroesData.id,
+                heroId = heroesData.id,
                 name = heroesData.name,
                 imageUrl = heroesData.imageUrl
             )

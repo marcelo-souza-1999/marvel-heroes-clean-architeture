@@ -1,6 +1,6 @@
 package com.marcelo.marvelheroes.domain.usecases
 
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
+import com.marcelo.marvelheroes.domain.repository.HeroesRepository
 import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsEventsParams
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.SetupCoroutines

@@ -10,17 +10,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.marcelo.marvelheroes.databinding.FragmentDetailsBinding
 import com.marcelo.marvelheroes.databinding.FragmentDetailsBinding.inflate
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.extensions.loadImage
-import com.marcelo.marvelheroes.presentation.adapters.DetailParentAdapter
+import com.marcelo.marvelheroes.presentation.adapters.details.DetailParentAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Empty
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Error
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Loading
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Success
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailsFragment : Fragment() {
@@ -56,7 +51,7 @@ class DetailsFragment : Fragment() {
         setSharedElementTransitionOnEnter()
     }
 
-    private fun fetchDetailsHeroes() = viewModel.getHeroesDetails(args.detailsHeroesArg.heroeId)
+    private fun fetchDetailsHeroes() = viewModel.getHeroesDetails(args.detailsHeroesArg.heroId)
 
     private fun setSharedElementTransitionOnEnter() {
         TransitionInflater.from(requireContext())
@@ -67,50 +62,45 @@ class DetailsFragment : Fragment() {
 
     private fun handleDetailsHeroes() = lifecycleScope.launchWhenCreated {
         viewModel.viewState.collect { state ->
-            when (state) {
-                is Loading -> showShimmer(true)
-                is Error -> showError()
-                is Empty -> showEmpty()
-                is Success -> {
-                    showShimmer(false)
-                    handleSuccessState(state.data)
-                }
-            }
+            showShimmer(isLoading = state.isLoading)
+            showError(isError = state.error)
+            showEmpty(isEmpty = state.empty)
+            showSuccess(state.success)
         }
     }
 
-    private fun showShimmer(isVisibility: Boolean) =
-        with(binding.includeShimmer.shimmerDetailHeroes) {
-            isVisible = isVisibility
-            if (isVisibility) startShimmer()
-            else {
-                stopShimmer()
-                binding.layoutShimmer.isVisible = false
-                binding.rvParentDetails.isGone = false
-            }
-        }
-
-    private fun showError() = with(binding) {
-        layoutShimmer.isVisible = false
-        layoutErrorView.isVisible = true
-        includeErrorView.btnRetryLoading.setOnClickListener {
-            fetchDetailsHeroes()
+    private fun showShimmer(isLoading: Boolean) = with(binding) {
+        includeShimmer.shimmerDetailHeroes.isVisible = isLoading
+        if (isLoading) {
+            includeShimmer.shimmerDetailHeroes.startShimmer()
             layoutShimmer.isVisible = true
-            layoutErrorView.isVisible = false
+            rvParentDetails.isGone = true
+        } else {
+            includeShimmer.shimmerDetailHeroes.stopShimmer()
+            layoutShimmer.isVisible = false
+            rvParentDetails.isGone = false
         }
     }
 
-    private fun showEmpty() = with(binding) {
-        layoutShimmer.isVisible = false
-        layoutErrorView.isVisible = false
-        layoutErrorEmpty.isVisible = true
+    private fun showError(isError: Boolean) = with(binding) {
+        layoutErrorView.isVisible = isError
+        layoutErrorEmpty.isVisible = isError.not()
+        if (isError) {
+            includeErrorView.btnRetryLoading.setOnClickListener {
+                fetchDetailsHeroes()
+            }
+        }
     }
 
-    private fun handleSuccessState(data: List<DetailParentViewData>) =
+    private fun showEmpty(isEmpty: Boolean) = with(binding) {
+        layoutErrorView.isVisible = false
+        layoutErrorEmpty.isVisible = isEmpty
+    }
+
+    private fun showSuccess(data: List<DetailParentViewData>) =
         with(binding.rvParentDetails) {
+            showShimmer(isLoading = false)
             setHasFixedSize(true)
-            val layoutManager = LinearLayoutManager(requireContext())
-            this.layoutManager = layoutManager
             adapter = DetailParentAdapter(data)
         }
 }

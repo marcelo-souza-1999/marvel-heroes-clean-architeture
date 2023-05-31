@@ -1,9 +1,9 @@
 package com.marcelo.marvelheroes.data.repository
 
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRemoteDataSource
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
+import com.marcelo.marvelheroes.data.remote.datasource.HeroesRemoteDataSource
+import com.marcelo.marvelheroes.domain.repository.HeroesRepository
 import com.marcelo.marvelheroes.extensions.emptyString
-import com.marcelo.marvelheroes.presentation.pagination.HeroesPagingSource
+import com.marcelo.marvelheroes.data.remote.datasource.HeroesPagingSource
 import com.marcelo.marvelheroes.utils.getComicsFactory
 import com.marcelo.marvelheroes.utils.getComicsFactoryList
 import com.marcelo.marvelheroes.utils.getEventsFactory

@@ -1,8 +1,8 @@
 package com.marcelo.marvelheroes.di.modules
 
 import com.marcelo.marvelheroes.data.repository.HeroesRepositoryImpl
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRemoteDataSource
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
+import com.marcelo.marvelheroes.data.remote.datasource.HeroesRemoteDataSource
+import com.marcelo.marvelheroes.domain.repository.HeroesRepository
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
 import org.junit.Assert.assertEquals
