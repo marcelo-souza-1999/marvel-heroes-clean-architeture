@@ -13,10 +13,4 @@ interface HeroesRemoteDataSource {
     fun fetchComics(heroId: Int): Flow<DataContainerResponse<ComicsResponse>>
 
     fun fetchEvents(heroId: Int): Flow<DataContainerResponse<EventsResponse>>
-
-    /*suspend fun fetchHeroes(queries: Map<String, String>): DataContainerResponse<HeroesResponse>
-
-    suspend fun fetchComics(heroId: Int): DataContainerResponse<ComicsResponse>
-
-    suspend fun fetchEvents(heroId: Int): DataContainerResponse<EventsResponse>*/
 }
