@@ -37,7 +37,6 @@ class HeroesRepositoryImpl(
     * By using `flatMap`, the resulting lists are combined into a single list of `EventsViewData`.
     * If the response or results list is null, an empty list is returned.
     */
-
     override suspend fun getEvents(heroId: Int): List<DetailChildViewData> {
         val response = remoteDataSource.fetchEvents(heroId).singleOrNull()
         return response?.dataContainerHeroes?.results?.flatMap { eventsResponse ->

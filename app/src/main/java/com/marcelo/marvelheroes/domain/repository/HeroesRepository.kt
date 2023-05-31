@@ -5,6 +5,7 @@ import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 
 interface HeroesRepository {
+
     fun getHeroes(query: String): PagingSource<Int, HeroesViewData>
 
     suspend fun getComics(heroId: Int): List<DetailChildViewData>
