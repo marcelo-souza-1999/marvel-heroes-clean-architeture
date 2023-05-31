@@ -32,36 +32,4 @@ class RetrofitHeroesDataSourceImpl(private val marvelApi: MarvelApi) : HeroesRem
             emit(response)
         }
     }
-
-
-    /* override suspend fun fetchHeroes(queries: Map<String, String>) = marvelApi.getHeroes(queries)
-
-     override suspend fun fetchComics(heroId: Int) = marvelApi.getComics(heroId)
-
-     override suspend fun fetchEvents(heroId: Int) = marvelApi.getEvents(heroId)
- */
-
-
-    /*override suspend fun fetchHeroes(queries: Map<String, String>): HeroesPagingViewData {
-        val dataPaging = marvelApi.getHeroes(queries).dataContainerHeroes
-        val heroes = dataPaging.results.map {
-            it.toHeroesViewData()
-        }
-
-        return HeroesPagingViewData(
-            offset = dataPaging.offset,
-            total = dataPaging.total,
-            heroesList = heroes
-        )
-    }*/
-
-    /*override suspend fun fetchComics(heroId: Int) =
-        marvelApi.getComics(heroId).dataContainerHeroes.results.map {
-            it.toComicsViewData()
-        }
-
-    override suspend fun fetchEvents(heroId: Int): List<EventsViewData> =
-        marvelApi.getEvents(heroId).dataContainerHeroes.results.map {
-            it.toEventsViewData()
-        }*/
 }
