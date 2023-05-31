@@ -14,22 +14,19 @@ class RetrofitHeroesDataSourceImpl(private val marvelApi: MarvelApi) : HeroesRem
 
     override fun fetchHeroes(queries: Map<String, String>): Flow<DataContainerResponse<HeroesResponse>> {
         return flow {
-            val response = marvelApi.getHeroes(queries)
-            emit(response)
+            emit(marvelApi.getHeroes(queries))
         }
     }
 
     override fun fetchComics(heroId: Int): Flow<DataContainerResponse<ComicsResponse>> {
         return flow {
-            val response = marvelApi.getComics(heroId)
-            emit(response)
+            emit(marvelApi.getComics(heroId))
         }
     }
 
     override fun fetchEvents(heroId: Int): Flow<DataContainerResponse<EventsResponse>> {
         return flow {
-            val response = marvelApi.getEvents(heroId)
-            emit(response)
+            emit(marvelApi.getEvents(heroId))
         }
     }
 }

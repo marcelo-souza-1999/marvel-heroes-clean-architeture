@@ -19,8 +19,8 @@ class HeroesRepositoryImpl(
     /*
     * In this function, we are retrieving a response containing a list of comics related to a specific hero.
     * The response object may have a data container, which contains a results list.
-    * We use `flatMap` to map each item in the results list to a list of `ComicsViewData` using the `detailHeroesMapper`.
-    * By using `flatMap`, the resulting lists are combined into a single list of `ComicsViewData`.
+    * We use `flatMap` to map each item in the results list to a list of `DetailChildViewData` using the `detailHeroesMapper`.
+    * By using `flatMap`, the resulting lists are combined into a single list of `DetailChildViewData`.
     * If the response or results list is null, an empty list is returned.
     */
     override suspend fun getComics(heroId: Int): List<DetailChildViewData> {
@@ -33,8 +33,8 @@ class HeroesRepositoryImpl(
     /*
     * Similarly, in this function, we are retrieving a response containing a list of events related to a specific hero.
     * The response object may have a data container, which contains a results list.
-    * We use `flatMap` to map each item in the results list to a list of `EventsViewData` using the `detailHeroesMapper`.
-    * By using `flatMap`, the resulting lists are combined into a single list of `EventsViewData`.
+    * We use `flatMap` to map each item in the results list to a list of `DetailChildViewData` using the `detailHeroesMapper`.
+    * By using `flatMap`, the resulting lists are combined into a single list of `DetailChildViewData`.
     * If the response or results list is null, an empty list is returned.
     */
     override suspend fun getEvents(heroId: Int): List<DetailChildViewData> {
