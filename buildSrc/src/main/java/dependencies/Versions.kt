@@ -27,6 +27,7 @@ object Versions {
     const val gson = "2.8.6"
 
     const val junit = "4.13.2"
+    const val mockk = "1.13.5"
     const val mockito_core = "4.2.0"
     const val mockito_kotlin = "2.2.0"
     const val androidx_junit = "1.1.3"

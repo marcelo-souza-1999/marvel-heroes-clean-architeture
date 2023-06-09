@@ -86,7 +86,7 @@ class HeroesFragment : Fragment() {
         with(binding) {
             layoutShimmer.isVisible = false
             layoutError.isVisible = true
-            binding.includeError.btnRetryLoading.setOnClickListener {
+            includeError.btnRetryLoading.setOnClickListener {
                 heroesAdapter.retry()
                 layoutShimmer.isVisible = true
                 layoutError.isVisible = false

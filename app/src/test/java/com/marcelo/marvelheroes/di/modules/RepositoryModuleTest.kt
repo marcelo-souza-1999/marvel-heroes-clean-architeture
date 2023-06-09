@@ -1,9 +1,10 @@
 package com.marcelo.marvelheroes.di.modules
 
-import com.marcelo.marvelheroes.data.repository.HeroesRepositoryImpl
 import com.marcelo.marvelheroes.data.remote.datasource.HeroesRemoteDataSource
+import com.marcelo.marvelheroes.data.repository.HeroesRepositoryImpl
+import com.marcelo.marvelheroes.domain.mapper.DetailHeroesMapper
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
-import com.nhaarman.mockitokotlin2.mock
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -16,12 +17,21 @@ import org.koin.test.inject
 
 class RepositoryModuleTest : KoinTest {
 
-    private val mockRemoteDataSource: HeroesRemoteDataSource = mock()
+    private lateinit var mockRemoteDataSource: HeroesRemoteDataSource
+    private lateinit var mockMapper: DetailHeroesMapper
     private val heroesRepository: HeroesRepository by inject()
 
     private val setupModule = module {
-        single<HeroesRepository> { HeroesRepositoryImpl(get()) }
-        single { mock<HeroesRemoteDataSource>() }
+        mockRemoteDataSource = mockk()
+        mockMapper = mockk()
+        single<HeroesRepository> {
+            HeroesRepositoryImpl(
+                remoteDataSource = get(),
+                detailHeroesMapper = get()
+            )
+        }
+        single { mockk<HeroesRemoteDataSource>() }
+        single { mockk<DetailHeroesMapper>() }
     }
 
     @Before
@@ -37,7 +47,10 @@ class RepositoryModuleTest : KoinTest {
 
     @Test
     fun `test providesHeroesRepository`() {
-        val expected = HeroesRepositoryImpl(mockRemoteDataSource)
+        val expected = HeroesRepositoryImpl(
+            remoteDataSource = mockRemoteDataSource,
+            detailHeroesMapper = mockMapper
+        )
 
         val actual = heroesRepository
 

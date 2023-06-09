@@ -84,16 +84,12 @@ class DetailsFragment : Fragment() {
 
     private fun showError(isError: Boolean) = with(binding) {
         layoutErrorView.isVisible = isError
-        layoutErrorEmpty.isVisible = isError.not()
-        if (isError) {
-            includeErrorView.btnRetryLoading.setOnClickListener {
-                fetchDetailsHeroes()
-            }
+        includeErrorView.btnRetryLoading.setOnClickListener {
+            requireActivity().finish()
         }
     }
 
     private fun showEmpty(isEmpty: Boolean) = with(binding) {
-        layoutErrorView.isVisible = false
         layoutErrorEmpty.isVisible = isEmpty
     }
 

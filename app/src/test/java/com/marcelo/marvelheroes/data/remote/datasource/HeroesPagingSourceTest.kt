@@ -1,20 +1,24 @@
-package com.marcelo.marvelheroes.presentation.pagination
+package com.marcelo.marvelheroes.data.remote.datasource
 
 import androidx.paging.PagingSource
-import com.marcelo.marvelheroes.data.remote.datasource.HeroesRemoteDataSource
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
-import com.marcelo.marvelheroes.data.remote.datasource.HeroesPagingSource
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.ONE
 import com.marcelo.marvelheroes.utils.PAGING_SIZE
 import com.marcelo.marvelheroes.utils.SetupCoroutines
-import com.marcelo.marvelheroes.utils.getHeroesFactory
-import com.marcelo.marvelheroes.utils.getHeroesPagingViewData
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.marcelo.marvelheroes.utils.getComicsFactory
+import com.marcelo.marvelheroes.utils.getComicsFactoryFlow
+import com.marcelo.marvelheroes.utils.getComicsResponseList
+import com.marcelo.marvelheroes.utils.getEventsFactory
+import com.marcelo.marvelheroes.utils.getEventsFactoryFlow
+import com.marcelo.marvelheroes.utils.getEventsResponseList
+import com.marcelo.marvelheroes.utils.getHeroesFactoryFlow
+import com.marcelo.marvelheroes.utils.getHeroesPagingSourceFactory
+import io.mockk.coEvery
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -32,7 +36,7 @@ class HeroesPagingSourceTest {
 
     @Before
     fun setup() {
-        remoteDataSource = mock()
+        remoteDataSource = mockk()
         heroesPagingSource = HeroesPagingSource(
             remoteDataSource = remoteDataSource,
             query = emptyString()
@@ -41,9 +45,8 @@ class HeroesPagingSourceTest {
 
     @Test
     fun `should return success first load result when load is called`() = runTest {
-        whenever(remoteDataSource.fetchHeroes(any())).thenReturn(
-            getHeroesPagingViewData
-        )
+
+        coEvery { remoteDataSource.fetchHeroes(any()) } returns getHeroesFactoryFlow
 
         val result = heroesPagingSource.load(
             params = PagingSource.LoadParams.Refresh(
@@ -54,7 +57,7 @@ class HeroesPagingSourceTest {
         )
 
         val expected = listOf(
-            getHeroesFactory
+            getHeroesPagingSourceFactory
         )
 
         assertEquals(
@@ -69,10 +72,10 @@ class HeroesPagingSourceTest {
 
     @Test
     fun `should return a error load result when load is called`() = runTest {
-        val exception = RuntimeException()
-        whenever(remoteDataSource.fetchHeroes(any())).thenThrow(
-            exception
-        )
+
+        val exception = Exception()
+
+        coEvery { remoteDataSource.fetchHeroes(any()) } throws exception
 
         val result = heroesPagingSource.load(
             params = PagingSource.LoadParams.Refresh(
@@ -86,5 +89,33 @@ class HeroesPagingSourceTest {
             PagingSource.LoadResult.Error<Int, HeroesViewData>(exception),
             result
         )
+    }
+
+    @Test
+    fun `should return success result for fetchComics when load is called`() = runTest {
+
+        val heroId = getComicsFactory.id
+
+        coEvery { remoteDataSource.fetchComics(any()) } returns getComicsFactoryFlow
+
+        val result = remoteDataSource.fetchComics(heroId).single().dataContainerHeroes.results
+
+        val expected = getComicsResponseList
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `should return success result for fetchEvents when load is called`() = runTest {
+
+        val heroId = getEventsFactory.id
+
+        coEvery { remoteDataSource.fetchEvents(any()) } returns getEventsFactoryFlow
+
+        val result = remoteDataSource.fetchEvents(heroId).single().dataContainerHeroes.results
+
+        val expected = getEventsResponseList
+
+        assertEquals(expected, result)
     }
 }

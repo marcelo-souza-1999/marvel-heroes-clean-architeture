@@ -143,6 +143,7 @@ dependencies {
     implementation DevelopmentDependencies.lifecycle_runtime
 
     testImplementation TestDependencies.junit
+    testImplementation TestDependencies.mockk
     testImplementation TestDependencies.mockito_core
     testImplementation TestDependencies.mockito_kotlin
     testImplementation TestDependencies.androidx_junit
