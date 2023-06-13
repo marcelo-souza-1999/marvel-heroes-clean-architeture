@@ -3,12 +3,12 @@ package com.marcelo.marvelheroes.presentation.ui.fragments.heroes
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.runner.AndroidJUnit4
-import com.marcelo.marvelheroes.R
+import com.marcelo.marvelheroes.R.id
 import com.marcelo.marvelheroes.presentation.adapters.viewholder.HeroesViewHolder
 import com.marcelo.marvelheroes.presentation.ui.activitys.NavigationActivity
 import com.marcelo.marvelheroes.presentation.viewmodel.HeroesViewModel
@@ -52,7 +52,7 @@ class HeroesFragmentTest {
         scenario = ActivityScenario.launch(NavigationActivity::class.java)
 
         onView(
-            withId(R.id.layoutShimmer)
+            withId(id.layoutShimmerHeroes)
         ).check(
             matches(isDisplayed())
         )
@@ -65,7 +65,7 @@ class HeroesFragmentTest {
         server.enqueue(MockResponse().setResponseCode(CODE_404))
 
         onView(
-            withId(R.id.layoutError)
+            withId(id.layoutError)
         ).check(
             matches(isDisplayed())
         )
@@ -78,7 +78,7 @@ class HeroesFragmentTest {
         server.enqueue(MockResponse().setBody(FileJsonReader().readJsonFile(FILE_NAME_HEROES_JSON)))
 
         onView(
-            withId(R.id.rvHeroes)
+            withId(id.rvHeroes)
         ).check(
             matches(isDisplayed())
         )
@@ -100,10 +100,9 @@ class HeroesFragmentTest {
         }
 
         onView(
-            withId(R.id.rvHeroes)
+            withId(id.rvHeroes)
         ).perform(
-            RecyclerViewActions
-                .scrollToPosition<HeroesViewHolder>(TWENTY)
+            scrollToPosition<HeroesViewHolder>(TWENTY)
         )
 
         onView(
@@ -113,17 +112,17 @@ class HeroesFragmentTest {
         )
     }
 
-    private val testModule = module {
-        viewModel { HeroesViewModel(get()) }
-        single(named("baseUrl")) { BASE_URL }
-    }
-
     private companion object {
         const val TWENTY = 20
-        const val CODE_404 = 404
         const val PORT_8080 = 8080
+        const val CODE_404 = 404
         const val BASE_URL = "http://localhost:$PORT_8080"
         const val FILE_NAME_HEROES_JSON = "heroes_marvel.json"
         const val FILE_NAME_HEROES_PAGING_TWO_JSON = "heroes_marvel_paging_two.json"
+
+        val testModule = module {
+            viewModel { HeroesViewModel(get()) }
+            single(named("baseUrl")) { BASE_URL }
+        }
     }
 }

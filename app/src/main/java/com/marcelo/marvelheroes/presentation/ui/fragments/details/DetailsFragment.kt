@@ -44,7 +44,7 @@ class DetailsFragment : Fragment() {
 
     private fun initView() = with(binding) {
         val getArgs = args.detailsHeroesArg
-        imageHeroe.run {
+        imageHero.run {
             transitionName = getArgs.name
             loadImage(getArgs.imageUrl)
         }
@@ -69,20 +69,18 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun showShimmer(isLoading: Boolean) = with(binding) {
-        includeShimmer.shimmerDetailHeroes.isVisible = isLoading
-        if (isLoading) {
-            includeShimmer.shimmerDetailHeroes.startShimmer()
-            layoutShimmer.isVisible = true
-            rvParentDetails.isGone = true
-        } else {
-            includeShimmer.shimmerDetailHeroes.stopShimmer()
-            layoutShimmer.isVisible = false
-            rvParentDetails.isGone = false
+    private fun showShimmer(isLoading: Boolean) = with(binding.includeShimmer.shimmerDetailHeroes) {
+        isVisible = isLoading
+        if (isLoading) startShimmer()
+        else {
+            stopShimmer()
+            binding.layoutShimmerDetails.isVisible = false
+            binding.rvDetails.isGone = false
         }
     }
 
     private fun showError(isError: Boolean) = with(binding) {
+        showShimmer(false)
         layoutErrorView.isVisible = isError
         includeErrorView.btnRetryLoading.setOnClickListener {
             requireActivity().finish()
@@ -90,11 +88,11 @@ class DetailsFragment : Fragment() {
     }
 
     private fun showEmpty(isEmpty: Boolean) = with(binding) {
-        layoutErrorEmpty.isVisible = isEmpty
+        layoutEmptyView.isVisible = isEmpty
     }
 
     private fun showSuccess(data: List<DetailParentViewData>) =
-        with(binding.rvParentDetails) {
+        with(binding.rvDetails) {
             showShimmer(isLoading = false)
             setHasFixedSize(true)
             adapter = DetailParentAdapter(data)

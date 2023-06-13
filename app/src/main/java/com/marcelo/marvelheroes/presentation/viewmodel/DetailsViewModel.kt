@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -20,12 +21,13 @@ class DetailsViewModel(
     private val getComicsEventsUseCase: GetComicsEventsUseCase
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(DetailsViewState(isLoading = true))
+    private val _viewState = MutableStateFlow(DetailsViewState())
     val viewState = _viewState.asStateFlow()
 
 
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
         getComicsEventsUseCase(HeroId(heroId))
+            .onStart { _viewState.value = DetailsViewState(isLoading = true) }
             .onEach(::handleSuccess)
             .launchIn(viewModelScope)
     }
@@ -42,7 +44,7 @@ class DetailsViewModel(
 
     companion object {
         data class DetailsViewState(
-            val isLoading: Boolean = false,
+            val isLoading: Boolean = true,
             val empty: Boolean = false,
             val error: Boolean = false,
             val success: List<DetailParentViewData> = emptyList()

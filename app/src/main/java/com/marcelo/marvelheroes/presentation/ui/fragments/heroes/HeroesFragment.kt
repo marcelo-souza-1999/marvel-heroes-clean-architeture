@@ -49,7 +49,6 @@ class HeroesFragment : Fragment() {
     }
 
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
-        scrollToPosition(HEROES_INITIAL_POSITION)
         setHasFixedSize(true)
         adapter = heroesAdapter.withLoadStateFooter(
             footer = HeroesLoadMoreAdapter(retryLoad = heroesAdapter::retry)
@@ -77,18 +76,18 @@ class HeroesFragment : Fragment() {
         if (isVisibility) startShimmer()
         else {
             stopShimmer()
-            binding.layoutShimmer.isVisible = false
+            binding.layoutShimmerHeroes.isVisible = false
             binding.rvHeroes.isGone = false
         }
     }
 
     private fun showError() =
         with(binding) {
-            layoutShimmer.isVisible = false
+            layoutShimmerHeroes.isVisible = false
             layoutError.isVisible = true
             includeError.btnRetryLoading.setOnClickListener {
                 heroesAdapter.retry()
-                layoutShimmer.isVisible = true
+                layoutShimmerHeroes.isVisible = true
                 layoutError.isVisible = false
             }
         }
@@ -108,9 +107,5 @@ class HeroesFragment : Fragment() {
         )
 
         findNavController().navigate(directions, extras)
-    }
-
-    companion object {
-        private const val HEROES_INITIAL_POSITION = 0
     }
 }
