@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState.Error
@@ -21,6 +23,7 @@ import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesAdapter
 import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesLoadMoreAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.HeroesViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.paging.LoadState.NotLoading as Success
 
@@ -55,18 +58,22 @@ class HeroesFragment : Fragment() {
         )
     }
 
-    private fun fetchRequestHeroesPaging() = lifecycleScope.launchWhenCreated {
-        viewModel.getPagingHeroes(emptyString()).collect { pagingData ->
-            heroesAdapter.submitData(pagingData)
+    private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            viewModel.getPagingHeroes(emptyString()).collect { pagingData ->
+                heroesAdapter.submitData(pagingData)
+            }
         }
     }
 
-    private fun handleHeroesPaging() = lifecycleScope.launchWhenCreated {
-        heroesAdapter.loadStateFlow.collectLatest { loadState ->
-            when (loadState.refresh) {
-                is Loading -> showShimmer(true)
-                is Success -> showShimmer(false)
-                is Error -> showError()
+    private fun handleHeroesPaging() = lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            heroesAdapter.loadStateFlow.collectLatest { loadState ->
+                when (loadState.refresh) {
+                    is Loading -> showShimmer(true)
+                    is Success -> showShimmer(false)
+                    is Error -> showError()
+                }
             }
         }
     }
