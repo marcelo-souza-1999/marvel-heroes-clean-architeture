@@ -1,4 +1,4 @@
-package com.marcelo.marvelheroes.presentation.adapters
+package com.marcelo.marvelheroes.presentation.adapters.heroes
 
 import android.view.ViewGroup
 import androidx.paging.LoadState

@@ -1,11 +1,11 @@
-package com.marcelo.marvelheroes.presentation.adapters
+package com.marcelo.marvelheroes.presentation.adapters.details
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.marcelo.marvelheroes.databinding.LayoutItemParentDetailBinding
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
-import com.marcelo.marvelheroes.presentation.adapters.DetailParentAdapter.Companion.DetailParentViewHolder
+import com.marcelo.marvelheroes.presentation.adapters.details.DetailParentAdapter.Companion.DetailParentViewHolder
 
 class DetailParentAdapter(
     private val detailParentList: List<DetailParentViewData>
