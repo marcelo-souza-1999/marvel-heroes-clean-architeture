@@ -52,7 +52,7 @@ class DetailsFragmentTest {
             TOOLBAR_TITLE_ARG to heroNameDefault
         )
 
-        fragmentScenario = launchFragmentInContainer<DetailsFragment>(
+        fragmentScenario = launchFragmentInContainer(
             fragmentArgs = bundleArgs
         )
     }

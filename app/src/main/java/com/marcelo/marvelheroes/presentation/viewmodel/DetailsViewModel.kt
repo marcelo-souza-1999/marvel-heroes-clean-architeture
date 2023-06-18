@@ -24,7 +24,6 @@ class DetailsViewModel(
     private val _viewState = MutableStateFlow(DetailsViewState())
     val viewState = _viewState.asStateFlow()
 
-
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
         getComicsEventsUseCase(HeroId(heroId))
             .onStart { _viewState.value = DetailsViewState(isLoading = true) }

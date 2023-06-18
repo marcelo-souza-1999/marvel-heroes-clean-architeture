@@ -6,7 +6,5 @@ import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl.Companion.G
 import kotlinx.coroutines.flow.Flow
 
 interface GetHeroesUseCase {
-    operator fun invoke(
-        params: GetHeroesParams
-    ): Flow<PagingData<HeroesViewData>>
+    operator fun invoke(params: GetHeroesParams): Flow<PagingData<HeroesViewData>>
 }
