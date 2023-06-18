@@ -185,7 +185,7 @@ fun getApiKeyProperties(key: String): String {
         return properties.getProperty(key)
     }
 
-    throw throw FileNotFoundException()
+    throw FileNotFoundException()
 }
 
 fun getReleaseProperties(key: String): String {
