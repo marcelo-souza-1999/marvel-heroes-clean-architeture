@@ -7,21 +7,23 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding.inflate
 import com.marcelo.marvelheroes.domain.model.DetailsHeroesArgViewData
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
-import com.marcelo.marvelheroes.presentation.adapters.HeroesAdapter
-import com.marcelo.marvelheroes.presentation.adapters.HeroesLoadMoreAdapter
+import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesAdapter
+import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesLoadMoreAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.HeroesViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.paging.LoadState.NotLoading as Success
 
@@ -50,27 +52,28 @@ class HeroesFragment : Fragment() {
     }
 
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
-        scrollToPosition(HEROES_INITIAL_POSITION)
         setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(requireContext())
-        this.layoutManager = layoutManager
         adapter = heroesAdapter.withLoadStateFooter(
             footer = HeroesLoadMoreAdapter(retryLoad = heroesAdapter::retry)
         )
     }
 
-    private fun fetchRequestHeroesPaging() = lifecycleScope.launchWhenCreated {
-        viewModel.getPagingHeroes(emptyString()).collect { pagingData ->
-            heroesAdapter.submitData(pagingData)
+    private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            viewModel.getPagingHeroes(emptyString()).collect { pagingData ->
+                heroesAdapter.submitData(pagingData)
+            }
         }
     }
 
-    private fun handleHeroesPaging() = lifecycleScope.launchWhenCreated {
-        heroesAdapter.loadStateFlow.collectLatest { loadState ->
-            when (loadState.refresh) {
-                is Loading -> showShimmer(true)
-                is Success -> showShimmer(false)
-                is Error -> showError()
+    private fun handleHeroesPaging() = lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            heroesAdapter.loadStateFlow.collectLatest { loadState ->
+                when (loadState.refresh) {
+                    is Loading -> showShimmer(true)
+                    is Success -> showShimmer(false)
+                    is Error -> showError()
+                }
             }
         }
     }
@@ -80,18 +83,18 @@ class HeroesFragment : Fragment() {
         if (isVisibility) startShimmer()
         else {
             stopShimmer()
-            binding.layoutShimmer.isVisible = false
+            binding.layoutShimmerHeroes.isVisible = false
             binding.rvHeroes.isGone = false
         }
     }
 
     private fun showError() =
         with(binding) {
-            layoutShimmer.isVisible = false
+            layoutShimmerHeroes.isVisible = false
             layoutError.isVisible = true
-            binding.includeError.btnRetryLoading.setOnClickListener {
+            includeError.btnRetryLoading.setOnClickListener {
                 heroesAdapter.retry()
-                layoutShimmer.isVisible = true
+                layoutShimmerHeroes.isVisible = true
                 layoutError.isVisible = false
             }
         }
@@ -104,16 +107,12 @@ class HeroesFragment : Fragment() {
         val directions = HeroesFragmentDirections.actionOpenDetailsFragment(
             heroesData.name,
             DetailsHeroesArgViewData(
-                heroeId = heroesData.id,
+                heroId = heroesData.id,
                 name = heroesData.name,
                 imageUrl = heroesData.imageUrl
             )
         )
 
         findNavController().navigate(directions, extras)
-    }
-
-    companion object {
-        private const val HEROES_INITIAL_POSITION = 0
     }
 }

@@ -1,14 +1,12 @@
 package com.marcelo.marvelheroes.domain.usecases
 
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
-import com.marcelo.marvelheroes.domain.model.ComicsViewData
-import com.marcelo.marvelheroes.domain.model.EventsViewData
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsEventsParams
+import com.marcelo.marvelheroes.domain.model.DetailParentViewData
+import com.marcelo.marvelheroes.domain.repository.HeroesRepository
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.HeroId
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.coroutines.CoroutinesDispatchers
 import com.marcelo.marvelheroes.utils.states.ResultStatus
 import com.marcelo.marvelheroes.utils.usecase.BaseUseCase
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
 
@@ -16,24 +14,42 @@ import org.koin.core.annotation.Single
 class GetComicsEventsEventsUseCaseImpl(
     private val repository: HeroesRepository,
     private val dispatcher: CoroutinesDispatchers
-) : BaseUseCase<GetComicsEventsParams, Pair<List<ComicsViewData>, List<EventsViewData>>>(),
-    GetComicsEventsUseCase {
+) : BaseUseCase<HeroId, List<DetailParentViewData>>(), GetComicsEventsUseCase {
 
-    override suspend fun runUseCase(params: GetComicsEventsParams): ResultStatus<Pair<List<ComicsViewData>, List<EventsViewData>>> {
+    override suspend fun runUseCase(params: HeroId): ResultStatus<List<DetailParentViewData>> {
         return withContext(dispatcher.io()) {
+            val comics = repository.getComics(params.heroId)
+            val events = repository.getEvents(params.heroId)
 
-            val comicsAsync = async { repository.getComics(params.heroeId) }
-            val eventsAsync = async { repository.getEvents(params.heroeId) }
+            val detailParentList = mutableListOf<DetailParentViewData>()
 
-            val comicsResult = comicsAsync.await()
-            val eventsResult = eventsAsync.await()
+            if (comics.isNotEmpty()) {
+                detailParentList.add(
+                    DetailParentViewData(
+                        categories = COMICS,
+                        detailChildList = comics
+                    )
+                )
+            }
 
+            if (events.isNotEmpty()) {
+                detailParentList.add(
+                    DetailParentViewData(
+                        categories = EVENTS,
+                        detailChildList = events
+                    )
+                )
+            }
 
-            ResultStatus.Success(data = comicsResult to eventsResult)
+            ResultStatus.Success(data = detailParentList)
         }
     }
 
     companion object {
-        data class GetComicsEventsParams(val heroeId: Int)
+        @JvmInline
+        value class HeroId(val heroId: Int)
+
+        private const val COMICS = "Comics"
+        private const val EVENTS = "Events"
     }
 }
