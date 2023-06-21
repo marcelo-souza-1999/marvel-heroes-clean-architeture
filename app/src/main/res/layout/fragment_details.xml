@@ -7,7 +7,7 @@
     tools:context=".presentation.ui.fragments.details.DetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutShimmer"
+        android:id="@+id/layoutShimmerDetails"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:focusable="true"
@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageHeroe">
+        app:layout_constraintTop_toBottomOf="@+id/imageHero">
 
         <include
             android:id="@+id/includeShimmer"
@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageHeroe">
+        app:layout_constraintTop_toBottomOf="@+id/imageHero">
 
         <include
             android:id="@+id/includeErrorView"
@@ -44,7 +44,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutErrorEmpty"
+        android:id="@+id/layoutEmptyView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_4"
@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageHeroe">
+        app:layout_constraintTop_toBottomOf="@+id/imageHero">
 
         <include
             android:id="@+id/includeErrorEmpty"
@@ -62,7 +62,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageHeroe"
+        android:id="@+id/imageHero"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_200"
         android:importantForAccessibility="no"
@@ -74,7 +74,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvParentDetails"
+        android:id="@+id/rvDetails"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -82,10 +82,11 @@
         android:padding="@dimen/padding_16"
         android:scrollbars="horizontal"
         android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageHeroe"
+        app:layout_constraintTop_toBottomOf="@+id/imageHero"
         tools:itemCount="2"
         tools:listitem="@layout/layout_item_parent_detail" />
 

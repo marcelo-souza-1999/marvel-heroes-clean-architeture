@@ -1,11 +1,10 @@
 package com.marcelo.marvelheroes.domain.usecases
 
-import com.marcelo.marvelheroes.data.repository.interfaces.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.GetComicsEventsParams
+import com.marcelo.marvelheroes.domain.repository.HeroesRepository
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.HeroId
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.SetupCoroutines
-import com.marcelo.marvelheroes.utils.getComicsFactoryList
-import com.marcelo.marvelheroes.utils.getEventsFactoryList
+import com.marcelo.marvelheroes.utils.getDetailChildFactoryList
 import com.marcelo.marvelheroes.utils.getHeroesFactory
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Error
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Loading
@@ -47,18 +46,18 @@ class GetComicsEventsEventsUseCaseImplTest {
 
             whenever(repository.getComics(getHeroesFactory.id))
                 .thenReturn(
-                    getComicsFactoryList
+                    getDetailChildFactoryList
                 )
 
             whenever(repository.getEvents(getHeroesFactory.id))
                 .thenReturn(
-                    getEventsFactoryList
+                    getDetailChildFactoryList
                 )
 
             val result = useCase
                 .invoke(
-                    GetComicsEventsParams(
-                        heroeId = getHeroesFactory.id
+                    HeroId(
+                        heroId = getHeroesFactory.id
                     )
                 )
 
@@ -76,8 +75,8 @@ class GetComicsEventsEventsUseCaseImplTest {
 
             val result = useCase
                 .invoke(
-                    GetComicsEventsParams(
-                        heroeId = getHeroesFactory.id
+                    HeroId(
+                        heroId = getHeroesFactory.id
                     )
                 )
 
@@ -95,8 +94,8 @@ class GetComicsEventsEventsUseCaseImplTest {
 
             val result = useCase
                 .invoke(
-                    GetComicsEventsParams(
-                        heroeId = getHeroesFactory.id
+                    HeroId(
+                        heroId = getHeroesFactory.id
                     )
                 )
 
