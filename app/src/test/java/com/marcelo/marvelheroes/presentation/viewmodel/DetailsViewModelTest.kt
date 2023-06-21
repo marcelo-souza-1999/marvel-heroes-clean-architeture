@@ -1,22 +1,16 @@
 package com.marcelo.marvelheroes.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.marcelo.marvelheroes.domain.model.ComicsViewData
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Empty
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Error
-import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel.Companion.DetailsViewModelState.Success
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getComicsFactory
-import com.marcelo.marvelheroes.utils.getComicsFactoryList
 import com.marcelo.marvelheroes.utils.getEventsFactory
-import com.marcelo.marvelheroes.utils.getEventsFactoryList
 import com.marcelo.marvelheroes.utils.getHeroesFactory
 import com.marcelo.marvelheroes.utils.states.ResultStatus
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.coEvery
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -25,7 +19,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -38,13 +31,13 @@ class DetailsViewModelTest {
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
-    @Mock
-    lateinit var getComicsEventsUseCase: GetComicsEventsUseCase
+    private lateinit var getComicsEventsUseCase: GetComicsEventsUseCase
 
     private lateinit var viewModel: DetailsViewModel
 
     @Before
     fun setup() {
+        getComicsEventsUseCase = mockk()
         viewModel = DetailsViewModel(getComicsEventsUseCase)
     }
 
@@ -67,16 +60,16 @@ class DetailsViewModelTest {
                 )
             )
 
-            whenever(getComicsEventsUseCase.invoke(any()))
-                .thenReturn(
-                    flowOf(
-                        ResultStatus.Success(
-                            getComicsFactoryList to getEventsFactoryList
-                        )
-                    )
+            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+                ResultStatus.Success(
+                    expectedListSuccess
                 )
+            )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
+
+            val expectedViewStateSuccess =
+                DetailsViewModel.Companion.DetailsViewState(success = expectedListSuccess)
 
             assertEquals(
                 TWO,
@@ -84,7 +77,7 @@ class DetailsViewModelTest {
             )
 
             assertEquals(
-                Success(expectedListSuccess),
+                expectedViewStateSuccess,
                 viewModel.viewState.value
             )
 
@@ -112,16 +105,14 @@ class DetailsViewModelTest {
                 )
             )
 
-            whenever(getComicsEventsUseCase.invoke(any()))
-                .thenReturn(
-                    flowOf(
-                        ResultStatus.Success(
-                            getComicsFactoryList to emptyList()
-                        )
-                    )
-                )
+            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+                ResultStatus.Success(expectedListSuccess)
+            )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
+
+            val expectedViewStateSuccess =
+                DetailsViewModel.Companion.DetailsViewState(success = expectedListSuccess)
 
             assertEquals(
                 ONE,
@@ -129,7 +120,7 @@ class DetailsViewModelTest {
             )
 
             assertEquals(
-                Success(expectedListSuccess),
+                expectedViewStateSuccess,
                 viewModel.viewState.value
             )
 
@@ -152,16 +143,17 @@ class DetailsViewModelTest {
                 )
             )
 
-            whenever(getComicsEventsUseCase.invoke(any()))
-                .thenReturn(
-                    flowOf(
-                        ResultStatus.Success(
-                            emptyList<ComicsViewData>() to getEventsFactoryList
-                        )
-                    )
+            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+                ResultStatus.Success(
+                    expectedListSuccess
                 )
+            )
+
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
+
+            val expectedViewStateSuccess =
+                DetailsViewModel.Companion.DetailsViewState(success = expectedListSuccess)
 
             assertEquals(
                 ONE,
@@ -169,7 +161,7 @@ class DetailsViewModelTest {
             )
 
             assertEquals(
-                Success(expectedListSuccess),
+                expectedViewStateSuccess,
                 viewModel.viewState.value
             )
 
@@ -183,19 +175,16 @@ class DetailsViewModelTest {
     fun `should notify viewState with Empty from viewState when get heroes details returns empty list`() =
         runTest {
 
-            whenever(getComicsEventsUseCase.invoke(any()))
-                .thenReturn(
-                    flowOf(
-                        ResultStatus.Success(
-                            emptyList<ComicsViewData>() to emptyList()
-                        )
-                    )
-                )
+            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+                ResultStatus.Success(emptyList())
+            )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
+            val expectedViewStateEmpty = DetailsViewModel.Companion.DetailsViewState(empty = true)
+
             assertEquals(
-                Empty,
+                expectedViewStateEmpty,
                 viewModel.viewState.value
             )
         }
@@ -204,19 +193,18 @@ class DetailsViewModelTest {
     fun `should notify viewState with Error from viewState when get heroes details returns exception`() =
         runTest {
 
-            whenever(getComicsEventsUseCase.invoke(any()))
-                .thenReturn(
-                    flowOf(
-                        ResultStatus.Error(
-                            Throwable()
-                        )
-                    )
+            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+                ResultStatus.Error(
+                    Throwable()
                 )
+            )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
+            val expectedViewStateError = DetailsViewModel.Companion.DetailsViewState(error = true)
+
             assertEquals(
-                Error,
+                expectedViewStateError,
                 viewModel.viewState.value
             )
         }
