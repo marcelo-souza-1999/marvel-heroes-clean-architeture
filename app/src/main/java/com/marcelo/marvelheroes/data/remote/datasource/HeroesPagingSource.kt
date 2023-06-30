@@ -2,6 +2,7 @@ package com.marcelo.marvelheroes.data.remote.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.toHeroesViewData
 import kotlinx.coroutines.flow.singleOrNull

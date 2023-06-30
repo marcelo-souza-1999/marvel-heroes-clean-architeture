@@ -1,7 +1,8 @@
 package com.marcelo.marvelheroes.data.repository
 
 import com.marcelo.marvelheroes.data.remote.datasource.HeroesPagingSource
-import com.marcelo.marvelheroes.data.remote.datasource.HeroesRemoteDataSource
+import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
+import com.marcelo.marvelheroes.data.remote.repository.HeroesRepositoryImpl
 import com.marcelo.marvelheroes.domain.mapper.DetailHeroesMapper
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
 import com.marcelo.marvelheroes.extensions.emptyString

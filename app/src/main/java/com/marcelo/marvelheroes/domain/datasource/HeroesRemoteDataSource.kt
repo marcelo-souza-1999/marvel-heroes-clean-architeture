@@ -1,4 +1,4 @@
-package com.marcelo.marvelheroes.data.remote.datasource
+package com.marcelo.marvelheroes.domain.datasource
 
 import com.marcelo.marvelheroes.data.remote.model.ComicsResponse
 import com.marcelo.marvelheroes.data.remote.model.DataContainerResponse

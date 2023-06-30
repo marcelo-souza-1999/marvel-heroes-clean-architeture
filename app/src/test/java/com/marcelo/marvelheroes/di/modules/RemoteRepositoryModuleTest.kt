@@ -1,7 +1,7 @@
 package com.marcelo.marvelheroes.di.modules
 
-import com.marcelo.marvelheroes.data.remote.datasource.HeroesRemoteDataSource
-import com.marcelo.marvelheroes.data.repository.HeroesRepositoryImpl
+import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
+import com.marcelo.marvelheroes.data.remote.repository.HeroesRepositoryImpl
 import com.marcelo.marvelheroes.domain.mapper.DetailHeroesMapper
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
 import io.mockk.mockk
@@ -15,7 +15,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class RepositoryModuleTest : KoinTest {
+class RemoteRepositoryModuleTest : KoinTest {
 
     private lateinit var mockRemoteDataSource: HeroesRemoteDataSource
     private lateinit var mockMapper: DetailHeroesMapper

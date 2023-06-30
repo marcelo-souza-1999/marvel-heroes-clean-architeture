@@ -5,12 +5,13 @@ import com.marcelo.marvelheroes.data.remote.model.ComicsResponse
 import com.marcelo.marvelheroes.data.remote.model.DataContainerResponse
 import com.marcelo.marvelheroes.data.remote.model.EventsResponse
 import com.marcelo.marvelheroes.data.remote.model.HeroesResponse
+import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Single
 
 @Single
-class RetrofitHeroesDataSourceImpl(private val marvelApi: MarvelApi) : HeroesRemoteDataSource {
+class HeroesRemoteDataSourceImpl(private val marvelApi: MarvelApi) : HeroesRemoteDataSource {
 
     override fun fetchHeroes(queries: Map<String, String>): Flow<DataContainerResponse<HeroesResponse>> {
         return flow {
