@@ -1,7 +1,6 @@
 package com.marcelo.marvelheroes.presentation.viewmodel
 
 import androidx.paging.PagingData
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getHeroesFactory

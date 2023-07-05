@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavoritesHeroRepository {
 
-    suspend fun getAllFavorites(): List<HeroesViewData>
+    suspend fun getAllFavorites(): Flow<List<HeroesViewData>>
 
     suspend fun saveFavorite(heroes: HeroesViewData)
 
-    suspend fun deleteFavorite(heroes: HeroesViewData)
+    suspend fun deleteFavorite(idHero: Int)
 }

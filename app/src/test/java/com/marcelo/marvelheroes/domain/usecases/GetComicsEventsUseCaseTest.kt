@@ -1,8 +1,7 @@
 package com.marcelo.marvelheroes.domain.usecases
 
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.HeroId
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase.Companion.HeroId
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getDetailChildFactoryList
 import com.marcelo.marvelheroes.utils.getHeroesFactory
@@ -12,7 +11,6 @@ import com.marcelo.marvelheroes.utils.states.ResultStatus.Success
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -21,7 +19,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi
-class GetComicsEventsEventsUseCaseImplTest {
+class GetComicsEventsUseCaseTest {
 
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
@@ -33,7 +31,7 @@ class GetComicsEventsEventsUseCaseImplTest {
     @Before
     fun setup() {
         repository = mock()
-        useCase = GetComicsEventsEventsUseCaseImpl(
+        useCase = GetComicsEventsUseCase(
             repository = repository,
             dispatcher = setupCoroutineRule.testDispatcherProvider
         )

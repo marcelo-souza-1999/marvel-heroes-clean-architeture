@@ -3,10 +3,10 @@ package com.marcelo.marvelheroes.data.local.entitys
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.marcelo.marvelheroes.utils.constants.DatabaseConstants.NAME_TABLE
-import com.marcelo.marvelheroes.utils.constants.DatabaseConstants.COLUMN_INFO_ID
-import com.marcelo.marvelheroes.utils.constants.DatabaseConstants.COLUMN_INFO_IMAGE_URL
-import com.marcelo.marvelheroes.utils.constants.DatabaseConstants.COLUMN_INFO_NAME
+import com.marcelo.marvelheroes.utils.constants.COLUMN_INFO_ID
+import com.marcelo.marvelheroes.utils.constants.COLUMN_INFO_IMAGE_URL
+import com.marcelo.marvelheroes.utils.constants.COLUMN_INFO_NAME
+import com.marcelo.marvelheroes.utils.constants.NAME_TABLE
 
 @Entity(tableName = NAME_TABLE)
 data class FavoriteHeroEntity(

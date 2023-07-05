@@ -2,8 +2,7 @@ package com.marcelo.marvelheroes.domain.usecases
 
 import androidx.paging.PagingConfig
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl.Companion.GetHeroesParams
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCase.Companion.GetHeroesParams
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.PAGING_SIZE
 import com.marcelo.marvelheroes.utils.SetupCoroutines
@@ -21,7 +20,7 @@ import org.junit.Test
 import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
-class GetHeroesUseCaseImplTest {
+class GetHeroesUseCaseTest {
 
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
@@ -33,7 +32,7 @@ class GetHeroesUseCaseImplTest {
     @Before
     fun setup() {
         repository = mock()
-        useCase = GetHeroesUseCaseImpl(
+        useCase = GetHeroesUseCase(
             repository = repository
         )
     }

@@ -14,5 +14,5 @@ class FavoritesHeroRepositoryImpl(
 
     override suspend fun saveFavorite(heroes: HeroesViewData) = localDataSource.save(heroes)
 
-    override suspend fun deleteFavorite(heroes: HeroesViewData) = localDataSource.delete(heroes)
+    override suspend fun deleteFavorite(idHero: Int) = localDataSource.delete(idHero)
 }

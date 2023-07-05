@@ -3,7 +3,6 @@ package com.marcelo.marvelheroes.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getComicsFactory
 import com.marcelo.marvelheroes.utils.getEventsFactory

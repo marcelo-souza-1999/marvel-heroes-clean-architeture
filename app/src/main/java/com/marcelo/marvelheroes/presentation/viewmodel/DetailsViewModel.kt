@@ -3,8 +3,7 @@ package com.marcelo.marvelheroes.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsEventsUseCaseImpl.Companion.HeroId
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.utils.states.ResultStatus
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Error
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Success
@@ -25,7 +24,7 @@ class DetailsViewModel(
     val viewState = _viewState.asStateFlow()
 
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
-        getComicsEventsUseCase(HeroId(heroId))
+        getComicsEventsUseCase(heroId)
             .onStart { _viewState.value = DetailsViewState(isLoading = true) }
             .onEach(::handleSuccess)
             .launchIn(viewModelScope)
