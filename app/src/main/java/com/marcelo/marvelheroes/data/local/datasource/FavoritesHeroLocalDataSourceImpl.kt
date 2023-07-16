@@ -12,7 +12,7 @@ import org.koin.core.annotation.Single
 class FavoritesHeroLocalDataSourceImpl(
     private val favoriteHeroDao: FavoriteHeroDao
 ) : FavoritesHeroLocalDataSource {
-    override fun getAll() = favoriteHeroDao.getFavorites().map {
+    override suspend fun getAll() = favoriteHeroDao.getFavorites().map {
         it.toHeroesViewData()
     }
 

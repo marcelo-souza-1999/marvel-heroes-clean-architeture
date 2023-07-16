@@ -54,14 +54,14 @@ class DetailsFragment : Fragment() {
         setSharedElementTransitionOnEnter()
     }
 
-    private fun fetchDetailsHeroes() = viewModel.getHeroesDetails(args.detailsHeroesArg.heroId)
-
     private fun setSharedElementTransitionOnEnter() {
         TransitionInflater.from(requireContext())
             .inflateTransition(android.R.transition.move)?.let {
                 sharedElementEnterTransition = it
             }
     }
+
+    private fun fetchDetailsHeroes() = viewModel.getHeroesDetails(args.detailsHeroesArg.heroId)
 
     private fun handleDetailsHeroes() = lifecycleScope.launch {
         lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {

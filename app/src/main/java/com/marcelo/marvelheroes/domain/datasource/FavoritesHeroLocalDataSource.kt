@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavoritesHeroLocalDataSource {
 
-    fun getAll(): Flow<List<HeroesViewData>>
+    suspend fun getAll(): Flow<List<HeroesViewData>>
 
     suspend fun save(heroes: HeroesViewData)
 
