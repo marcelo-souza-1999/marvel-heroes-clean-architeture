@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
+import com.marcelo.marvelheroes.domain.usecases.DeleteFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
+import com.marcelo.marvelheroes.domain.usecases.GetFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
-import com.marcelo.marvelheroes.presentation.ui.fragments.details.DetailsFragmentArgs
 import com.marcelo.marvelheroes.utils.states.ResultStatus
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Error
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Success
@@ -22,7 +23,9 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class DetailsViewModel(
     private val getComicsEventsUseCase: GetComicsEventsUseCase,
-    private val saveFavoriteUseCase: SaveFavoriteUseCase
+    private val saveFavoriteUseCase: SaveFavoriteUseCase,
+    private val getFavoriteUseCase: GetFavoriteUseCase,
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase
 ) : ViewModel() {
 
     private val _viewStateDetails = MutableStateFlow(DetailsViewState())
@@ -32,10 +35,31 @@ class DetailsViewModel(
     val viewStateFavorite = _viewStateFavorite.asStateFlow()
 
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
-        getComicsEventsUseCase(heroId)
-            .onStart { _viewStateDetails.value = DetailsViewState(isLoading = true) }
-            .onEach(::handleSuccessDetails)
-            .launchIn(viewModelScope)
+        getComicsEventsUseCase(heroId).onStart {
+            _viewStateDetails.value = DetailsViewState(isLoading = true)
+        }.onEach(::handleSuccessDetails).launchIn(viewModelScope)
+    }
+
+    fun saveHeroFavorite(heroId: Int, heroName: String, heroImageUrl: String) =
+        viewModelScope.launch {
+            saveFavoriteUseCase(
+                heroId = heroId, nameHero = heroName, imageUrl = heroImageUrl
+            ).onStart { _viewStateFavorite.value = FavoriteViewState(isLoading = true) }
+                .onEach(::handleSaveFavorite).launchIn(viewModelScope)
+        }
+
+    fun checkFavorite(heroId: Int) = viewModelScope.launch {
+        getFavoriteUseCase(
+            heroId = heroId
+        ).onStart { _viewStateFavorite.value = FavoriteViewState(isLoading = true) }
+            .onEach(::handleCheckFavorite).launchIn(viewModelScope)
+    }
+
+    fun deleteFavorite(heroId: Int) = viewModelScope.launch {
+        deleteFavoriteUseCase(
+            heroId = heroId
+        ).onStart { _viewStateFavorite.value = FavoriteViewState(isLoading = true) }
+            .onEach(::handleRemoveFavorite).launchIn(viewModelScope)
     }
 
     private fun handleSuccessDetails(resultStatus: ResultStatus<List<DetailParentViewData>>) {
@@ -48,24 +72,28 @@ class DetailsViewModel(
         }
     }
 
-    fun saveFavoriteHero(detailViewArgs: DetailsFragmentArgs) = viewModelScope.launch {
-        saveFavoriteUseCase(
-            heroId = detailViewArgs.detailsHeroesArg.heroId,
-            nameHero = detailViewArgs.detailsHeroesArg.name,
-            imageUrl = detailViewArgs.detailsHeroesArg.imageUrl
-        )
-            .onStart { _viewStateFavorite.value = FavoriteViewState(isLoading = true) }
-            .onEach(::handleSuccessSaveFavorite)
-            .launchIn(viewModelScope)
+    private fun handleCheckFavorite(resultStatus: ResultStatus<Boolean>) {
+        if (resultStatus is Success) {
+            _viewStateFavorite.value = FavoriteViewState(
+                successIcon = if (resultStatus.data) {
+                    R.drawable.ic_favorite_hero
+                } else {
+                    R.drawable.ic_not_favorite_hero
+                }
+            )
+        }
     }
 
-    private fun handleSuccessSaveFavorite(resultStatus: ResultStatus<Unit>) {
+    private fun handleRemoveFavorite(resultStatus: ResultStatus<Unit>) {
+        if (resultStatus is Success) _viewStateFavorite.value = FavoriteViewState(
+            successIcon = R.drawable.ic_not_favorite_hero
+        )
+    }
+
+    private fun handleSaveFavorite(resultStatus: ResultStatus<Unit>) {
         if (resultStatus is Success) _viewStateFavorite.value =
             FavoriteViewState(successIcon = R.drawable.ic_favorite_hero)
-
-
     }
-
 
     companion object {
         data class DetailsViewState(
@@ -76,8 +104,7 @@ class DetailsViewModel(
         )
 
         data class FavoriteViewState(
-            val isLoading: Boolean = true,
-            val error: Boolean = false,
+            val isLoading: Boolean = false,
             @DrawableRes val successIcon: Int = R.drawable.ic_not_favorite_hero
         )
     }

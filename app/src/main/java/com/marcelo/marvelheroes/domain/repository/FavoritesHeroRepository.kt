@@ -7,6 +7,8 @@ interface FavoritesHeroRepository {
 
     suspend fun getAllFavorites(): Flow<List<HeroesViewData>>
 
+    suspend fun isFavorite(idHero: Int): Boolean
+
     suspend fun saveFavorite(heroes: HeroesViewData)
 
     suspend fun deleteFavorite(idHero: Int)

@@ -3,6 +3,8 @@ package com.marcelo.marvelheroes.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
+import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getComicsFactory
 import com.marcelo.marvelheroes.utils.getEventsFactory
@@ -32,12 +34,15 @@ class DetailsViewModelTest {
 
     private lateinit var getComicsEventsUseCase: GetComicsEventsUseCase
 
+    private lateinit var saveFavoriteUseCase: SaveFavoriteUseCase
+
     private lateinit var viewModel: DetailsViewModel
 
     @Before
     fun setup() {
         getComicsEventsUseCase = mockk()
-        viewModel = DetailsViewModel(getComicsEventsUseCase)
+        saveFavoriteUseCase = mockk()
+        viewModel = DetailsViewModel(getComicsEventsUseCase, saveFavoriteUseCase)
     }
 
     @Test

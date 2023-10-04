@@ -16,6 +16,8 @@ class FavoritesHeroLocalDataSourceImpl(
         it.toHeroesViewData()
     }
 
+    override suspend fun isFavorite(idHero: Int) = favoriteHeroDao.hasFavorite(idHero) != null
+
     override suspend fun save(heroes: HeroesViewData) = favoriteHeroDao.insertFavorite(
         heroes.toFavoriteHeroEntity()
     )

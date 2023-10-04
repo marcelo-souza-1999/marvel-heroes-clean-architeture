@@ -1,11 +1,11 @@
 package com.marcelo.marvelheroes.presentation.viewmodel
 
 import androidx.paging.PagingData
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCase
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getHeroesFactory
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.coEvery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -48,12 +48,8 @@ class HeroesViewModelTest {
     fun `should validate the paging data object values when calling getPagingHeroes`() =
         runTest {
 
-            whenever(getHeroesUseCase.invoke(any()))
-                .thenReturn(
-                    flowOf(
-                        pagingDataHeroes,
-                    )
-                )
+            coEvery { getHeroesUseCase.invoke(any(), any()) }
+                .returns(flowOf(pagingDataHeroes))
 
             val result = heroesViewModel.getPagingHeroes(emptyString())
 
@@ -64,7 +60,8 @@ class HeroesViewModelTest {
     fun `should return null when there's an error in getPagingHeroes`() =
         runTest {
 
-            whenever(getHeroesUseCase.invoke(any())).thenThrow(RuntimeException())
+            coEvery { getHeroesUseCase.invoke(any(), any()) }
+                .throws(RuntimeException())
 
             val result = heroesViewModel.getPagingHeroes(emptyString())
 

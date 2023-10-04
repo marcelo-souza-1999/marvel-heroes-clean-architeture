@@ -2,7 +2,7 @@ package com.marcelo.marvelheroes.di.modules
 
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
 import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCase
-import com.nhaarman.mockitokotlin2.mock
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -15,7 +15,7 @@ import org.koin.test.inject
 
 class UseCaseModuleTest : KoinTest {
 
-    private val mockHeroesRepository: HeroesRepository = mock()
+    private val mockHeroesRepository: HeroesRepository = mockk()
     private val getHeroesUseCase: GetHeroesUseCase by inject()
 
     private val setupModule = module {

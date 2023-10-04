@@ -141,7 +141,7 @@ class DetailsFragmentTest {
         const val FILE_NAME_HEROES_DETAILS_EMPTY_JSON = "heroes_marvel_details_empty.json"
 
         val testModule = module {
-            viewModel { DetailsViewModel(get()) }
+            viewModel { DetailsViewModel(get(), get()) }
             single(named("baseUrl")) { BASE_URL }
         }
     }

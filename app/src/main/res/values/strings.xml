@@ -19,4 +19,6 @@
 
     <string name="details_comics_category">Comics</string>
     <string name="details_events_category">Events</string>
+    <string name="error_save_hero_local_database">Não foi possivel salvar o heroi no banco de dados!</string>
+    <string name="error_check_hero_local_database">Não foi possivel checar o heroi no banco de dados!</string>
 </resources>

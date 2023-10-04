@@ -14,7 +14,7 @@ google_services = "4.3.15"
 navigation = "2.5.2"
 lifecycle = "2.6.1"
 coroutines = "1.6.4"
-room = "2.5.2"
+room = "2.5.1"
 pagination = "3.1.1"
 glide = "4.12.0"
 shimmer = "0.5.0"
@@ -28,7 +28,6 @@ firebase_bom = "32.1.1"
 junit = "4.13.2"
 mockk = "1.13.5"
 mockito_core = "4.2.0"
-mockito_kotlin = "2.2.0"
 androidx_junit = "1.1.5"
 androidx_core_testing = "2.2.0"
 androidx_espresso = "3.5.1"
@@ -86,7 +85,6 @@ firebase_analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 junit = { module = "junit:junit", version.ref = "junit" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockito_core = { module = "org.mockito:mockito-core", version.ref = "mockito_core" }
-mockito_kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "mockito_kotlin" }
 androidx_junit = { module = "androidx.test.ext:junit", version.ref = "androidx_junit" }
 androidx_core_testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx_core_testing" }
 androidx_espresso_contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx_espresso" }
@@ -107,7 +105,7 @@ glide = ["glide.dev", "glide.compiler"]
 navigation = ["navigation.fragment", "navigation.ui"]
 androidx = ["androidx.core", "androidx.appcompat", "androidx.constraint.layout"]
 lifecycle = ["lifecycle.view.model", "lifecycle.live.data", "lifecycle.runtime"]
-unit_test = ["junit", "mockk", "mockito.core", "mockito.kotlin", "androidx.junit", "androidx.core.testing", "coroutines.test", "koin.test.ktx"]
+unit_test = ["junit", "mockk", "mockito.core", "androidx.junit", "androidx.core.testing", "coroutines.test", "koin.test.ktx"]
 instrumented_test = ["koin.test.ktx",
     "koin.test.junit",
     "junit",

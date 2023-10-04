@@ -57,6 +57,7 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
