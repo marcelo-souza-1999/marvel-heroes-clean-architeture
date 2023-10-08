@@ -9,6 +9,8 @@ import com.marcelo.marvelheroes.domain.usecases.DeleteFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
 import com.marcelo.marvelheroes.domain.usecases.GetFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.collectViewStateDetails
 import com.marcelo.marvelheroes.utils.states.ResultStatus
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Error
 import com.marcelo.marvelheroes.utils.states.ResultStatus.Success
@@ -28,17 +30,26 @@ class DetailsViewModel(
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase
 ) : ViewModel() {
 
-    private val _viewStateDetails = MutableStateFlow(DetailsViewState())
+    /*private val _viewStateDetails = MutableStateFlow(DetailsViewState())
+    val viewState = _viewStateDetails.asStateFlow()*/
+
+    private val _viewStateDetails =
+        MutableStateFlow<State<List<DetailParentViewData>>>(State.Loading())
     val viewState = _viewStateDetails.asStateFlow()
 
     private val _viewStateFavorite = MutableStateFlow(FavoriteViewState())
     val viewStateFavorite = _viewStateFavorite.asStateFlow()
 
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
+        getComicsEventsUseCase(heroId)
+            .collectViewStateDetails(_viewStateDetails)
+    }
+
+    /*fun getHeroesDetails(heroId: Int) = viewModelScope.launch {1
         getComicsEventsUseCase(heroId).onStart {
             _viewStateDetails.value = DetailsViewState(isLoading = true)
         }.onEach(::handleSuccessDetails).launchIn(viewModelScope)
-    }
+    }*/
 
     fun saveHeroFavorite(heroId: Int, heroName: String, heroImageUrl: String) =
         viewModelScope.launch {

@@ -16,13 +16,6 @@ class HeroesRepositoryImpl(
 
     override fun getHeroes(query: String) = HeroesPagingSource(remoteDataSource, query)
 
-    /*
-    * In this function, we are retrieving a response containing a list of comics related to a specific hero.
-    * The response object may have a data container, which contains a results list.
-    * We use `flatMap` to map each item in the results list to a list of `DetailChildViewData` using the `detailHeroesMapper`.
-    * By using `flatMap`, the resulting lists are combined into a single list of `DetailChildViewData`.
-    * If the response or results list is null, an empty list is returned.
-    */
     override suspend fun getComics(heroId: Int): List<DetailChildViewData> {
         val response = remoteDataSource.fetchComics(heroId).singleOrNull()
         return response?.dataContainerHeroes?.results?.flatMap { comicsResponse ->
@@ -30,13 +23,6 @@ class HeroesRepositoryImpl(
         } ?: emptyList()
     }
 
-    /*
-    * Similarly, in this function, we are retrieving a response containing a list of events related to a specific hero.
-    * The response object may have a data container, which contains a results list.
-    * We use `flatMap` to map each item in the results list to a list of `DetailChildViewData` using the `detailHeroesMapper`.
-    * By using `flatMap`, the resulting lists are combined into a single list of `DetailChildViewData`.
-    * If the response or results list is null, an empty list is returned.
-    */
     override suspend fun getEvents(heroId: Int): List<DetailChildViewData> {
         val response = remoteDataSource.fetchEvents(heroId).singleOrNull()
         return response?.dataContainerHeroes?.results?.flatMap { eventsResponse ->
