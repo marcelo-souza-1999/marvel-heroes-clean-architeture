@@ -5,7 +5,6 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -19,6 +18,12 @@ import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.extensions.loadImage
 import com.marcelo.marvelheroes.presentation.adapters.details.DetailParentAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.DetailsViewModel
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.ErrorType.GenericError
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.ErrorType.NetworkError
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.ErrorType.ServerError
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State.Error
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State.Loading
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State.Success
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,6 +34,8 @@ class DetailsFragment : Fragment() {
     private val viewModel: DetailsViewModel by viewModel()
 
     private val args by navArgs<DetailsFragmentArgs>()
+
+    private var isFavorite: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,10 +50,11 @@ class DetailsFragment : Fragment() {
         initView()
         fetchDetailsHeroes()
         handleDetailsHeroes()
+        saveHeroFavoriteListener()
         handleSaveHeroFavorite()
         fetchCheckHeroFavorite()
         handleCheckHeroFavorite()
-        saveHeroFavoriteListener()
+        handleDeleteHeroFavorite()
     }
 
     private fun initView() = with(binding) {
@@ -69,52 +77,67 @@ class DetailsFragment : Fragment() {
     private fun handleDetailsHeroes() = viewLifecycleOwner.lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.CREATED) {
             viewModel.viewState.collect { state ->
-                showShimmer(isLoading = state.isLoading)
-                showErrorHeroes(isError = state.error)
-                showEmpty(isEmpty = state.empty)
-                showSuccess(state.success)
+                showShimmer(state is Loading)
+                if (state is Success) {
+                    if (state.data.isNotEmpty()) {
+                        showSuccess(data = state.data)
+                    } else showEmpty()
+                } else if (state is Error) {
+                    when (state.errorType) {
+                        is NetworkError -> showErrorHeroes(isNetwork = true)
+                        is GenericError -> showErrorHeroes()
+                        is ServerError -> showErrorHeroes(isErrorServer = true)
+                    }
+                }
             }
         }
     }
 
-    private fun handleSaveHeroFavorite() = viewLifecycleOwner.lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.CREATED) {
-            viewModel.viewStateFavorite.collect { state ->
-                setupLoading(isLoading = state.isLoading)
-                setupSaveHero(
-                    isSuccessIcon = state.successIcon
-                )
-            }
+    private fun showShimmer(isLoading: Boolean) = with(binding) {
+        val shimmer = includeShimmer.shimmerDetailHeroes
+        shimmer.isVisible = isLoading
+        if (isLoading) {
+            shimmer.startShimmer()
+        } else {
+            shimmer.stopShimmer()
+            layoutShimmerDetails.isVisible = false
+            rvDetails.isVisible = false
         }
     }
 
-    private fun showShimmer(isLoading: Boolean) = with(binding.includeShimmer.shimmerDetailHeroes) {
-        isVisible = isLoading
-        if (isLoading) startShimmer()
-        else {
-            stopShimmer()
-            binding.layoutShimmerDetails.isVisible = false
-            binding.rvDetails.isGone = false
-        }
-    }
 
-    private fun showErrorHeroes(isError: Boolean) = with(binding) {
+    private fun showErrorHeroes(
+        isNetwork: Boolean = false,
+        isErrorServer: Boolean = false
+    ) = with(binding) {
         showShimmer(false)
-        layoutErrorView.isVisible = isError
-        includeErrorView.btnRetryLoading.setOnClickListener {
-            requireActivity().finish()
+        layoutErrorView.isVisible = true
+        binding.includeErrorView.btnRetryLoading.setOnClickListener {
+            showShimmer(true)
+            fetchDetailsHeroes()
+        }
+        if (isNetwork) {
+            includeErrorView.txtErrorLoading.text = getString(R.string.error_network)
+        } else if (isErrorServer) {
+            includeErrorView.txtErrorLoading.text = getString(R.string.error_server)
+            includeErrorView.btnRetryLoading.isVisible = false
         }
     }
 
-    private fun showEmpty(isEmpty: Boolean) = with(binding) {
-        layoutEmptyView.isVisible = isEmpty
+    private fun showEmpty() = with(binding) {
+        layoutEmptyView.isVisible = true
     }
 
-    private fun showSuccess(data: List<DetailParentViewData>) = with(binding.rvDetails) {
+    private fun showSuccess(data: List<DetailParentViewData>) = with(binding) {
         showShimmer(isLoading = false)
-        setHasFixedSize(true)
-        adapter = DetailParentAdapter(data)
+        layoutErrorView.isVisible = false
+        rvDetails.apply {
+            isVisible = true
+            setHasFixedSize(true)
+            adapter = DetailParentAdapter(data)
+        }
     }
+
 
     private fun fetchSaveHeroFavorite() = viewModel.saveHeroFavorite(
         heroId = args.detailsHeroesArg.heroId,
@@ -122,40 +145,20 @@ class DetailsFragment : Fragment() {
         heroImageUrl = args.detailsHeroesArg.imageUrl
     )
 
-    private fun fetchDeleteHeroFavorite() = viewModel.deleteFavorite(
-        heroId = args.detailsHeroesArg.heroId
-    )
-
-    private fun setupLoading(isLoading: Boolean) = with(binding) {
-        if (isLoading) {
-            imageFavorite.isVisible = false
-            progressBarFavorite.isVisible = true
-        } else {
-            imageFavorite.isVisible = true
-            progressBarFavorite.isVisible = false
-        }
-    }
-
-    private fun setupSaveHero(isSuccessIcon: Int) =
-        with(binding.imageFavorite) {
-            if (isSuccessIcon == R.drawable.ic_favorite_hero) {
-                setImageResource(R.drawable.ic_not_favorite_hero)
-                setOnClickListener {
-                    fetchDeleteHeroFavorite()
+    private fun handleSaveHeroFavorite() = viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.CREATED) {
+            viewModel.viewStateSaveFavorite.collect { state ->
+                setupLoadingFavorite(state is Loading)
+                isFavorite = when (state) {
+                    is Success -> true
+                    is Error -> false
+                    else -> false
                 }
-            } else {
-                setImageResource(R.drawable.ic_favorite_hero)
-                setOnClickListener {
-                    fetchSaveHeroFavorite()
-                }
+                setIconFavorite(isFavorite)
             }
         }
-
-    private fun saveHeroFavoriteListener() = with(binding.imageFavorite) {
-        setOnClickListener {
-            fetchSaveHeroFavorite()
-        }
     }
+
 
     private fun fetchCheckHeroFavorite() = viewModel.checkFavorite(
         heroId = args.detailsHeroesArg.heroId
@@ -163,14 +166,66 @@ class DetailsFragment : Fragment() {
 
     private fun handleCheckHeroFavorite() = viewLifecycleOwner.lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.CREATED) {
-            viewModel.viewStateFavorite.collect { state ->
-                setupLoading(isLoading = state.isLoading)
-                setupCheckFavorite(icon = state.successIcon)
+            viewModel.viewStateCheckFavorite.collect { state ->
+                setupLoadingFavorite(state is Loading)
+                isFavorite = when (state) {
+                    is Success -> state.data
+                    is Error -> false
+                    else -> false
+                }
+                setIconFavorite(isFavorite)
             }
         }
     }
 
-    private fun setupCheckFavorite(icon: Int) = with(binding.imageFavorite) {
-        setImageResource(icon)
+    private fun fetchDeleteHeroFavorite() = viewModel.deleteFavorite(
+        heroId = args.detailsHeroesArg.heroId
+    )
+
+    private fun handleDeleteHeroFavorite() = viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.CREATED) {
+            viewModel.viewStateDeleteFavorite.collect { state ->
+                setupLoadingFavorite(state is Loading)
+                isFavorite = when (state) {
+                    is Success -> {
+                        setIconFavorite(isSuccessIcon = !state.data)
+                        !state.data
+                    }
+
+                    is Error -> {
+                        setIconFavorite(isSuccessIcon = false)
+                        false
+                    }
+
+                    else -> {
+                        false
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun setupLoadingFavorite(isLoading: Boolean) = with(binding) {
+        imageFavorite.isVisible = !isLoading
+        progressBarFavorite.isVisible = isLoading
+    }
+
+    private fun setIconFavorite(isSuccessIcon: Boolean) = with(binding.imageFavorite) {
+        if (isSuccessIcon) {
+            setImageResource(R.drawable.ic_favorite_hero)
+        } else {
+            setImageResource(R.drawable.ic_not_favorite_hero)
+        }
+    }
+
+    private fun saveHeroFavoriteListener() = with(binding.imageFavorite) {
+        setOnClickListener {
+            if (isFavorite) {
+                fetchDeleteHeroFavorite()
+            } else {
+                fetchSaveHeroFavorite()
+            }
+        }
     }
 }

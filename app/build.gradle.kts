@@ -1,6 +1,6 @@
-import java.util.Properties
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -158,7 +158,6 @@ dependencies {
     implementation(libs.bundles.lifecycle)
 
     testImplementation(libs.bundles.unit.test)
-
     androidTestImplementation(libs.bundles.instrumented.test)
     debugImplementation(libs.fragment.testing)
 }

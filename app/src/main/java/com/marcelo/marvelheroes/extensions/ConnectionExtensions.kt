@@ -8,5 +8,6 @@ internal fun Throwable.isConnectionError() =
     this is UnknownHostException || cause is UnknownHostException ||
             this is SocketTimeoutException || cause is SocketTimeoutException
 
-internal fun Throwable.isServerError() =
-    this is HttpException && code() == 500
+internal fun Throwable.isServerError(): Boolean {
+    return this is HttpException && code() >= 500 && code() < 600
+}

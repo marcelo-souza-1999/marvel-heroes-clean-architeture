@@ -3,12 +3,11 @@ package com.marcelo.marvelheroes.di.modules
 import com.marcelo.marvelheroes.domain.factories.DetailParentFactory
 import com.marcelo.marvelheroes.domain.repository.FavoritesHeroRepository
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
+import com.marcelo.marvelheroes.domain.usecases.CheckFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.DeleteFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
-import com.marcelo.marvelheroes.domain.usecases.GetFavoriteUseCase
 import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCase
 import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
-import com.marcelo.marvelheroes.utils.coroutines.CoroutinesDispatchers
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -21,25 +20,21 @@ class UseCaseModule {
     @Single
     fun provideGetComicsUseCase(
         repository: HeroesRepository,
-        factory: DetailParentFactory,
-        dispatchers: CoroutinesDispatchers
-    ) = GetComicsEventsUseCase(repository, factory, dispatchers)
+        factory: DetailParentFactory
+    ) = GetComicsEventsUseCase(repository, factory)
 
     @Single
     fun provideGetFavoriteUseCase(
-        repository: FavoritesHeroRepository,
-        dispatchers: CoroutinesDispatchers
-    ) = GetFavoriteUseCase(repository, dispatchers)
+        repository: FavoritesHeroRepository
+    ) = CheckFavoriteUseCase(repository)
 
     @Single
     fun provideSaveFavoriteUseCase(
-        repository: FavoritesHeroRepository,
-        dispatchers: CoroutinesDispatchers
-    ) = SaveFavoriteUseCase(repository, dispatchers)
+        repository: FavoritesHeroRepository
+    ) = SaveFavoriteUseCase(repository)
 
     @Single
     fun provideRemoveFavoriteUseCase(
-        repository: FavoritesHeroRepository,
-        dispatchers: CoroutinesDispatchers
-    ) = DeleteFavoriteUseCase(repository, dispatchers)
+        repository: FavoritesHeroRepository
+    ) = DeleteFavoriteUseCase(repository)
 }
