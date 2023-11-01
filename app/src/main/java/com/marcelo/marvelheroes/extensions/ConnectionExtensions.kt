@@ -9,5 +9,5 @@ internal fun Throwable.isConnectionError() =
             this is SocketTimeoutException || cause is SocketTimeoutException
 
 internal fun Throwable.isServerError(): Boolean {
-    return this is HttpException && code() >= 500 && code() < 600
+    return this is HttpException && code() >= 500 && code() <= 600
 }

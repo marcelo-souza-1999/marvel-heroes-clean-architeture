@@ -20,11 +20,13 @@ class GetComicsEventsUseCase(
 
             val detailParentList = mutableListOf<DetailParentViewData>()
             if (comics.isNotEmpty()) {
-                detailParentList.add(detailParentFactory.createDetailParent("Comics", comics))
+                detailParentList.add(
+                    detailParentFactory.createDetailParent("Comics", comics))
             }
 
             if (events.isNotEmpty()) {
-                detailParentList.add(detailParentFactory.createDetailParent("Events", events))
+                detailParentList.add(
+                    detailParentFactory.createDetailParent("Events", events))
             }
 
             emit(detailParentList)

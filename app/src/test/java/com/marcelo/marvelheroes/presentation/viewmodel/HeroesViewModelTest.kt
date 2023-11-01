@@ -6,6 +6,7 @@ import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getHeroesFactory
 import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -14,7 +15,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -26,8 +26,7 @@ class HeroesViewModelTest {
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
-    @Mock
-    lateinit var getHeroesUseCase: GetHeroesUseCase
+    private lateinit var getHeroesUseCase: GetHeroesUseCase
 
     private lateinit var heroesViewModel: HeroesViewModel
 
@@ -39,6 +38,7 @@ class HeroesViewModelTest {
 
     @Before
     fun setup() {
+        getHeroesUseCase = mockk()
         heroesViewModel = HeroesViewModel(
             getHeroesUseCase = getHeroesUseCase
         )
