@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
 import com.marcelo.marvelheroes.domain.model.FavoriteViewData
-import com.marcelo.marvelheroes.domain.usecases.CheckFavoriteUseCase
-import com.marcelo.marvelheroes.domain.usecases.DeleteFavoriteUseCase
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
-import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
+import com.marcelo.marvelheroes.domain.usecases.CheckFavorite
+import com.marcelo.marvelheroes.domain.usecases.DeleteFavorite
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEvents
+import com.marcelo.marvelheroes.domain.usecases.SaveFavorite
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.collectViewState
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.collectViewStateList
@@ -18,15 +18,15 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class DetailsViewModel(
-    private val getComicsEventsUseCase: GetComicsEventsUseCase,
-    private val saveFavoriteUseCase: SaveFavoriteUseCase,
-    private val checkFavoriteUseCase: CheckFavoriteUseCase,
-    private val deleteFavoriteUseCase: DeleteFavoriteUseCase
+    private val getComicsEvents: GetComicsEvents,
+    private val saveFavorite: SaveFavorite,
+    private val checkFavorite: CheckFavorite,
+    private val deleteFavorite: DeleteFavorite
 ) : ViewModel() {
 
     private val _viewStateDetails =
         MutableStateFlow<State<List<DetailParentViewData>>>(State.Loading())
-    val viewState = _viewStateDetails.asStateFlow()
+    val viewStateDetails = _viewStateDetails.asStateFlow()
 
     private val _viewStateSaveFavorite = MutableStateFlow<State<FavoriteViewData>>(State.Loading())
     val viewStateSaveFavorite = _viewStateSaveFavorite.asStateFlow()
@@ -39,7 +39,7 @@ class DetailsViewModel(
     val viewStateDeleteFavorite = _viewStateDeleteFavorite.asStateFlow()
 
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
-        getComicsEventsUseCase(heroId)
+        getComicsEvents(heroId)
             .collectViewStateList(_viewStateDetails)
     }
 
@@ -48,21 +48,21 @@ class DetailsViewModel(
         heroName: String,
         heroImageUrl: String
     ) = viewModelScope.launch {
-        saveFavoriteUseCase(
+        saveFavorite(
             heroId = heroId,
             nameHero = heroName,
             imageUrl = heroImageUrl
         ).collectViewState(_viewStateSaveFavorite)
     }
 
-    fun checkFavorite(heroId: Int) = viewModelScope.launch {
-        checkFavoriteUseCase(
+    fun checkHeroFavorite(heroId: Int) = viewModelScope.launch {
+        checkFavorite(
             heroId = heroId
         ).collectViewState(_viewStateCheckFavorite)
     }
 
-    fun deleteFavorite(heroId: Int) = viewModelScope.launch {
-        deleteFavoriteUseCase(
+    fun deleteHeroFavorite(heroId: Int) = viewModelScope.launch {
+        deleteFavorite(
             heroId = heroId
         ).collectViewState(_viewStateDeleteFavorite)
     }

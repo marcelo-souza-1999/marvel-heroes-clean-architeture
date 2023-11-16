@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
 
 @Single
-class GetHeroesUseCase(
+class GetHeroes(
     private val repository: HeroesRepository
 ) {
     operator fun invoke(

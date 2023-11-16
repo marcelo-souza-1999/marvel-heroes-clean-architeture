@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Single
 
 @Single
-class SaveFavoriteUseCase(
+class SaveFavorite(
     private val repository: FavoritesHeroRepository
 ) {
 

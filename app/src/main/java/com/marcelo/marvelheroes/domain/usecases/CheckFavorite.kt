@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Single
 
 @Single
-class CheckFavoriteUseCase(
+class CheckFavorite(
     private val repository: FavoritesHeroRepository
 ) {
 

@@ -3,10 +3,10 @@ package com.marcelo.marvelheroes.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
-import com.marcelo.marvelheroes.domain.usecases.CheckFavoriteUseCase
-import com.marcelo.marvelheroes.domain.usecases.DeleteFavoriteUseCase
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
-import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
+import com.marcelo.marvelheroes.domain.usecases.CheckFavorite
+import com.marcelo.marvelheroes.domain.usecases.DeleteFavorite
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEvents
+import com.marcelo.marvelheroes.domain.usecases.SaveFavorite
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.ErrorType
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State
 import com.marcelo.marvelheroes.utils.SetupCoroutines
@@ -38,27 +38,27 @@ class DetailsViewModelTest {
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
-    private lateinit var getComicsEventsUseCase: GetComicsEventsUseCase
+    private lateinit var getComicsEvents: GetComicsEvents
 
-    private lateinit var saveFavoriteUseCase: SaveFavoriteUseCase
+    private lateinit var saveFavorite: SaveFavorite
 
-    private lateinit var checkFavoriteUseCase: CheckFavoriteUseCase
+    private lateinit var checkFavorite: CheckFavorite
 
-    private lateinit var deleteFavoriteUseCase: DeleteFavoriteUseCase
+    private lateinit var deleteFavorite: DeleteFavorite
 
     private lateinit var viewModel: DetailsViewModel
 
     @Before
     fun setup() {
-        getComicsEventsUseCase = mockk()
-        saveFavoriteUseCase = mockk()
-        checkFavoriteUseCase = mockk()
-        deleteFavoriteUseCase = mockk()
+        getComicsEvents = mockk()
+        saveFavorite = mockk()
+        checkFavorite = mockk()
+        deleteFavorite = mockk()
         viewModel = DetailsViewModel(
-            getComicsEventsUseCase,
-            saveFavoriteUseCase,
-            checkFavoriteUseCase,
-            deleteFavoriteUseCase
+            getComicsEvents,
+            saveFavorite,
+            checkFavorite,
+            deleteFavorite
         )
     }
 
@@ -81,7 +81,7 @@ class DetailsViewModelTest {
                 )
             )
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
                 expectedListSuccess
             )
 
@@ -96,7 +96,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateSuccess,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
 
             assertEquals(
@@ -123,7 +123,7 @@ class DetailsViewModelTest {
                 )
             )
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
                 expectedListSuccess
             )
 
@@ -138,7 +138,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateSuccess,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
 
             assertEquals(
@@ -160,7 +160,7 @@ class DetailsViewModelTest {
                 )
             )
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
                 expectedListSuccess
             )
 
@@ -176,7 +176,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateSuccess,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
 
             assertEquals(
@@ -189,7 +189,7 @@ class DetailsViewModelTest {
     fun `should notify viewState with Empty from viewState when get heroes details returns empty list`() =
         runTest {
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
                 emptyList()
             )
 
@@ -199,7 +199,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateEmpty,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
         }
 
@@ -207,14 +207,14 @@ class DetailsViewModelTest {
     fun `should notify viewState with Error from viewState when get heroes details returns exception`() =
         runTest {
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flow {
+            coEvery { getComicsEvents.invoke(any()) } returns flow {
                 throw Exception("Simulando uma exceção")
             }
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
             val expectedViewStateError: State<List<DetailParentViewData>> =
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
 
             assertTrue(expectedViewStateError is State.Error)
             assertEquals(ErrorType.GenericError, (expectedViewStateError as State.Error).errorType)
@@ -224,14 +224,14 @@ class DetailsViewModelTest {
     fun `should notify viewState with NetworkError from viewState when get heroes details returns network error`() =
         runTest {
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flow {
+            coEvery { getComicsEvents.invoke(any()) } returns flow {
                 throw UnknownHostException("Simulando um erro de rede")
             }
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
             val expectedViewStateError: State<List<DetailParentViewData>> =
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
 
             assertTrue(expectedViewStateError is State.Error)
             assertEquals(ErrorType.NetworkError, (expectedViewStateError as State.Error).errorType)

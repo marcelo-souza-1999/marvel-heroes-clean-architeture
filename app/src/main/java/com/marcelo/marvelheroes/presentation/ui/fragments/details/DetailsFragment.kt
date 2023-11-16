@@ -76,7 +76,7 @@ class DetailsFragment : Fragment() {
 
     private fun handleDetailsHeroes() = viewLifecycleOwner.lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.CREATED) {
-            viewModel.viewState.collect { state ->
+            viewModel.viewStateDetails.collect { state ->
                 showShimmer(state is Loading)
                 if (state is Success) {
                     if (state.data.isNotEmpty()) {
@@ -105,14 +105,13 @@ class DetailsFragment : Fragment() {
         }
     }
 
-
     private fun showErrorHeroes(
         isNetwork: Boolean = false,
         isErrorServer: Boolean = false
     ) = with(binding) {
         showShimmer(false)
         layoutErrorView.isVisible = true
-        binding.includeErrorView.btnRetryLoading.setOnClickListener {
+        includeErrorView.btnRetryLoading.setOnClickListener {
             showShimmer(true)
             fetchDetailsHeroes()
         }
@@ -122,10 +121,6 @@ class DetailsFragment : Fragment() {
             includeErrorView.txtErrorLoading.text = getString(R.string.error_server)
             includeErrorView.btnRetryLoading.isVisible = false
         }
-    }
-
-    private fun showEmpty() = with(binding) {
-        layoutEmptyView.isVisible = true
     }
 
     private fun showSuccess(data: List<DetailParentViewData>) = with(binding) {
@@ -138,6 +133,9 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private fun showEmpty() = with(binding) {
+        layoutEmptyView.isVisible = true
+    }
 
     private fun fetchSaveHeroFavorite() = viewModel.saveHeroFavorite(
         heroId = args.detailsHeroesArg.heroId,
@@ -160,7 +158,7 @@ class DetailsFragment : Fragment() {
     }
 
 
-    private fun fetchCheckHeroFavorite() = viewModel.checkFavorite(
+    private fun fetchCheckHeroFavorite() = viewModel.checkHeroFavorite(
         heroId = args.detailsHeroesArg.heroId
     )
 
@@ -178,7 +176,7 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun fetchDeleteHeroFavorite() = viewModel.deleteFavorite(
+    private fun fetchDeleteHeroFavorite() = viewModel.deleteHeroFavorite(
         heroId = args.detailsHeroesArg.heroId
     )
 

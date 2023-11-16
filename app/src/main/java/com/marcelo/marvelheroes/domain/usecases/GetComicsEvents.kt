@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Single
 
 @Single
-class GetComicsEventsUseCase(
+class GetComicsEvents(
     private val repository: HeroesRepository,
     private val detailParentFactory: DetailParentFactory
 ) {

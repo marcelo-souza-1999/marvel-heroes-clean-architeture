@@ -20,7 +20,7 @@ import org.junit.Test
 import kotlin.test.assertFailsWith
 
 @ExperimentalCoroutinesApi
-class GetComicsEventsUseCaseTest {
+class GetComicsEventsTest {
 
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
@@ -29,13 +29,13 @@ class GetComicsEventsUseCaseTest {
 
     private lateinit var detailParentFactory: DetailParentFactory
 
-    private lateinit var useCase: GetComicsEventsUseCase
+    private lateinit var useCase: GetComicsEvents
 
     @Before
     fun setup() {
         repository = mockk()
         detailParentFactory = mockk()
-        useCase = GetComicsEventsUseCase(repository, detailParentFactory)
+        useCase = GetComicsEvents(repository, detailParentFactory)
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.marcelo.marvelheroes.presentation.viewmodel
 
 import androidx.paging.PagingData
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCase
+import com.marcelo.marvelheroes.domain.usecases.GetHeroes
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getHeroesFactory
@@ -26,7 +26,7 @@ class HeroesViewModelTest {
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
-    private lateinit var getHeroesUseCase: GetHeroesUseCase
+    private lateinit var getHeroes: GetHeroes
 
     private lateinit var heroesViewModel: HeroesViewModel
 
@@ -38,9 +38,9 @@ class HeroesViewModelTest {
 
     @Before
     fun setup() {
-        getHeroesUseCase = mockk()
+        getHeroes = mockk()
         heroesViewModel = HeroesViewModel(
-            getHeroesUseCase = getHeroesUseCase
+            getHeroes = getHeroes
         )
     }
 
@@ -48,7 +48,7 @@ class HeroesViewModelTest {
     fun `should validate the paging data object values when calling getPagingHeroes`() =
         runTest {
 
-            coEvery { getHeroesUseCase.invoke(any(), any()) }
+            coEvery { getHeroes.invoke(any(), any()) }
                 .returns(flowOf(pagingDataHeroes))
 
             val result = heroesViewModel.getPagingHeroes(emptyString())
@@ -60,7 +60,7 @@ class HeroesViewModelTest {
     fun `should return null when there's an error in getPagingHeroes`() =
         runTest {
 
-            coEvery { getHeroesUseCase.invoke(any(), any()) }
+            coEvery { getHeroes.invoke(any(), any()) }
                 .throws(RuntimeException())
 
             val result = heroesViewModel.getPagingHeroes(emptyString())

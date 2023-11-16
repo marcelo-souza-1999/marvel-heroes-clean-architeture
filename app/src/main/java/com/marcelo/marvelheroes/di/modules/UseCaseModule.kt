@@ -3,11 +3,12 @@ package com.marcelo.marvelheroes.di.modules
 import com.marcelo.marvelheroes.domain.factories.DetailParentFactory
 import com.marcelo.marvelheroes.domain.repository.FavoritesHeroRepository
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.CheckFavoriteUseCase
-import com.marcelo.marvelheroes.domain.usecases.DeleteFavoriteUseCase
-import com.marcelo.marvelheroes.domain.usecases.GetComicsEventsUseCase
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCase
-import com.marcelo.marvelheroes.domain.usecases.SaveFavoriteUseCase
+import com.marcelo.marvelheroes.domain.usecases.CheckFavorite
+import com.marcelo.marvelheroes.domain.usecases.DeleteFavorite
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEvents
+import com.marcelo.marvelheroes.domain.usecases.GetHeroes
+import com.marcelo.marvelheroes.domain.usecases.GetHeroesFavorite
+import com.marcelo.marvelheroes.domain.usecases.SaveFavorite
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -15,26 +16,31 @@ import org.koin.core.annotation.Single
 @Single
 class UseCaseModule {
     @Single
-    fun provideGetHeroesUseCase(repository: HeroesRepository) = GetHeroesUseCase(repository)
+    fun provideGetHeroesUseCase(repository: HeroesRepository) = GetHeroes(repository)
 
     @Single
     fun provideGetComicsUseCase(
         repository: HeroesRepository,
         factory: DetailParentFactory
-    ) = GetComicsEventsUseCase(repository, factory)
+    ) = GetComicsEvents(repository, factory)
 
     @Single
     fun provideGetFavoriteUseCase(
         repository: FavoritesHeroRepository
-    ) = CheckFavoriteUseCase(repository)
+    ) = CheckFavorite(repository)
 
     @Single
     fun provideSaveFavoriteUseCase(
         repository: FavoritesHeroRepository
-    ) = SaveFavoriteUseCase(repository)
+    ) = SaveFavorite(repository)
 
     @Single
     fun provideRemoveFavoriteUseCase(
         repository: FavoritesHeroRepository
-    ) = DeleteFavoriteUseCase(repository)
+    ) = DeleteFavorite(repository)
+
+    @Single
+    fun providesGetHeroesFavorite(
+        repository: FavoritesHeroRepository
+    ) = GetHeroesFavorite(repository)
 }

@@ -14,19 +14,19 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class CheckFavoriteUseCaseTest {
+class CheckFavoriteTest {
 
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var repository: FavoritesHeroRepository
 
-    private lateinit var useCase: CheckFavoriteUseCase
+    private lateinit var useCase: CheckFavorite
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = CheckFavoriteUseCase(repository)
+        useCase = CheckFavorite(repository)
     }
 
     @Test

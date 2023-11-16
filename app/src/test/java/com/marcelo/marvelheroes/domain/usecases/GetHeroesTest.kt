@@ -19,19 +19,19 @@ import org.junit.Test
 import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
-class GetHeroesUseCaseTest {
+class GetHeroesTest {
 
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var repository: HeroesRepository
 
-    private lateinit var useCase: GetHeroesUseCase
+    private lateinit var useCase: GetHeroes
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = GetHeroesUseCase(
+        useCase = GetHeroes(
             repository = repository
         )
     }

@@ -15,19 +15,19 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi
-class SaveFavoriteUseCaseTest {
+class SaveFavoriteTest {
 
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
     private lateinit var repository: FavoritesHeroRepository
 
-    private lateinit var useCase: SaveFavoriteUseCase
+    private lateinit var useCase: SaveFavorite
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = SaveFavoriteUseCase(repository)
+        useCase = SaveFavorite(repository)
     }
 
     @Test
