@@ -12,6 +12,7 @@ import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.collectViewState
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.collectViewStateList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -37,6 +38,9 @@ class DetailsViewModel(
     private val _viewStateDeleteFavorite =
         MutableStateFlow<State<Boolean>>(State.Loading())
     val viewStateDeleteFavorite = _viewStateDeleteFavorite.asStateFlow()
+
+    private val _viewStateIsFavorite = MutableStateFlow(false)
+    val isFavorite: StateFlow<Boolean> get() = _viewStateIsFavorite
 
     fun getHeroesDetails(heroId: Int) = viewModelScope.launch {
         getComicsEvents(heroId)

@@ -77,16 +77,23 @@ class DetailsFragment : Fragment() {
     private fun handleDetailsHeroes() = viewLifecycleOwner.lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.CREATED) {
             viewModel.viewStateDetails.collect { state ->
-                showShimmer(state is Loading)
-                if (state is Success) {
-                    if (state.data.isNotEmpty()) {
-                        showSuccess(data = state.data)
-                    } else showEmpty()
-                } else if (state is Error) {
-                    when (state.errorType) {
-                        is NetworkError -> showErrorHeroes(isNetwork = true)
-                        is GenericError -> showErrorHeroes()
-                        is ServerError -> showErrorHeroes(isErrorServer = true)
+                when (state) {
+                    is Loading -> showShimmer(true)
+
+                    is Success -> {
+                        if (state.data.isNotEmpty()) {
+                            showSuccess(data = state.data)
+                        } else {
+                            showEmpty()
+                        }
+                    }
+
+                    is Error -> {
+                        when (state.errorType) {
+                            is NetworkError -> showErrorHeroes(isNetwork = true)
+                            is GenericError -> showErrorHeroes()
+                            is ServerError -> showErrorHeroes(isErrorServer = true)
+                        }
                     }
                 }
             }

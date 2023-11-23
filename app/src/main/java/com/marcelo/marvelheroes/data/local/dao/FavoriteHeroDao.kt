@@ -5,12 +5,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import com.marcelo.marvelheroes.data.local.entitys.FavoriteHeroEntity
-import com.marcelo.marvelheroes.utils.constants.NAME_TABLE
 import kotlinx.coroutines.flow.Flow
+
+private const val NAME_TABLE = "favorites"
 
 @Dao
 interface FavoriteHeroDao {
-
     @Query("SELECT * FROM $NAME_TABLE")
     fun getFavorites(): Flow<List<FavoriteHeroEntity>>
 

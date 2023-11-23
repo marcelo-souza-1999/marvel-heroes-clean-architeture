@@ -54,15 +54,21 @@ class FavoritesFragment : Fragment() {
     private fun handleFavoritesHeroes() = viewLifecycleOwner.lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.CREATED) {
             viewModel.viewStateFavorites.collect { state ->
-                showShimmer(state is Loading)
-                if (state is Success) {
-                    if (state.data.isNotEmpty()) {
-                        showSuccess(state.data)
-                    } else showEmpty()
-                } else if (state is Error) {
-                    when (state.errorType) {
-                        is GenericError -> showError()
-                        else -> {}
+                when (state) {
+                    is Loading -> showShimmer(true)
+
+                    is Success -> {
+                        if (state.data.isNotEmpty()) {
+                            showSuccess(state.data)
+                        } else {
+                            showEmpty()
+                        }
+                    }
+
+                    is Error -> {
+                        if (state.errorType is GenericError) {
+                            showError()
+                        }
                     }
                 }
             }
@@ -92,6 +98,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showEmpty() = with(binding) {
+        showShimmer(false)
         includeErrorEmpty.txtErrorLoading.text =
             getString(R.string.error_loading_favorite_heros_empty)
         layoutEmptyView.isVisible = true
