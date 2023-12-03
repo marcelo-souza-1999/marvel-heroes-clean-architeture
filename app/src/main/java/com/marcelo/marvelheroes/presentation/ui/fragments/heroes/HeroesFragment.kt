@@ -52,10 +52,15 @@ class HeroesFragment : Fragment() {
     }
 
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
+        postponeEnterTransition()
         setHasFixedSize(true)
         adapter = heroesAdapter.withLoadStateFooter(
             footer = HeroesLoadMoreAdapter(retryLoad = heroesAdapter::retry)
         )
+        viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
     }
 
     private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
@@ -88,7 +93,7 @@ class HeroesFragment : Fragment() {
         }
     }
 
-    private fun showError() =
+    private fun showError() {
         with(binding) {
             layoutShimmerHeroes.isVisible = false
             layoutError.isVisible = true
@@ -98,6 +103,8 @@ class HeroesFragment : Fragment() {
                 layoutError.isVisible = false
             }
         }
+
+    }
 
     private fun onHeroClicked(heroesData: HeroesViewData, view: View) {
         val extras = FragmentNavigatorExtras(

@@ -1,6 +1,7 @@
 package com.marcelo.marvelheroes.data.remote.datasource
 
 import androidx.paging.PagingSource
+import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.ONE

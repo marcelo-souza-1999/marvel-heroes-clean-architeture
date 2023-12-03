@@ -1,9 +1,8 @@
 package com.marcelo.marvelheroes.di.modules
 
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
-import com.nhaarman.mockitokotlin2.mock
+import com.marcelo.marvelheroes.domain.usecases.GetHeroes
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -16,11 +15,11 @@ import org.koin.test.inject
 
 class UseCaseModuleTest : KoinTest {
 
-    private val mockHeroesRepository: HeroesRepository = mock()
-    private val getHeroesUseCase: GetHeroesUseCase by inject()
+    private val mockHeroesRepository: HeroesRepository = mockk()
+    private val getHeroes: GetHeroes by inject()
 
     private val setupModule = module {
-        single<GetHeroesUseCase> { GetHeroesUseCaseImpl(mockHeroesRepository) }
+        single<GetHeroes> { GetHeroes(mockHeroesRepository) }
     }
 
     @Before
@@ -35,9 +34,9 @@ class UseCaseModuleTest : KoinTest {
 
     @Test
     fun `test provideGetHeroesUseCase`() {
-        val expected = GetHeroesUseCaseImpl(mockHeroesRepository)
+        val expected = GetHeroes(mockHeroesRepository)
 
-        val actual = getHeroesUseCase
+        val actual = getHeroes
 
         assertEquals(expected::class, actual::class)
     }
