@@ -19,6 +19,7 @@
     <string name="error_loading_favorite_heros_empty">Não foi encontrado heróis favoritados!</string>
     <string name="try_again_loading">Tente novamente</string>
     <string name="error_loading_page_heroes">Houve um erro ao tentar carregar heróis da proxima página. Tente novamente</string>
+    <string name="error_not_connection">Parece que estamos sem conexão. Para garantir que você tenha as informações mais recentes, por favor, verifique sua conexão com a internet e tente novamente. 🌐</string>
 
     <string name="details_comics_category">Comics</string>
     <string name="details_events_category">Events</string>

@@ -36,12 +36,6 @@ val getComicsFactory = ComicsViewData(
     imageUrl = IMAGE_URL_DEFAULT
 )
 
-val getHeroesPagingSourceFactory = HeroesViewData(
-    name = HERO_NAME_DEFAULT,
-    imageUrl = IMAGE_URL_DEFAULT,
-    id = HERO_ID_DEFAULT
-)
-
 val getDetailChildFactoryList = listOf(
     DetailChildViewData(
         id = HERO_ID_DEFAULT,

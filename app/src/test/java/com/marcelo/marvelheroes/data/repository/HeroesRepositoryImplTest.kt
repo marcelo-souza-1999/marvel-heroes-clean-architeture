@@ -1,17 +1,18 @@
 package com.marcelo.marvelheroes.data.repository
 
-import com.marcelo.marvelheroes.data.remote.datasource.HeroesPagingSource
-import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
+import androidx.paging.PagingConfig
+import com.marcelo.marvelheroes.data.local.database.MarvelDatabase
 import com.marcelo.marvelheroes.data.remote.repository.HeroesRepositoryImpl
+import com.marcelo.marvelheroes.domain.datasource.HeroesRemoteDataSource
 import com.marcelo.marvelheroes.domain.mapper.DetailHeroesMapper
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
-import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.getComicsFactory
 import com.marcelo.marvelheroes.utils.getComicsFactoryFlow
 import com.marcelo.marvelheroes.utils.getDetailChildFactoryList
 import com.marcelo.marvelheroes.utils.getEventsFactory
 import com.marcelo.marvelheroes.utils.getEventsFactoryFlow
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,24 +24,25 @@ import org.junit.Test
 class HeroesRepositoryImplTest {
 
     private lateinit var repository: HeroesRepository
+    private lateinit var database: MarvelDatabase
     private lateinit var mapper: DetailHeroesMapper
     private lateinit var remoteDataSource: HeroesRemoteDataSource
+    private lateinit var pagerConfig: PagingConfig
 
     @Before
     fun setup() {
         remoteDataSource = mockk()
+        database = mockk {
+            every { createHeroDao().pagingSource() } returns mockk(relaxed = true)
+            every { createRemoteKeyDao() } returns mockk()
+        }
         mapper = mockk()
+        pagerConfig = mockk()
         repository = HeroesRepositoryImpl(
-            remoteDataSource = remoteDataSource, detailHeroesMapper = mapper
+            remoteDataSource = remoteDataSource,
+            database = database,
+            detailHeroesMapper = mapper
         )
-    }
-
-    @Test
-    fun `getHeroes shouldReturn HeroesPagingSource`() {
-
-        val result = repository.getHeroes(emptyString())
-
-        assertEquals(HeroesPagingSource::class.java, result.javaClass)
     }
 
     @Test
