@@ -14,13 +14,13 @@ class DatabaseModule : KoinComponent {
 
     @Single
     fun providesDatabase(context: Context) = Room.databaseBuilder(
-        context = context,
-        klass = MarvelDatabase::class.java,
-        name = DATABASE_NAME
+        context = context, klass = MarvelDatabase::class.java, name = DATABASE_NAME
     ).build()
 
 
     @Single
     fun providesFavoriteDao(database: MarvelDatabase) = database.createFavoriteDao()
+    fun providesHeroDao(database: MarvelDatabase) = database.createHeroDao()
+    fun providesRemoteKeyDao(database: MarvelDatabase) = database.createRemoteKeyDao()
 
 }
