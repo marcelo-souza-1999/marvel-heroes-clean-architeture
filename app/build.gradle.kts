@@ -27,14 +27,14 @@ android {
     namespace = "com.marcelo.marvelheroes"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
-    signingConfigs {
+/*    signingConfigs {
         create("release") {
             storeFile = file(getReleaseProperties("STORE_FILE_KEY"))
             storePassword = getReleaseProperties("STORE_PASSWORD_KEY")
             keyPassword = getReleaseProperties("PASSWORD_KEY")
             keyAlias = getReleaseProperties("ALIAS_KEY")
         }
-    }
+    }*/
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -95,14 +95,14 @@ android {
             initWith(beta.get())
             initWith(getByName("debug"))
         }
-        named("release") {
+/*        named("release") {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }
+        }*/
     }
 
     compileOptions {

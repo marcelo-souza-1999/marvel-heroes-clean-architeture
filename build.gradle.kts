@@ -1,4 +1,4 @@
-import org.gradle.kotlin.dsl.*
+import io.gitlab.arturbosch.detekt.Detekt
 
 buildscript {
     repositories {
@@ -22,17 +22,40 @@ plugins {
 
 val detektFormat = libs.detekt.format
 
-subprojects {
-    apply {
-        plugin("io.gitlab.arturbosch.detekt")
-    }
+detekt {
+    toolVersion = libs.versions.detekt.get()
+    config.setFrom(file("${rootProject.projectDir}/config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    basePath = projectDir.absolutePath
+    reportsDir = file("$projectDir/build/reports/detekt/")
+}
 
-    detekt {
-        val pathDetektConfig = "config/detekt/detekt.yml"
-        config = rootProject.files(pathDetektConfig)
-    }
+tasks.register("detektAll", Detekt::class.java){
+    val autoFix = project.hasProperty("detektAutoFix")
 
-    dependencies {
-        detektPlugins(detektFormat)
+    description = "Custom DETEKT build for all modules"
+    parallel = true
+    ignoreFailures = true
+    autoCorrect = autoFix
+    buildUponDefaultConfig = true
+    setSource(file(projectDir))
+    config.setFrom(file("${rootProject.projectDir}/config/detekt/detekt.yml"))
+    include("**/*.kt")
+    exclude("**/resources/**", "**/build/**")
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(true)
+    }
+}
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(true)
+        basePath = projectDir.absolutePath
     }
 }
