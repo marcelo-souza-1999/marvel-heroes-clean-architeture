@@ -9,7 +9,7 @@ android_material_design = "1.9.0"
 kotlin = "1.8.0"
 detekt = "1.22.0"
 koin = "3.3.2"
-koin_ammotations = "1.1.1"
+koin_annotations = "1.1.1"
 google_services = "4.3.15"
 navigation = "2.5.2"
 lifecycle = "2.6.1"
@@ -57,8 +57,8 @@ navigation_safe_args = { module = "androidx.navigation:navigation-safe-args-grad
 google_services = { module = "com.google.gms:google-services", version.ref = "google_services" }
 detekt_format = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 koin_dev = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin_annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin_ammotations" }
-koin_ksp_compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin_ammotations" }
+koin_annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin_annotations" }
+koin_ksp_compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin_annotations" }
 navigation_fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
 navigation_ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 lifecycle_view_model = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }

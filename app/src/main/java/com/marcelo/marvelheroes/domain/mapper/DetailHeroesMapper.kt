@@ -10,7 +10,6 @@ import org.koin.core.annotation.Single
 
 @Single
 class DetailHeroesMapper {
-
     fun mapComicsResponseToDetailChildViewData(comicsResponse: ComicsResponse): List<DetailChildViewData> {
         val detailChildList = mutableListOf<DetailChildViewData>()
 

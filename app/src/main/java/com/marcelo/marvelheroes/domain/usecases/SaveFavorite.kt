@@ -12,7 +12,6 @@ import org.koin.core.annotation.Single
 class SaveFavorite(
     private val repository: FavoritesHeroRepository
 ) {
-
     suspend operator fun invoke(
         heroId: Int, nameHero: String, imageUrl: String
     ): Flow<FavoriteViewData> = flow {

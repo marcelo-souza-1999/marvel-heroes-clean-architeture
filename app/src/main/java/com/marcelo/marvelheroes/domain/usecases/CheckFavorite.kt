@@ -9,7 +9,6 @@ import org.koin.core.annotation.Single
 class CheckFavorite(
     private val repository: FavoritesHeroRepository
 ) {
-
     suspend operator fun invoke(heroId: Int): Flow<Boolean> = flow {
         val isFavorite =
             runCatching { repository.isFavorite(heroId) }.getOrDefault(defaultValue = false)

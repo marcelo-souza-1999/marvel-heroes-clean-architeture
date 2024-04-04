@@ -2,6 +2,9 @@ package com.marcelo.marvelheroes.presentation.ui.fragments.heroes
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -15,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
+import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding.inflate
 import com.marcelo.marvelheroes.domain.model.DetailsHeroesArgViewData
@@ -40,12 +44,33 @@ class HeroesFragment : Fragment() {
 
     private val viewModel: HeroesViewModel by viewModel()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.item_sort_heroes_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sortHeroes -> {
+                findNavController().navigate(R.id.action_heroesFragment_to_sortFragment)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

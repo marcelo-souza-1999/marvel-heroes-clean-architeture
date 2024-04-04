@@ -11,13 +11,13 @@ import org.koin.core.annotation.Single
 class GetHeroesFavorite(
     private val repository: FavoritesHeroRepository
 ) {
-
     suspend operator fun invoke(): Flow<List<FavoriteItemData>> = flow {
         repository.getAllFavorites().collect { favoriteHeroes ->
-            val mappedHeroes = favoriteHeroes.map {
-                HeroesFavoriteMapper.mapHeroesToFavoriteItem(it)
-            }
-            emit(mappedHeroes)
+            emit(
+                favoriteHeroes.map {
+                    HeroesFavoriteMapper.mapHeroesToFavoriteItem(it)
+                }
+            )
         }
     }
 }
