@@ -8,6 +8,7 @@ import androidx.core.view.forEach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.marcelo.marvelheroes.R
@@ -48,20 +49,18 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
         handleGetOrderHeroes()
     }
 
-    private fun setupListenerChipGroups() {
-        with(binding) {
-            chipGroupOrderByTitle.setOnCheckedChangeListener { _, checkedId ->
-                orderBy = getOrderByValue(checkedId)
-            }
+    private fun setupListenerChipGroups() = with(binding) {
+        chipGroupOrderByTitle.setOnCheckedChangeListener { _, checkedId ->
+            orderBy = getOrderByValue(checkedId)
+        }
 
-            chipGroupOrderByOptions.setOnCheckedChangeListener { _, checkedId ->
-                order = getOrderValue(checkedId)
-            }
+        chipGroupOrderByOptions.setOnCheckedChangeListener { _, checkedId ->
+            order = getOrderValue(checkedId)
+        }
 
-            btnApplySort.setOnClickListener {
-                fetchSaveOrderHeroes()
-                handleSaveOrderHeroes()
-            }
+        btnApplySort.setOnClickListener {
+            fetchSaveOrderHeroes()
+            handleSaveOrderHeroes()
         }
     }
 
@@ -81,68 +80,71 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
         viewModel.saveOrderHeroes(orderBy, order)
     }
 
-    private fun handleGetOrderHeroes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.viewStateGetSortHeroes.collect { state ->
-                    when (state) {
-                        is State.Loading -> {
-                            binding.btnApplySort.visibility = View.GONE
-                            binding.progressBarSort.visibility = View.VISIBLE
+    private fun handleGetOrderHeroes() = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            viewModel.viewStateGetSortHeroes.collect { state ->
+                when (state) {
+                    is State.Loading -> updateUIVisibility(isLoading = true)
+                    is State.Success -> {
+                        updateUIVisibility(isLoading = false)
+                        if (state.data is SortHeroesViewData.Success) {
+                            successGetOrderHeroes(state.data)
                         }
-
-                        is State.Success -> {
-                            binding.btnApplySort.visibility = View.VISIBLE
-                            binding.progressBarSort.visibility = View.GONE
-                            if (state.data is SortHeroesViewData.Success) {
-                                successGetOrderHeroes(state.data)
-                            }
-                        }
-
-                        else -> {}
                     }
+
+                    else -> {}
                 }
             }
         }
     }
 
-    private fun successGetOrderHeroes(data: SortHeroesViewData.Success) {
-        with(binding) {
-            val (orderBy, orderOptions) = data.sortingPair
+    private fun successGetOrderHeroes(data: SortHeroesViewData.Success) = with(binding) {
+        val (orderBy, orderOptions) = data.sortingPair
 
-            chipGroupOrderByTitle.forEach { chip ->
-                if (getOrderByValue(chip.id) == orderBy) {
-                    (chip as Chip).isChecked = true
-                }
+        chipGroupOrderByTitle.forEach { chip ->
+            if (getOrderByValue(chip.id) == orderBy) {
+                (chip as Chip).isChecked = true
             }
+        }
 
-            chipGroupOrderByOptions.forEach { chip ->
-                if (getOrderValue(chip.id) == orderOptions) {
-                    (chip as Chip).isChecked = true
+        chipGroupOrderByOptions.forEach { chip ->
+            if (getOrderValue(chip.id) == orderOptions) {
+                (chip as Chip).isChecked = true
+            }
+        }
+
+
+    }
+
+    private fun handleSaveOrderHeroes() = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            viewModel.viewStateSaveSortHeroes.collect { state ->
+                when (state) {
+                    is State.Loading -> updateUIVisibility(isLoading = true)
+                    is State.Success -> {
+                        updateUIVisibility(isLoading = false)
+                        successSaveOrderHeroes()
+                    }
+
+                    else -> {}
                 }
             }
         }
     }
 
-    private fun handleSaveOrderHeroes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.viewStateSaveSortHeroes.collect { state ->
-                    when (state) {
-                        is State.Loading -> {
-                            binding.btnApplySort.visibility = View.GONE
-                            binding.progressBarSort.visibility = View.VISIBLE
-                        }
+    private fun successSaveOrderHeroes() = with(findNavController()) {
+        previousBackStackEntry?.savedStateHandle?.set(
+            key = ORDER_APPLIED_BASK_STACK_KEY, value = true
+        )
+        popBackStack()
+    }
 
-                        is State.Success -> {
-                            binding.btnApplySort.visibility = View.VISIBLE
-                            binding.progressBarSort.visibility = View.GONE
-                        }
+    private fun updateUIVisibility(isLoading: Boolean) = with(binding) {
+        btnApplySort.visibility = if (isLoading) View.GONE else View.VISIBLE
+        progressBarSort.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
-                        else -> {}
-                    }
-                }
-            }
-        }
+    private companion object {
+        const val ORDER_APPLIED_BASK_STACK_KEY = "sortingAppliedBackStackKey"
     }
 }

@@ -20,6 +20,7 @@ import okio.IOException
 @OptIn(ExperimentalPagingApi::class)
 class HeroesRemoteMediator(
     private val query: String,
+    private val orderBy: String,
     private val database: MarvelDatabase,
     private val dataSource: HeroesRemoteDataSource
 ) : RemoteMediator<Int, HeroesEntity>() {
@@ -53,6 +54,9 @@ class HeroesRemoteMediator(
             )
             if (query.isNotEmpty()) {
                 queries[NAME_STARTS_WITH] = query
+            }
+            if (orderBy.isNotEmpty()) {
+                queries[ORDER_BY] = query
             }
             val heroesPaging = dataSource.fetchHeroes(queries).singleOrNull()
             val responseOffset = heroesPaging?.dataContainerHeroes?.offset ?: ZERO
@@ -94,5 +98,6 @@ class HeroesRemoteMediator(
         const val ZERO = 0
         const val OFFSET = "offset"
         const val NAME_STARTS_WITH = "nameStartsWith"
+        const val ORDER_BY = "orderBy"
     }
 }

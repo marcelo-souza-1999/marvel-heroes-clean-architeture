@@ -10,6 +10,7 @@ interface HeroesRepository {
 
     fun getCachedHeroes(
         query: String,
+        orderBy: String,
         pagingConfig: PagingConfig
     ): Flow<PagingData<HeroesViewData>>
 

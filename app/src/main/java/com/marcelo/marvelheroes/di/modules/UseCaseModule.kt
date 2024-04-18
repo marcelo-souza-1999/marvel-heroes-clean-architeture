@@ -19,12 +19,13 @@ import org.koin.core.annotation.Single
 @Single
 class UseCaseModule {
     @Single
-    fun provideGetHeroesUseCase(repository: HeroesRepository) = GetHeroes(repository)
+    fun provideGetHeroesUseCase(
+        repository: HeroesRepository, localStorageRepository: LocalStorageRepository
+    ) = GetHeroes(repository, localStorageRepository)
 
     @Single
     fun provideGetComicsUseCase(
-        repository: HeroesRepository,
-        factory: DetailParentFactory
+        repository: HeroesRepository, factory: DetailParentFactory
     ) = GetComicsEvents(repository, factory)
 
     @Single
