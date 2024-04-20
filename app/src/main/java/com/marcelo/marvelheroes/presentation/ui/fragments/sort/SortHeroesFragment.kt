@@ -97,7 +97,7 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
                         }
                     }
 
-                    else -> {}
+                    is State.Error -> TODO("Será construido ainda")
                 }
             }
         }
@@ -131,7 +131,7 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
                         successSaveOrderHeroes()
                     }
 
-                    else -> {}
+                    is State.Error -> TODO("Será construido ainda")
                 }
             }
         }
