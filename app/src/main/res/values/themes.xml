@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.MarvelHeroes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -12,5 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="chipStyle">@style/Theme.SortChip</item>
+    </style>
+
+    <style name="Theme.SortChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/background_chip_sort</item>
+        <item name="android:textColor">@color/background_chip_text_sort</item>
+        <item name="checkedIconTint">@color/background_chip_text_sort</item>
     </style>
 </resources>

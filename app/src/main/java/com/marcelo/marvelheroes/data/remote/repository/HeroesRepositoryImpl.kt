@@ -27,13 +27,14 @@ class HeroesRepositoryImpl(
 
     override fun getCachedHeroes(
         query: String,
+        orderBy: String,
         pagingConfig: PagingConfig
     ): Flow<PagingData<HeroesViewData>> {
         val pagingSourceFactory = { database.createHeroDao().pagingSource() }
 
         return Pager(
             config = pagingConfig,
-            remoteMediator = HeroesRemoteMediator(query, database, remoteDataSource),
+            remoteMediator = HeroesRemoteMediator(query, orderBy, database, remoteDataSource),
             pagingSourceFactory = pagingSourceFactory
         ).flow.map { pagingData ->
             pagingData.map(detailHeroesMapper::mapHeroesEntityToHeroesViewData)

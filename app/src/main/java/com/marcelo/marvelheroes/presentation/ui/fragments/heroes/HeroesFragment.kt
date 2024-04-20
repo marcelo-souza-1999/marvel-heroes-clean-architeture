@@ -2,12 +2,16 @@ package com.marcelo.marvelheroes.presentation.ui.fragments.heroes
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -15,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
+import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding.inflate
 import com.marcelo.marvelheroes.domain.model.DetailsHeroesArgViewData
@@ -40,6 +45,12 @@ class HeroesFragment : Fragment() {
 
     private val viewModel: HeroesViewModel by viewModel()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,12 +59,28 @@ class HeroesFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.item_sort_heroes_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sortHeroes -> {
+                findNavController().navigate(R.id.action_heroesFragment_to_sortFragment)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initHeroesAdapter()
         fetchRequestHeroesPaging()
         handleHeroesPaging()
+        observerStateHandle()
     }
 
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
@@ -67,6 +94,29 @@ class HeroesFragment : Fragment() {
             startPostponedEnterTransition()
             true
         }
+    }
+
+    private fun observerStateHandle() {
+        val navController = findNavController()
+        val navBackStackEntry = navController.getBackStackEntry(R.id.heroesFragment)
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && navBackStackEntry.savedStateHandle.contains(
+                    ORDER_APPLIED_BASK_STACK_KEY
+                )
+            ) {
+                fetchRequestHeroesPaging()
+                navBackStackEntry.savedStateHandle.remove<Boolean>(ORDER_APPLIED_BASK_STACK_KEY)
+            }
+        }
+
+        navBackStackEntry.getLifecycle().addObserver(observer)
+
+        val onDestroyObserver = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.getLifecycle().removeObserver(observer)
+            }
+        }
+        navBackStackEntry.getLifecycle().addObserver(onDestroyObserver)
     }
 
     private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
@@ -95,7 +145,6 @@ class HeroesFragment : Fragment() {
             }
         }
     }
-
 
     private fun showShimmer(isVisibility: Boolean) = with(binding.includeShimmer.shimmerHeroes) {
         isVisible = isVisibility
@@ -139,5 +188,6 @@ class HeroesFragment : Fragment() {
 
     private companion object {
         const val ZERO = 0
+        const val ORDER_APPLIED_BASK_STACK_KEY = "sortingAppliedBackStackKey"
     }
 }
