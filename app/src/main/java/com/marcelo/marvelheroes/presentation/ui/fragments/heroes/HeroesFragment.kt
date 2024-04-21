@@ -1,5 +1,7 @@
 package com.marcelo.marvelheroes.presentation.ui.fragments.heroes
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -7,6 +9,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -33,7 +37,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HeroesFragment : Fragment() {
+class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     private lateinit var binding: FragmentHeroesBinding
 
@@ -44,6 +48,54 @@ class HeroesFragment : Fragment() {
     }
 
     private val viewModel: HeroesViewModel by viewModel()
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.item_sort_heroes_menu, menu)
+
+        val widgetSearch = menu.findItem(R.id.searchHeroes)
+        val searchView = widgetSearch.actionView as SearchView
+        widgetSearch.setOnActionExpandListener(this)
+
+        if (viewModel.getTextSearch().isNotEmpty()) {
+            widgetSearch.expandActionView()
+            searchView.setQuery(viewModel.getTextSearch(), false)
+        }
+
+        with(searchView) {
+            isSubmitButtonEnabled = true
+            setOnQueryTextListener(this@HeroesFragment)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sortHeroes -> {
+                findNavController().navigate(R.id.action_heroesFragment_to_sortFragment)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return query?.let { queryData ->
+            viewModel.setTextSearch(queryData)
+            fetchRequestHeroesPaging()
+            hideKeyboard(requireActivity())
+            true
+        } ?: false
+    }
+
+    override fun onQueryTextChange(newText: String?) = true
+
+    override fun onMenuItemActionExpand(expand: MenuItem) = true
+
+    override fun onMenuItemActionCollapse(collapsed: MenuItem): Boolean {
+        viewModel.setTextSearch(emptyString())
+        fetchRequestHeroesPaging()
+        return true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,21 +109,6 @@ class HeroesFragment : Fragment() {
     ): View {
         binding = inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.item_sort_heroes_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.sortHeroes -> {
-                findNavController().navigate(R.id.action_heroesFragment_to_sortFragment)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -121,7 +158,7 @@ class HeroesFragment : Fragment() {
 
     private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
         lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-            viewModel.getPagingHeroes(emptyString()).collect { pagingData ->
+            viewModel.getPagingHeroes().collect { pagingData ->
                 heroesAdapter.submitData(pagingData)
             }
         }
@@ -166,7 +203,6 @@ class HeroesFragment : Fragment() {
                 layoutError.isVisible = false
             }
         }
-
     }
 
     private fun onHeroClicked(heroesData: HeroesViewData, view: View) {
@@ -184,6 +220,18 @@ class HeroesFragment : Fragment() {
         )
 
         findNavController().navigate(directions, extras)
+    }
+
+    private fun hideKeyboard(activity: Activity) {
+        val inputMethodManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusedView = activity.currentFocus
+        currentFocusedView?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                it.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
 
     private companion object {

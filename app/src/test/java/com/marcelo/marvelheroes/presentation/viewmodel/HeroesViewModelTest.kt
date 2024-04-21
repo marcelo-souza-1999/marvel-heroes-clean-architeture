@@ -1,9 +1,11 @@
 package com.marcelo.marvelheroes.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import com.marcelo.marvelheroes.domain.usecases.GetHeroes
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.utils.SetupCoroutines
+import com.marcelo.marvelheroes.utils.TEXT_SEARCH_KEY
 import com.marcelo.marvelheroes.utils.getHeroesFactory
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -30,6 +32,8 @@ class HeroesViewModelTest {
 
     private lateinit var heroesViewModel: HeroesViewModel
 
+    private val savedStateHandle: SavedStateHandle = mockk()
+
     private val pagingDataHeroes = PagingData.from(
         data = listOf(
             getHeroesFactory
@@ -38,9 +42,12 @@ class HeroesViewModelTest {
 
     @Before
     fun setup() {
+        coEvery { savedStateHandle.contains(any()) } returns true
+        coEvery { savedStateHandle.get<String>(TEXT_SEARCH_KEY) } returns emptyString()
         getHeroes = mockk()
         heroesViewModel = HeroesViewModel(
-            getHeroes = getHeroes
+            getHeroes = getHeroes,
+            savedStateHandle = savedStateHandle
         )
     }
 
@@ -51,7 +58,7 @@ class HeroesViewModelTest {
             coEvery { getHeroes.invoke(any(), any()) }
                 .returns(flowOf(pagingDataHeroes))
 
-            val result = heroesViewModel.getPagingHeroes(emptyString())
+            val result = heroesViewModel.getPagingHeroes()
 
             assertNotNull(result.first())
         }
@@ -63,7 +70,7 @@ class HeroesViewModelTest {
             coEvery { getHeroes.invoke(any(), any()) }
                 .throws(RuntimeException())
 
-            val result = heroesViewModel.getPagingHeroes(emptyString())
+            val result = heroesViewModel.getPagingHeroes()
 
             assertNull(result.first())
         }

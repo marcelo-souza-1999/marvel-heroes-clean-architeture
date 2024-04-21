@@ -1,5 +1,6 @@
 package com.marcelo.marvelheroes.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingConfig
@@ -7,17 +8,33 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.domain.usecases.GetHeroes
+import com.marcelo.marvelheroes.extensions.emptyString
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class HeroesViewModel(
-    private val getHeroes: GetHeroes
+    private val getHeroes: GetHeroes,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    fun getPagingHeroes(query: String): Flow<PagingData<HeroesViewData>> =
+    init {
+        if (!savedStateHandle.contains(TEXT_SEARCH_KEY)) {
+            savedStateHandle[TEXT_SEARCH_KEY] = emptyString()
+        }
+    }
+
+    fun getTextSearch(): String {
+        return savedStateHandle[TEXT_SEARCH_KEY] ?: emptyString()
+    }
+
+    fun setTextSearch(query: String) {
+        savedStateHandle[TEXT_SEARCH_KEY] = query
+    }
+
+    fun getPagingHeroes(): Flow<PagingData<HeroesViewData>> =
         getHeroes(
-            query = query,
+            query = getTextSearch(),
             pagingConfig = getDefaultPagingConfig()
         ).cachedIn(viewModelScope)
 
@@ -26,6 +43,7 @@ class HeroesViewModel(
     )
 
     private companion object {
-        private const val DEFAULT_PAGE_SIZE = 20
+        const val DEFAULT_PAGE_SIZE = 20
+        const val TEXT_SEARCH_KEY = "textSearch"
     }
 }

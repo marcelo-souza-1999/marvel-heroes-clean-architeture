@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flow
 private const val HERO_ID_DEFAULT = 1009562
 private const val IMAGE_URL_DEFAULT = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35.jpg"
 private const val HERO_NAME_DEFAULT = "Scarlet Witch"
+const val TEXT_SEARCH_KEY = "textSearch"
 
 val getHeroesFactory = HeroesViewData(
     name = HERO_NAME_DEFAULT,
