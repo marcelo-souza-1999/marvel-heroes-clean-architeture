@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -37,7 +38,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuProvider,
+    MenuItem.OnActionExpandListener {
 
     private lateinit var binding: FragmentHeroesBinding
 
@@ -49,8 +51,8 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnAc
 
     private val viewModel: HeroesViewModel by viewModel()
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.item_sort_heroes_menu, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.item_sort_heroes_menu, menu)
 
         val widgetSearch = menu.findItem(R.id.searchHeroes)
         val searchView = widgetSearch.actionView as SearchView
@@ -67,14 +69,14 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnAc
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
             R.id.sortHeroes -> {
                 findNavController().navigate(R.id.action_heroesFragment_to_sortFragment)
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
@@ -97,15 +99,8 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnAc
         return true
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = inflate(inflater, container, false)
         return binding.root
@@ -114,6 +109,7 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnAc
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         initHeroesAdapter()
         fetchRequestHeroesPaging()
         handleHeroesPaging()
@@ -211,11 +207,8 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnAc
         )
 
         val directions = HeroesFragmentDirections.actionOpenDetailsFragment(
-            heroesData.name,
-            DetailsHeroesArgViewData(
-                heroId = heroesData.id,
-                name = heroesData.name,
-                imageUrl = heroesData.imageUrl
+            heroesData.name, DetailsHeroesArgViewData(
+                heroId = heroesData.id, name = heroesData.name, imageUrl = heroesData.imageUrl
             )
         )
 
@@ -228,8 +221,7 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnAc
         val currentFocusedView = activity.currentFocus
         currentFocusedView?.let {
             inputMethodManager.hideSoftInputFromWindow(
-                it.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
+                it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
     }

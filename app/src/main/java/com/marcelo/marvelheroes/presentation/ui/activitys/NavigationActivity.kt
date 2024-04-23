@@ -39,7 +39,6 @@ class NavigationActivity : AppCompatActivity() {
             setOf(
                 R.id.heroesFragment,
                 R.id.favoritesFragment,
-                R.id.aboutFragment,
                 R.id.sortFragment
             )
         )
