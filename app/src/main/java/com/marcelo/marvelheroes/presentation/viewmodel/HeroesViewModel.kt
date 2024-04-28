@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.domain.usecases.GetHeroes
 import com.marcelo.marvelheroes.extensions.emptyString
@@ -18,21 +19,21 @@ class HeroesViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val DEFAULT_PAGE_SIZE = 20
-    private val TEXT_SEARCH_KEY = "textSearch"
+    private val defaultPageSize = R.dimen.twenty
+    private val textSearchKey = "textSearch"
 
     init {
-        if (!savedStateHandle.contains(TEXT_SEARCH_KEY)) {
-            savedStateHandle[TEXT_SEARCH_KEY] = emptyString()
+        if (!savedStateHandle.contains(textSearchKey)) {
+            savedStateHandle[textSearchKey] = emptyString()
         }
     }
 
     fun getTextSearch(): String {
-        return savedStateHandle[TEXT_SEARCH_KEY] ?: emptyString()
+        return savedStateHandle[textSearchKey] ?: emptyString()
     }
 
     fun setTextSearch(query: String) {
-        savedStateHandle[TEXT_SEARCH_KEY] = query
+        savedStateHandle[textSearchKey] = query
     }
 
     fun getPagingHeroes(): Flow<PagingData<HeroesViewData>> =
@@ -42,6 +43,6 @@ class HeroesViewModel(
         ).cachedIn(viewModelScope)
 
     private fun getDefaultPagingConfig() = PagingConfig(
-        pageSize = DEFAULT_PAGE_SIZE
+        pageSize = defaultPageSize
     )
 }
