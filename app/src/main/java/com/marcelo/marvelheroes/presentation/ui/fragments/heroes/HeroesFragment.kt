@@ -1,7 +1,5 @@
 package com.marcelo.marvelheroes.presentation.ui.fragments.heroes
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -9,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.core.view.isGone
@@ -34,6 +31,7 @@ import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesAdapter
 import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesLoadMoreAdapter
 import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesRefreshDataAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.HeroesViewModel
+import com.marcelo.marvelheroes.utils.keyboard.hideKeyboard
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -84,7 +82,7 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuProvider,
         return query?.let { queryData ->
             viewModel.setTextSearch(queryData)
             fetchRequestHeroesPaging()
-            hideKeyboard(requireActivity())
+            requireActivity().hideKeyboard()
             true
         } ?: false
     }
@@ -130,8 +128,7 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuProvider,
     }
 
     private fun observerStateHandle() {
-        val navController = findNavController()
-        val navBackStackEntry = navController.getBackStackEntry(R.id.heroesFragment)
+        val navBackStackEntry = findNavController().getBackStackEntry(R.id.heroesFragment)
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME && navBackStackEntry.savedStateHandle.contains(
                     ORDER_APPLIED_BASK_STACK_KEY
@@ -213,17 +210,6 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuProvider,
         )
 
         findNavController().navigate(directions, extras)
-    }
-
-    private fun hideKeyboard(activity: Activity) {
-        val inputMethodManager =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val currentFocusedView = activity.currentFocus
-        currentFocusedView?.let {
-            inputMethodManager.hideSoftInputFromWindow(
-                it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
-            )
-        }
     }
 
     private companion object {

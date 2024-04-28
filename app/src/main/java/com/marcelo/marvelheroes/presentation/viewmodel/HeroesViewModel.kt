@@ -18,6 +18,9 @@ class HeroesViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val DEFAULT_PAGE_SIZE = 20
+    private val TEXT_SEARCH_KEY = "textSearch"
+
     init {
         if (!savedStateHandle.contains(TEXT_SEARCH_KEY)) {
             savedStateHandle[TEXT_SEARCH_KEY] = emptyString()
@@ -41,9 +44,4 @@ class HeroesViewModel(
     private fun getDefaultPagingConfig() = PagingConfig(
         pageSize = DEFAULT_PAGE_SIZE
     )
-
-    private companion object {
-        const val DEFAULT_PAGE_SIZE = 20
-        const val TEXT_SEARCH_KEY = "textSearch"
-    }
 }
