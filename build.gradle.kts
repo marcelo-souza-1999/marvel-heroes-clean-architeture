@@ -36,6 +36,12 @@ detekt {
     buildUponDefaultConfig = true
     basePath = projectDir.absolutePath
     reportsDir = file("$projectDir/build/reports/detekt/")
+    reports {
+        sarif {
+            enabled = true
+            destination = file("$projectDir/build/reports/detekt/detekt.sarif")
+        }
+    }
 }
 
 tasks.register("detektAll", Detekt::class.java){
