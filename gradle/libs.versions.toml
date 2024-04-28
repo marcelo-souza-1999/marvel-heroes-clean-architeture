@@ -1,15 +1,15 @@
 [versions]
-# Android
 androidx_core = "1.10.1"
 androidx_app_compat = "1.6.1"
 androidx_constraint_layout = "2.1.4"
 android_material_design = "1.9.0"
-
-# Development
+build_gradle = "8.0.2"
+secrets = "2.0.1"
 kotlin = "1.8.0"
-detekt = "1.22.0"
+google_ksp = "1.8.0-1.0.9"
+detekt = "1.23.6"
 koin = "3.3.2"
-koin_ammotations = "1.1.1"
+koin_annotations = "1.1.1"
 google_services = "4.3.15"
 navigation = "2.5.2"
 lifecycle = "2.6.1"
@@ -23,8 +23,6 @@ ok_http_bom = "4.9.0"
 retrofit = "2.9.0"
 gson = "2.9.0"
 firebase_bom = "32.1.1"
-
-# Quality Tests
 junit = "4.13.2"
 mockk = "1.13.5"
 mockito_core = "4.2.0"
@@ -35,10 +33,6 @@ fragment_testing = "1.6.0"
 androidx_test_runner = "1.5.2"
 androidx_test_orchestrator = "1.4.2"
 mock_ok_http_test = "4.9.3"
-
-# Gradle
-google_ksp = "1.8.0-1.0.9"
-build_gradle = "8.0.2"
 min_sdk = "21"
 target_sdk = "33"
 compile_sdk = "33"
@@ -51,14 +45,15 @@ androidx_core = { module = "androidx.core:core-ktx", version.ref = "androidx_cor
 androidx_appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_app_compat" }
 androidx_constraint_layout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx_constraint_layout" }
 android_material_design = { module = "com.google.android.material:material", version.ref = "android_material_design" }
+secrets = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secrets"}
 build_tools = { module = "com.android.tools.build:gradle", version.ref = "build_gradle" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 navigation_safe_args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 google_services = { module = "com.google.gms:google-services", version.ref = "google_services" }
 detekt_format = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 koin_dev = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin_annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin_ammotations" }
-koin_ksp_compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin_ammotations" }
+koin_annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin_annotations" }
+koin_ksp_compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin_annotations" }
 navigation_fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
 navigation_ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 lifecycle_view_model = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -93,29 +88,29 @@ androidx_espresso_core = { module = "androidx.test.espresso:espresso-core", vers
 fragment_testing = { module = "androidx.fragment:fragment-testing", version.ref = "fragment_testing" }
 androidx_test_runner = { module = "androidx.test:runner", version.ref = "androidx_test_runner" }
 androidx_test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidx_test_orchestrator" }
-ok_http_mock_test = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mock_ok_http_test" }
-coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+ok_http_mock_test = { module = "com.squareup.okhttp3:mockwebserver",  version.ref = "mock_ok_http_test"}
+coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines"}
 koin_test_ktx = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin_test_junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
 [bundles]
-coroutines = ["coroutines.ktx", "coroutines.core"]
-retrofit = ["retrofit.ktx", "retrofit.converter.gson"]
-ok_http = ["ok_http.bom", "ok_http.squareup", "ok_http.interceptor"]
-glide = ["glide.dev", "glide.compiler"]
-navigation = ["navigation.fragment", "navigation.ui"]
-androidx = ["androidx.core", "androidx.appcompat", "androidx.constraint.layout"]
-lifecycle = ["lifecycle.view.model", "lifecycle.live.data", "lifecycle.runtime"]
-unit_test = ["junit", "mockk", "mockito.core", "androidx.junit", "androidx.core.testing", "coroutines.test", "koin.test.ktx"]
-instrumented_test = ["koin.test.ktx",
-    "koin.test.junit",
+coroutines = ["coroutines_ktx", "coroutines_core"]
+retrofit = ["retrofit_ktx", "retrofit_converter_gson"]
+ok_http = ["ok_http_squareup", "ok_http_interceptor"]
+glide = ["glide_dev", "glide_compiler"]
+navigation = ["navigation_fragment", "navigation_ui"]
+androidx = ["androidx_core", "androidx_appcompat", "androidx_constraint_layout"]
+lifecycle = ["lifecycle_view_model", "lifecycle_live_data", "lifecycle_runtime"]
+unit_test = ["junit", "mockk", "mockito_core", "androidx_junit", "androidx_core_testing", "coroutines_test", "koin_test_ktx"]
+instrumented_test = ["koin_test_ktx",
+    "koin_test_junit",
     "junit",
-    "androidx.core.testing",
-    "androidx.test.runner",
-    "androidx.espresso.contrib",
-    "androidx.espresso.core",
-    "androidx.test.orchestrator",
-    "ok.http.mock.test"]
+    "androidx_core_testing",
+    "androidx_test_runner",
+    "androidx_espresso_contrib",
+    "androidx_espresso_core",
+    "androidx_test_orchestrator",
+    "ok_http_mock_test"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
