@@ -86,8 +86,8 @@ androidx_espresso_core = { module = "androidx.test.espresso:espresso-core", vers
 fragment_testing = { module = "androidx.fragment:fragment-testing", version.ref = "fragment_testing" }
 androidx_test_runner = { module = "androidx.test:runner", version.ref = "androidx_test_runner" }
 androidx_test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidx_test_orchestrator" }
-ok_http_mock_test = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mock_ok_http_test" }
-coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+ok_http_mock_test = { module = "com.squareup.okhttp3:mockwebserver",  version.ref = "mock_ok_http_test"}
+coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines"}
 koin_test_ktx = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin_test_junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 

@@ -3,16 +3,22 @@ package com.marcelo.marvelheroes.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.marcelo.marvelheroes.domain.model.DetailChildViewData
 import com.marcelo.marvelheroes.domain.model.DetailParentViewData
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetComicsEventsUseCase
+import com.marcelo.marvelheroes.domain.usecases.CheckFavorite
+import com.marcelo.marvelheroes.domain.usecases.DeleteFavorite
+import com.marcelo.marvelheroes.domain.usecases.GetComicsEvents
+import com.marcelo.marvelheroes.domain.usecases.SaveFavorite
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.ErrorType
+import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State
 import com.marcelo.marvelheroes.utils.SetupCoroutines
 import com.marcelo.marvelheroes.utils.getComicsFactory
 import com.marcelo.marvelheroes.utils.getEventsFactory
 import com.marcelo.marvelheroes.utils.getHeroesFactory
-import com.marcelo.marvelheroes.utils.states.ResultStatus
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -20,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import java.net.UnknownHostException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -31,14 +38,28 @@ class DetailsViewModelTest {
     @get:Rule
     var setupCoroutineRule = SetupCoroutines()
 
-    private lateinit var getComicsEventsUseCase: GetComicsEventsUseCase
+    private lateinit var getComicsEvents: GetComicsEvents
+
+    private lateinit var saveFavorite: SaveFavorite
+
+    private lateinit var checkFavorite: CheckFavorite
+
+    private lateinit var deleteFavorite: DeleteFavorite
 
     private lateinit var viewModel: DetailsViewModel
 
     @Before
     fun setup() {
-        getComicsEventsUseCase = mockk()
-        viewModel = DetailsViewModel(getComicsEventsUseCase)
+        getComicsEvents = mockk()
+        saveFavorite = mockk()
+        checkFavorite = mockk()
+        deleteFavorite = mockk()
+        viewModel = DetailsViewModel(
+            getComicsEvents,
+            saveFavorite,
+            checkFavorite,
+            deleteFavorite
+        )
     }
 
     @Test
@@ -60,16 +81,13 @@ class DetailsViewModelTest {
                 )
             )
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
-                ResultStatus.Success(
-                    expectedListSuccess
-                )
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
+                expectedListSuccess
             )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
-            val expectedViewStateSuccess =
-                DetailsViewModel.Companion.DetailsViewState(success = expectedListSuccess)
+            val expectedViewStateSuccess = State.Success(expectedListSuccess)
 
             assertEquals(
                 TWO,
@@ -78,7 +96,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateSuccess,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
 
             assertEquals(
@@ -105,14 +123,13 @@ class DetailsViewModelTest {
                 )
             )
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
-                ResultStatus.Success(expectedListSuccess)
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
+                expectedListSuccess
             )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
-            val expectedViewStateSuccess =
-                DetailsViewModel.Companion.DetailsViewState(success = expectedListSuccess)
+            val expectedViewStateSuccess = State.Success(expectedListSuccess)
 
             assertEquals(
                 ONE,
@@ -121,7 +138,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateSuccess,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
 
             assertEquals(
@@ -143,17 +160,14 @@ class DetailsViewModelTest {
                 )
             )
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
-                ResultStatus.Success(
-                    expectedListSuccess
-                )
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
+                expectedListSuccess
             )
 
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
-            val expectedViewStateSuccess =
-                DetailsViewModel.Companion.DetailsViewState(success = expectedListSuccess)
+            val expectedViewStateSuccess = State.Success(expectedListSuccess)
 
             assertEquals(
                 ONE,
@@ -162,7 +176,7 @@ class DetailsViewModelTest {
 
             assertEquals(
                 expectedViewStateSuccess,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
 
             assertEquals(
@@ -175,17 +189,17 @@ class DetailsViewModelTest {
     fun `should notify viewState with Empty from viewState when get heroes details returns empty list`() =
         runTest {
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
-                ResultStatus.Success(emptyList())
+            coEvery { getComicsEvents.invoke(any()) } returns flowOf(
+                emptyList()
             )
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
-            val expectedViewStateEmpty = DetailsViewModel.Companion.DetailsViewState(empty = true)
+            val expectedViewStateEmpty = State.Success(emptyList<DetailParentViewData>())
 
             assertEquals(
                 expectedViewStateEmpty,
-                viewModel.viewState.value
+                viewModel.viewStateDetails.value
             )
         }
 
@@ -193,22 +207,35 @@ class DetailsViewModelTest {
     fun `should notify viewState with Error from viewState when get heroes details returns exception`() =
         runTest {
 
-            coEvery { getComicsEventsUseCase.invoke(any()) } returns flowOf(
-                ResultStatus.Error(
-                    Throwable()
-                )
-            )
+            coEvery { getComicsEvents.invoke(any()) } returns flow {
+                throw Exception("Simulando uma exceção")
+            }
 
             viewModel.getHeroesDetails(getHeroesFactory.id)
 
-            val expectedViewStateError = DetailsViewModel.Companion.DetailsViewState(error = true)
+            val expectedViewStateError: State<List<DetailParentViewData>> =
+                viewModel.viewStateDetails.value
 
-            assertEquals(
-                expectedViewStateError,
-                viewModel.viewState.value
-            )
+            assertTrue(expectedViewStateError is State.Error)
+            assertEquals(ErrorType.GenericError, (expectedViewStateError as State.Error).errorType)
         }
 
+    @Test
+    fun `should notify viewState with NetworkError from viewState when get heroes details returns network error`() =
+        runTest {
+
+            coEvery { getComicsEvents.invoke(any()) } returns flow {
+                throw UnknownHostException("Simulando um erro de rede")
+            }
+
+            viewModel.getHeroesDetails(getHeroesFactory.id)
+
+            val expectedViewStateError: State<List<DetailParentViewData>> =
+                viewModel.viewStateDetails.value
+
+            assertTrue(expectedViewStateError is State.Error)
+            assertEquals(ErrorType.NetworkError, (expectedViewStateError as State.Error).errorType)
+        }
 
     private companion object {
         const val COMICS = "Comics"

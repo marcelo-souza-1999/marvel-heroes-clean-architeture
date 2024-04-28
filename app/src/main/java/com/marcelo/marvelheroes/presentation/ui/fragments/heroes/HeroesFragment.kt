@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
 import com.marcelo.marvelheroes.databinding.FragmentHeroesBinding
@@ -21,17 +22,21 @@ import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.emptyString
 import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesAdapter
 import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesLoadMoreAdapter
+import com.marcelo.marvelheroes.presentation.adapters.heroes.HeroesRefreshDataAdapter
 import com.marcelo.marvelheroes.presentation.viewmodel.HeroesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.paging.LoadState.NotLoading as Success
 
 class HeroesFragment : Fragment() {
 
     private lateinit var binding: FragmentHeroesBinding
 
     private val heroesAdapter by lazy { HeroesAdapter(::onHeroClicked) }
+
+    private val heroesRefreshDataAdapter by lazy {
+        HeroesRefreshDataAdapter(heroesAdapter::retry)
+    }
 
     private val viewModel: HeroesViewModel by viewModel()
 
@@ -52,10 +57,16 @@ class HeroesFragment : Fragment() {
     }
 
     private fun initHeroesAdapter() = with(binding.rvHeroes) {
+        postponeEnterTransition()
         setHasFixedSize(true)
-        adapter = heroesAdapter.withLoadStateFooter(
+        adapter = heroesAdapter.withLoadStateHeaderAndFooter(
+            header = heroesRefreshDataAdapter,
             footer = HeroesLoadMoreAdapter(retryLoad = heroesAdapter::retry)
         )
+        viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
     }
 
     private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
@@ -66,17 +77,25 @@ class HeroesFragment : Fragment() {
         }
     }
 
-    private fun handleHeroesPaging() = lifecycleScope.launch {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-            heroesAdapter.loadStateFlow.collectLatest { loadState ->
-                when (loadState.refresh) {
-                    is Loading -> showShimmer(true)
-                    is Success -> showShimmer(false)
-                    is Error -> showError()
+    private fun handleHeroesPaging() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                heroesAdapter.loadStateFlow.collectLatest { loadState ->
+                    heroesRefreshDataAdapter.loadState = loadState.mediator?.refresh?.takeIf {
+                        it is Error && heroesAdapter.itemCount > ZERO
+                    } ?: loadState.prepend
+
+                    when (loadState.mediator?.refresh) {
+                        is Loading -> showShimmer(true)
+                        is Error -> if (heroesAdapter.itemCount == ZERO) showError()
+                        is LoadState.NotLoading -> showShimmer(false)
+                        null -> showError()
+                    }
                 }
             }
         }
     }
+
 
     private fun showShimmer(isVisibility: Boolean) = with(binding.includeShimmer.shimmerHeroes) {
         isVisible = isVisibility
@@ -88,7 +107,7 @@ class HeroesFragment : Fragment() {
         }
     }
 
-    private fun showError() =
+    private fun showError() {
         with(binding) {
             layoutShimmerHeroes.isVisible = false
             layoutError.isVisible = true
@@ -98,6 +117,8 @@ class HeroesFragment : Fragment() {
                 layoutError.isVisible = false
             }
         }
+
+    }
 
     private fun onHeroClicked(heroesData: HeroesViewData, view: View) {
         val extras = FragmentNavigatorExtras(
@@ -114,5 +135,9 @@ class HeroesFragment : Fragment() {
         )
 
         findNavController().navigate(directions, extras)
+    }
+
+    private companion object {
+        const val ZERO = 0
     }
 }

@@ -6,22 +6,19 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
-import com.marcelo.marvelheroes.domain.usecases.GetHeroesUseCaseImpl.Companion.GetHeroesParams
-import com.marcelo.marvelheroes.domain.usecases.interfaces.GetHeroesUseCase
+import com.marcelo.marvelheroes.domain.usecases.GetHeroes
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class HeroesViewModel(
-    private val getHeroesUseCase: GetHeroesUseCase
+    private val getHeroes: GetHeroes
 ) : ViewModel() {
 
     fun getPagingHeroes(query: String): Flow<PagingData<HeroesViewData>> =
-        getHeroesUseCase(
-            GetHeroesParams(
-                query = query,
-                pagingConfig = getDefaultPagingConfig()
-            )
+        getHeroes(
+            query = query,
+            pagingConfig = getDefaultPagingConfig()
         ).cachedIn(viewModelScope)
 
     private fun getDefaultPagingConfig() = PagingConfig(

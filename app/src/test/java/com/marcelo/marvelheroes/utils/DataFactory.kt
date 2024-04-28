@@ -16,42 +16,36 @@ import com.marcelo.marvelheroes.extensions.emptyString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-private const val heroIdDefault = 1009562
-private const val imageUrlDefault = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35.jpg"
-private const val heroNameDefault = "Scarlet Witch"
+private const val HERO_ID_DEFAULT = 1009562
+private const val IMAGE_URL_DEFAULT = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35.jpg"
+private const val HERO_NAME_DEFAULT = "Scarlet Witch"
 
 val getHeroesFactory = HeroesViewData(
-    name = heroNameDefault,
-    imageUrl = imageUrlDefault,
-    id = heroIdDefault
+    name = HERO_NAME_DEFAULT,
+    imageUrl = IMAGE_URL_DEFAULT,
+    id = HERO_ID_DEFAULT
 )
 
 val getEventsFactory = EventsViewData(
-    id = heroIdDefault,
-    imageUrl = imageUrlDefault
+    id = HERO_ID_DEFAULT,
+    imageUrl = IMAGE_URL_DEFAULT
 )
 
 val getComicsFactory = ComicsViewData(
-    id = heroIdDefault,
-    imageUrl = imageUrlDefault
-)
-
-val getHeroesPagingSourceFactory = HeroesViewData(
-    name = heroNameDefault,
-    imageUrl = imageUrlDefault,
-    id = heroIdDefault
+    id = HERO_ID_DEFAULT,
+    imageUrl = IMAGE_URL_DEFAULT
 )
 
 val getDetailChildFactoryList = listOf(
     DetailChildViewData(
-        id = heroIdDefault,
-        imageUrl = imageUrlDefault
+        id = HERO_ID_DEFAULT,
+        imageUrl = IMAGE_URL_DEFAULT
     )
 )
 
 val getComicsResponseList = listOf(
     ComicsResponse(
-        id = heroIdDefault,
+        id = HERO_ID_DEFAULT,
         thumbnail = ThumbnailResponse(
             path = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35",
             extension = "jpg"
@@ -61,7 +55,7 @@ val getComicsResponseList = listOf(
 
 val getEventsResponseList = listOf(
     EventsResponse(
-        id = heroIdDefault,
+        id = HERO_ID_DEFAULT,
         thumbnail = ThumbnailResponse(
             path = "https://i.annihil.us/u/prod/marvel/i/mg/9/40/51ca10d996b8b",
             extension = "jpg"
@@ -78,8 +72,8 @@ val getHeroesFactoryFlow: Flow<DataContainerResponse<HeroesResponse>> = flow {
                 total = TOTAL_PAGING_SOURCE,
                 results = listOf(
                     HeroesResponse(
-                        id = heroIdDefault,
-                        name = heroNameDefault,
+                        id = HERO_ID_DEFAULT,
+                        name = HERO_NAME_DEFAULT,
                         thumbnail = ThumbnailResponse(
                             path = "http://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35",
                             extension = "jpg"
@@ -100,7 +94,7 @@ val getComicsFactoryFlow: Flow<DataContainerResponse<ComicsResponse>> = flow {
                 total = TOTAL_PAGING_SOURCE,
                 results = listOf(
                     ComicsResponse(
-                        id = heroIdDefault,
+                        id = HERO_ID_DEFAULT,
                         thumbnail = ThumbnailResponse(
                             path = "https://i.annihil.us/u/prod/marvel/i/mg/9/00/64243b0cedf35",
                             extension = "jpg"
@@ -121,7 +115,7 @@ val getEventsFactoryFlow: Flow<DataContainerResponse<EventsResponse>> = flow {
                 total = TOTAL_PAGING_SOURCE,
                 results = listOf(
                     EventsResponse(
-                        id = heroIdDefault,
+                        id = HERO_ID_DEFAULT,
                         thumbnail = ThumbnailResponse(
                             path = "https://i.annihil.us/u/prod/marvel/i/mg/9/40/51ca10d996b8b",
                             extension = "jpg"

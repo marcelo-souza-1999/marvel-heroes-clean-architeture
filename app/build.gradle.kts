@@ -43,15 +43,16 @@ android {
         applicationId = "com.marcelo.marvelheroes"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = libs.versions.testInstrumentationRunner.get()
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
@@ -146,6 +147,7 @@ dependencies {
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    implementation(libs.room.paging)
     ksp(libs.room.compiler)
 
     implementation(libs.datastore.ktx)
@@ -154,23 +156,8 @@ dependencies {
 
     implementation(libs.bundles.lifecycle)
 
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.bundles.mockito)
-    testImplementation(libs.androidx.junit)
-    testImplementation(libs.androidx.core.testing)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.koin.test.ktx)
-
-    androidTestImplementation(libs.koin.test.ktx)
-    androidTestImplementation(libs.koin.test.junit)
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.core.testing)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.espresso.contrib)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.test.orchestrator)
-    androidTestImplementation(libs.ok.http.mock.test)
+    testImplementation(libs.bundles.unit.test)
+    androidTestImplementation(libs.bundles.instrumented.test)
     debugImplementation(libs.fragment.testing)
 }
 
