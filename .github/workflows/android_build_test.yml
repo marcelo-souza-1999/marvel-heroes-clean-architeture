@@ -34,7 +34,9 @@ jobs:
         run: ./gradlew test
 
       - name: Instrumented Tests
-        run: ./gradlew connectedCheck
+        uses: gradle/gradle-test-kit-action@v1
+        with:
+            flags: 'connectedCheck'
 
       - name: Detekt Verification
         run: ./gradlew detektAll
