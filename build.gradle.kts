@@ -1,23 +1,31 @@
 import io.gitlab.arturbosch.detekt.Detekt
 
+plugins {
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin) apply false
+}
+
 buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
         google()
+
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
+        maven {
+            url = uri("https://dl.google.com/dl/android/maven2")
+        }
     }
 
     dependencies {
         classpath(libs.build.tools)
+        classpath(libs.secrets)
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.navigation.safe.args)
         classpath(libs.google.services)
     }
-}
-
-plugins {
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.kotlin) apply false
 }
 
 val detektFormat = libs.detekt.format

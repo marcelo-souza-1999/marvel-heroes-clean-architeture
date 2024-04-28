@@ -1,6 +1,6 @@
-import java.util.Properties
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -10,31 +10,30 @@ plugins {
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     alias(libs.plugins.google.ksp)
 }
 
-val apikeyPropertiesFile = rootProject.file("apikey.properties")
-val apikeyProperties = Properties().apply {
-    load(apikeyPropertiesFile.inputStream())
-}
+private val nameFileSecrets = "secrets.defaults.properties"
 
-val releasePropertiesFile = rootProject.file("release.properties")
-val releaseProperties = Properties().apply {
-    load(releasePropertiesFile.inputStream())
+val secretPropertiesFile = rootProject.file("secrets.defaults.properties")
+val secretProperties = Properties().apply {
+    load(secretPropertiesFile.inputStream())
 }
 
 android {
     namespace = "com.marcelo.marvelheroes"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
-/*    signingConfigs {
+    signingConfigs {
         create("release") {
-            storeFile = file(getReleaseProperties("STORE_FILE_KEY"))
-            storePassword = getReleaseProperties("STORE_PASSWORD_KEY")
-            keyPassword = getReleaseProperties("PASSWORD_KEY")
-            keyAlias = getReleaseProperties("ALIAS_KEY")
+            storeFile = file(getSecretProperties("STORE_FILE_KEY"))
+            storePassword = getSecretProperties("STORE_PASSWORD_KEY")
+            keyPassword = getSecretProperties("PASSWORD_KEY")
+            keyAlias = getSecretProperties("ALIAS_KEY")
         }
-    }*/
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -49,10 +48,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
-
-        buildConfigField("String", "PUBLIC_KEY", getApiKeyProperties("PUBLIC_KEY"))
-        buildConfigField("String", "PRIVATE_KEY", getApiKeyProperties("PRIVATE_KEY"))
-        buildConfigField("String", "BASE_URL_API", getApiKeyProperties("BASE_URL_API"))
     }
 
     testOptions {
@@ -95,14 +90,14 @@ android {
             initWith(beta.get())
             initWith(getByName("debug"))
         }
-/*        named("release") {
+        named("release") {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }*/
+        }
     }
 
     compileOptions {
@@ -120,6 +115,10 @@ android {
     }
 }
 
+secrets {
+    defaultPropertiesFileName = nameFileSecrets
+}
+
 dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.android.material.design)
@@ -132,8 +131,7 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     api(platform(libs.ok.http.bom))
-    implementation(libs.ok.http.squareup)
-    implementation(libs.ok.http.interceptor)
+    implementation(libs.bundles.ok.http)
 
     implementation(libs.bundles.retrofit)
     implementation(libs.gson)
@@ -176,20 +174,8 @@ dependencies {
     debugImplementation(libs.fragment.testing)
 }
 
-fun getApiKeyProperties(key: String): String {
-    val file = rootProject.file("apikey.properties")
-
-    if (file.exists()) {
-        val properties = Properties()
-        properties.load(FileInputStream(file))
-        return properties.getProperty(key)
-    }
-
-    throw FileNotFoundException()
-}
-
-fun getReleaseProperties(key: String): String {
-    val file = rootProject.file("release.properties")
+private fun getSecretProperties(key: String): String {
+    val file = rootProject.file(nameFileSecrets)
 
     if (file.exists()) {
         val properties = Properties()
