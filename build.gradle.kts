@@ -35,13 +35,7 @@ detekt {
     config.setFrom(file("${rootProject.projectDir}/config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
     basePath = projectDir.absolutePath
-    reportsDir = file("$projectDir/build/reports/detekt/")
-    reports {
-        sarif {
-            enabled = true
-            destination = file("$projectDir/build/reports/detekt/detekt.sarif")
-        }
-    }
+    reportsDir = file("$projectDir/app/build/reports/detekt/")
 }
 
 tasks.register("detektAll", Detekt::class.java){
