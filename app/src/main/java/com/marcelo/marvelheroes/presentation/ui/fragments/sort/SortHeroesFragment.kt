@@ -50,7 +50,6 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupListenerChipGroups() = with(binding) {
-
         chipGroupOrderByTitle.setOnCheckedStateChangeListener { group, checkIds ->
             checkIds.forEach {
                 orderBy = getOrderByValue(group.findViewById<Chip>(it).id)
