@@ -121,7 +121,7 @@ class HeroesFragmentTest {
         const val FILE_NAME_HEROES_PAGING_TWO_JSON = "heroes_marvel_paging_two.json"
 
         val testModule = module {
-            viewModel { HeroesViewModel(get()) }
+            viewModel { HeroesViewModel(get(), get()) }
             single(named("baseUrl")) { BASE_URL }
         }
     }

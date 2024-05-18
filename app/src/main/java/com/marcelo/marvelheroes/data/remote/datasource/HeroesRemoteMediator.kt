@@ -20,6 +20,7 @@ import okio.IOException
 @OptIn(ExperimentalPagingApi::class)
 class HeroesRemoteMediator(
     private val query: String,
+    private val orderBy: String,
     private val database: MarvelDatabase,
     private val dataSource: HeroesRemoteDataSource
 ) : RemoteMediator<Int, HeroesEntity>() {
@@ -28,8 +29,7 @@ class HeroesRemoteMediator(
     private val remoteKeyDao = database.createRemoteKeyDao()
 
     override suspend fun load(
-        loadType: LoadType,
-        state: PagingState<Int, HeroesEntity>
+        loadType: LoadType, state: PagingState<Int, HeroesEntity>
     ): MediatorResult {
         return try {
             val offset = when (loadType) {
@@ -54,6 +54,9 @@ class HeroesRemoteMediator(
             if (query.isNotEmpty()) {
                 queries[NAME_STARTS_WITH] = query
             }
+            if (orderBy.isNotEmpty()) {
+                queries[ORDER_BY] = orderBy
+            }
             val heroesPaging = dataSource.fetchHeroes(queries).singleOrNull()
             val responseOffset = heroesPaging?.dataContainerHeroes?.offset ?: ZERO
             val totalHeroes = heroesPaging?.dataContainerHeroes?.total ?: ZERO
@@ -72,9 +75,7 @@ class HeroesRemoteMediator(
 
                 heroesPaging?.dataContainerHeroes?.results?.map { data ->
                     HeroesEntity(
-                        id = data.id,
-                        name = data.name,
-                        imageUrl = data.thumbnail.getHttpsUrl()
+                        id = data.id, name = data.name, imageUrl = data.thumbnail.getHttpsUrl()
                     )
                 }?.let { heroesEntity ->
                     heroDao.insertAll(heroes = heroesEntity)
@@ -94,5 +95,6 @@ class HeroesRemoteMediator(
         const val ZERO = 0
         const val OFFSET = "offset"
         const val NAME_STARTS_WITH = "nameStartsWith"
+        const val ORDER_BY = "orderBy"
     }
 }

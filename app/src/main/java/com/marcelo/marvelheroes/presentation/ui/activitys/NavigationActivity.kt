@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.marcelo.marvelheroes.R
 import com.marcelo.marvelheroes.databinding.ActivityNavigationBinding
@@ -22,6 +23,7 @@ class NavigationActivity : AppCompatActivity() {
 
         binding = inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbarMain)
 
         setupNavHost()
         setupToolbar()
@@ -37,9 +39,10 @@ class NavigationActivity : AppCompatActivity() {
             setOf(
                 R.id.heroesFragment,
                 R.id.favoritesFragment,
-                R.id.aboutFragment
+                R.id.sortFragment
             )
         )
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     private fun setupToolbar() {

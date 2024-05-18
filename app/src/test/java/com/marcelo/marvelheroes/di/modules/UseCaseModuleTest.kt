@@ -1,6 +1,7 @@
 package com.marcelo.marvelheroes.di.modules
 
 import com.marcelo.marvelheroes.domain.repository.HeroesRepository
+import com.marcelo.marvelheroes.domain.repository.LocalStorageRepository
 import com.marcelo.marvelheroes.domain.usecases.GetHeroes
 import io.mockk.mockk
 import org.junit.After
@@ -16,10 +17,11 @@ import org.koin.test.inject
 class UseCaseModuleTest : KoinTest {
 
     private val mockHeroesRepository: HeroesRepository = mockk()
+    private val mockLocalStorageRepository: LocalStorageRepository = mockk()
     private val getHeroes: GetHeroes by inject()
 
     private val setupModule = module {
-        single<GetHeroes> { GetHeroes(mockHeroesRepository) }
+        single<GetHeroes> { GetHeroes(mockHeroesRepository, mockLocalStorageRepository) }
     }
 
     @Before
@@ -34,7 +36,7 @@ class UseCaseModuleTest : KoinTest {
 
     @Test
     fun `test provideGetHeroesUseCase`() {
-        val expected = GetHeroes(mockHeroesRepository)
+        val expected = GetHeroes(mockHeroesRepository, mockLocalStorageRepository)
 
         val actual = getHeroes
 

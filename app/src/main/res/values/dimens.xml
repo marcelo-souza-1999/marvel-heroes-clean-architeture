@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="twenty">20</dimen>
     <dimen name="height_30">30dp</dimen>
+    <dimen name="height_40">40dp</dimen>
     <dimen name="height_56">56dp</dimen>
     <dimen name="height_140">140dp</dimen>
     <dimen name="height_230">230dp</dimen>

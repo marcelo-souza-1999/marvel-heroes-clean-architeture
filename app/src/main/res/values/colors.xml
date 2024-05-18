@@ -8,5 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="medium_grey">#D1D1D1</color>
+    <color name="checked_chip">#20C62828</color>
+    <color name="unchecked_chip">@color/medium_grey</color>
+    <color name="checked_chip_text">#C62828</color>
+    <color name="unchecked_chip_text">@color/black</color>
     <color name="dark_grey">#2E2B2B</color>
 </resources>
