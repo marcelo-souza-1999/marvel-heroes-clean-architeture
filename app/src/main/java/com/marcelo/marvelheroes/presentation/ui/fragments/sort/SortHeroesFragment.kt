@@ -18,8 +18,6 @@ import com.marcelo.marvelheroes.presentation.viewmodel.SortHeroesViewModel
 import com.marcelo.marvelheroes.presentation.viewmodel.viewstate.State
 import com.marcelo.marvelheroes.utils.constants.ASCENDING
 import com.marcelo.marvelheroes.utils.constants.DESCENDING
-import com.marcelo.marvelheroes.utils.constants.MODIFIED
-import com.marcelo.marvelheroes.utils.constants.NAME
 import com.marcelo.marvelheroes.utils.constants.ORDER_BY_MODIFIED_ASCENDING
 import com.marcelo.marvelheroes.utils.constants.ORDER_BY_NAME_ASCENDING
 import kotlinx.coroutines.launch
@@ -30,10 +28,6 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSortHeroesBinding
 
     private val viewModel: SortHeroesViewModel by viewModel()
-
-    private var orderBy = NAME
-
-    private var order = MODIFIED
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -52,13 +46,13 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
     private fun setupListenerChipGroups() = with(binding) {
         chipGroupOrderByTitle.setOnCheckedStateChangeListener { group, checkIds ->
             checkIds.forEach {
-                orderBy = getOrderByValue(group.findViewById<Chip>(it).id)
+                viewModel.setOrderBy(getOrderByValue(group.findViewById<Chip>(it).id))
             }
         }
 
         chipGroupOrderByOptions.setOnCheckedStateChangeListener { group, checkIds ->
             checkIds.forEach {
-                order = getOrderValue(group.findViewById<Chip>(it).id)
+                viewModel.setOrder(getOrderValue(group.findViewById<Chip>(it).id))
             }
         }
 
@@ -81,7 +75,7 @@ class SortHeroesFragment : BottomSheetDialogFragment() {
     }
 
     private fun fetchSaveOrderHeroes() {
-        viewModel.saveOrderHeroes(orderBy, order)
+        viewModel.saveOrderHeroes()
     }
 
     private fun handleGetOrderHeroes() = viewLifecycleOwner.lifecycleScope.launch {
