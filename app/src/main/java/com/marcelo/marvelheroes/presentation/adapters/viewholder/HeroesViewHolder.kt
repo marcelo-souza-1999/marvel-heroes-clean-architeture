@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.marcelo.marvelheroes.databinding.LayoutItemHeroesBinding
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.extensions.loadImage
-import com.marcelo.marvelheroes.utils.alias.OnHeroeItemClick
+import com.marcelo.marvelheroes.utils.alias.OnHeroItemClick
 
 class HeroesViewHolder(
     private val binding: LayoutItemHeroesBinding,
-    private val onItemClick: OnHeroeItemClick
+    private val onItemClick: OnHeroItemClick
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(heroesViewData: HeroesViewData) = with(binding) {
@@ -24,7 +24,7 @@ class HeroesViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            onItemClick: OnHeroeItemClick
+            onItemClick: OnHeroItemClick
         ): HeroesViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = LayoutItemHeroesBinding.inflate(inflater, parent, false)

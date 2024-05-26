@@ -3,7 +3,8 @@
 
     <string name="app_menu_heroes">Heroes</string>
     <string name="app_menu_favorites">Favorites</string>
-    <string name="app_menu_about">About</string>
+    <string name="item_menu_sort">Sort</string>
+    <string name="item_menu_search">Search</string>
 
     <string name="title_heroes_fragment">Heroes</string>
     <string name="title_favorites_fragment">Favorites</string>
@@ -13,10 +14,24 @@
     <string name="tools_sample_name_heroes">Scarlet Witch</string>
 
     <string name="error_loading_data">Houve um erro ao tentar carregar os dados!</string>
-    <string name="error_loading_dat_empty_data">Não foi encontrado resultados!</string>
+    <string name="error_network">Houve um erro com sua conexão a internet!</string>
+    <string name="error_server">Houve um erro inesperado! tente mais tarde</string>
+    <string name="error_loading_data_empty_data">Não foi encontrado resultados!</string>
+    <string name="error_loading_favorite_heros_empty">Não foi encontrado heróis favoritados!</string>
     <string name="try_again_loading">Tente novamente</string>
     <string name="error_loading_page_heroes">Houve um erro ao tentar carregar heróis da proxima página. Tente novamente</string>
+    <string name="error_not_connection">Parece que estamos sem conexão. Para garantir que você tenha as informações mais recentes, por favor, verifique sua conexão com a internet e tente novamente. 🌐</string>
 
     <string name="details_comics_category">Comics</string>
     <string name="details_events_category">Events</string>
+    <string name="error_save_hero_local_database">Não foi possivel salvar o heroi no banco de dados!</string>
+    <string name="error_check_hero_local_database">Não foi possivel checar o heroi no banco de dados!</string>
+
+    <string name="txt_order_by_title_dialog_fragment">Ordernar por</string>
+    <string name="txt_order_by_options_dialog_fragment">Exibir em ordem</string>
+    <string name="order_button">Ordenar</string>
+    <string name="ordey_by_name">Nome</string>
+    <string name="ordey_by_growing">Crescente</string>
+    <string name="ordey_by_descending">Decrescente</string>
+    <string name="ordey_by_modified">Modificado</string>
 </resources>

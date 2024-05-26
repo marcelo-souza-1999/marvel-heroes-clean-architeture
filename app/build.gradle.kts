@@ -1,6 +1,6 @@
-import java.util.Properties
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -10,17 +10,15 @@ plugins {
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     alias(libs.plugins.google.ksp)
 }
 
-val apikeyPropertiesFile = rootProject.file("apikey.properties")
-val apikeyProperties = Properties().apply {
-    load(apikeyPropertiesFile.inputStream())
-}
+private val nameFileSecrets = "secrets.defaults.properties"
 
-val releasePropertiesFile = rootProject.file("release.properties")
-val releaseProperties = Properties().apply {
-    load(releasePropertiesFile.inputStream())
+val secretPropertiesFile = rootProject.file("secrets.defaults.properties")
+val secretProperties = Properties().apply {
+    load(secretPropertiesFile.inputStream())
 }
 
 android {
@@ -29,12 +27,13 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(getReleaseProperties("STORE_FILE_KEY"))
-            storePassword = getReleaseProperties("STORE_PASSWORD_KEY")
-            keyPassword = getReleaseProperties("PASSWORD_KEY")
-            keyAlias = getReleaseProperties("ALIAS_KEY")
+            storeFile = file(getSecretProperties("STORE_FILE_KEY"))
+            storePassword = getSecretProperties("STORE_PASSWORD_KEY")
+            keyPassword = getSecretProperties("PASSWORD_KEY")
+            keyAlias = getSecretProperties("ALIAS_KEY")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -44,19 +43,16 @@ android {
         applicationId = "com.marcelo.marvelheroes"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = libs.versions.testInstrumentationRunner.get()
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
-
-        buildConfigField("String", "PUBLIC_KEY", getApiKeyProperties("PUBLIC_KEY"))
-        buildConfigField("String", "PRIVATE_KEY", getApiKeyProperties("PRIVATE_KEY"))
-        buildConfigField("String", "BASE_URL_API", getApiKeyProperties("BASE_URL_API"))
     }
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
@@ -120,6 +116,10 @@ android {
     }
 }
 
+secrets {
+    defaultPropertiesFileName = nameFileSecrets
+}
+
 dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.android.material.design)
@@ -132,8 +132,7 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     api(platform(libs.ok.http.bom))
-    implementation(libs.ok.http.squareup)
-    implementation(libs.ok.http.interceptor)
+    implementation(libs.bundles.ok.http)
 
     implementation(libs.bundles.retrofit)
     implementation(libs.gson)
@@ -148,6 +147,7 @@ dependencies {
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    implementation(libs.room.paging)
     ksp(libs.room.compiler)
 
     implementation(libs.datastore.ktx)
@@ -156,40 +156,13 @@ dependencies {
 
     implementation(libs.bundles.lifecycle)
 
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.bundles.mockito)
-    testImplementation(libs.androidx.junit)
-    testImplementation(libs.androidx.core.testing)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.koin.test.ktx)
-
-    androidTestImplementation(libs.koin.test.ktx)
-    androidTestImplementation(libs.koin.test.junit)
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.core.testing)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.espresso.contrib)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.test.orchestrator)
-    androidTestImplementation(libs.ok.http.mock.test)
+    testImplementation(libs.bundles.unit.test)
+    androidTestImplementation(libs.bundles.instrumented.test)
     debugImplementation(libs.fragment.testing)
 }
 
-fun getApiKeyProperties(key: String): String {
-    val file = rootProject.file("apikey.properties")
-
-    if (file.exists()) {
-        val properties = Properties()
-        properties.load(FileInputStream(file))
-        return properties.getProperty(key)
-    }
-
-    throw FileNotFoundException()
-}
-
-fun getReleaseProperties(key: String): String {
-    val file = rootProject.file("release.properties")
+private fun getSecretProperties(key: String): String {
+    val file = rootProject.file(nameFileSecrets)
 
     if (file.exists()) {
         val properties = Properties()

@@ -4,11 +4,12 @@ androidx_app_compat = "1.6.1"
 androidx_constraint_layout = "2.1.4"
 android_material_design = "1.9.0"
 build_gradle = "8.0.2"
+secrets = "2.0.1"
 kotlin = "1.8.0"
 google_ksp = "1.8.0-1.0.9"
-detekt = "1.22.0"
+detekt = "1.23.6"
 koin = "3.3.2"
-koin_ammotations = "1.1.1"
+koin_annotations = "1.1.1"
 google_services = "4.3.15"
 navigation = "2.5.2"
 lifecycle = "2.6.1"
@@ -25,7 +26,6 @@ firebase_bom = "32.1.1"
 junit = "4.13.2"
 mockk = "1.13.5"
 mockito_core = "4.2.0"
-mockito_kotlin = "2.2.0"
 androidx_junit = "1.1.5"
 androidx_core_testing = "2.2.0"
 androidx_espresso = "3.5.1"
@@ -36,20 +36,24 @@ mock_ok_http_test = "4.9.3"
 min_sdk = "21"
 target_sdk = "33"
 compile_sdk = "33"
+versionCode = "1"
+versionName = "1.0.0"
+testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 [libraries]
 androidx_core = { module = "androidx.core:core-ktx", version.ref = "androidx_core" }
 androidx_appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_app_compat" }
 androidx_constraint_layout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx_constraint_layout" }
 android_material_design = { module = "com.google.android.material:material", version.ref = "android_material_design" }
+secrets = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secrets"}
 build_tools = { module = "com.android.tools.build:gradle", version.ref = "build_gradle" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 navigation_safe_args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 google_services = { module = "com.google.gms:google-services", version.ref = "google_services" }
 detekt_format = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 koin_dev = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin_annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin_ammotations" }
-koin_ksp_compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin_ammotations" }
+koin_annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin_annotations" }
+koin_ksp_compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin_annotations" }
 navigation_fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
 navigation_ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 lifecycle_view_model = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -59,6 +63,7 @@ coroutines_ktx = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", 
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room_paging = { module = "androidx.room:room-paging", version.ref = "room" }
 room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 pagination_ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagination" }
 glide_dev = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -76,7 +81,6 @@ firebase_analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 junit = { module = "junit:junit", version.ref = "junit" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockito_core = { module = "org.mockito:mockito-core", version.ref = "mockito_core" }
-mockito_kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "mockito_kotlin" }
 androidx_junit = { module = "androidx.test.ext:junit", version.ref = "androidx_junit" }
 androidx_core_testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx_core_testing" }
 androidx_espresso_contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx_espresso" }
@@ -90,14 +94,23 @@ koin_test_ktx = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin_test_junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
 [bundles]
-mockito = ["mockito.core", "mockito.kotlin"]
-coroutines = ["coroutines.ktx", "coroutines.core"]
-retrofit = ["retrofit.ktx", "retrofit.converter.gson"]
-ok_http = ["ok_http.bom", "ok_http.squareup","ok_http.interceptor"]
-glide = ["glide.dev", "glide.compiler"]
-navigation = ["navigation.fragment", "navigation.ui"]
-androidx = ["androidx.core", "androidx.appcompat", "androidx.constraint.layout"]
-lifecycle = ["lifecycle.view.model", "lifecycle.live.data", "lifecycle.runtime"]
+coroutines = ["coroutines_ktx", "coroutines_core"]
+retrofit = ["retrofit_ktx", "retrofit_converter_gson"]
+ok_http = ["ok_http_squareup", "ok_http_interceptor"]
+glide = ["glide_dev", "glide_compiler"]
+navigation = ["navigation_fragment", "navigation_ui"]
+androidx = ["androidx_core", "androidx_appcompat", "androidx_constraint_layout"]
+lifecycle = ["lifecycle_view_model", "lifecycle_live_data", "lifecycle_runtime"]
+unit_test = ["junit", "mockk", "mockito_core", "androidx_junit", "androidx_core_testing", "coroutines_test", "koin_test_ktx"]
+instrumented_test = ["koin_test_ktx",
+    "koin_test_junit",
+    "junit",
+    "androidx_core_testing",
+    "androidx_test_runner",
+    "androidx_espresso_contrib",
+    "androidx_espresso_core",
+    "androidx_test_orchestrator",
+    "ok_http_mock_test"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

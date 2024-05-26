@@ -5,10 +5,10 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.marcelo.marvelheroes.domain.model.HeroesViewData
 import com.marcelo.marvelheroes.presentation.adapters.viewholder.HeroesViewHolder
-import com.marcelo.marvelheroes.utils.alias.OnHeroeItemClick
+import com.marcelo.marvelheroes.utils.alias.OnHeroItemClick
 
 class HeroesAdapter(
-    private val onItemClick: OnHeroeItemClick
+    private val onItemClick: OnHeroItemClick
 ) : PagingDataAdapter<HeroesViewData, HeroesViewHolder>(adapter_callback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
