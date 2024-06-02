@@ -1,6 +1,6 @@
 [versions]
 androidx_core = "1.13.1"
-androidx_app_compat = "1.6.1"
+androidx_app_compat = "1.7.0"
 androidx_constraint_layout = "2.1.4"
 android_material_design = "1.9.0"
 build_gradle = "8.0.2"
