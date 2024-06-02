@@ -139,14 +139,14 @@ class HeroesFragment : Fragment(), SearchView.OnQueryTextListener, MenuProvider,
             }
         }
 
-        navBackStackEntry.getLifecycle().addObserver(observer)
+        navBackStackEntry.lifecycle.addObserver(observer)
 
         val onDestroyObserver = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_DESTROY) {
-                navBackStackEntry.getLifecycle().removeObserver(observer)
+                navBackStackEntry.lifecycle.removeObserver(observer)
             }
         }
-        navBackStackEntry.getLifecycle().addObserver(onDestroyObserver)
+        navBackStackEntry.lifecycle.addObserver(onDestroyObserver)
     }
 
     private fun fetchRequestHeroesPaging() = lifecycleScope.launch {
