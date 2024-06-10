@@ -128,9 +128,6 @@ dependencies {
     implementation(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
 
-    api(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-
     api(platform(libs.ok.http.bom))
     implementation(libs.bundles.ok.http)
 
