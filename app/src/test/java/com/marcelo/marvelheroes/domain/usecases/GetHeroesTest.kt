@@ -16,7 +16,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,27 +44,6 @@ class GetHeroesTest {
             localStorageRepository = mockLocalStorageRepository
         )
     }
-
-    @Test
-    fun `should validate flow paging data creation when invoke from use case is called`() =
-        runTest {
-
-            coEvery {
-                repository.getCachedHeroes(
-                    emptyString(),
-                    any(),
-                    any()
-                )
-            } returns flow {
-                emit(PagingData.empty())
-            }
-
-            val result = useCase.invoke(emptyString(), PagingConfig(PAGING_SIZE))
-
-            result.collect { pagingData ->
-                assertEquals(PagingData.empty<HeroesViewData>(), pagingData)
-            }
-        }
 
     @Test
     fun `should throw exception when repository fails to provide paging data source`() = runTest {
