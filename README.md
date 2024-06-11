@@ -40,6 +40,48 @@ sobre os heróis em uma lista com suas respectivas fotos.
     <img src="imgs/four.jpeg" title="Tela de heróis favoritados" width="200"/>
 </p>
 
+## Como Buildar o Projeto
+
+Para buildar o projeto após clonar o repositório, siga os passos abaixo:
+
+1. Clone o repositório para sua máquina local:
+    ```bash
+    git clone https://github.com/seu-usuario/marvel-heroes.git
+    cd marvel-heroes
+    ```
+
+2. Abra o arquivo `secrets.defaults.properties` que está localizado na raiz do projeto.
+
+3. Altere os valores presentes no arquivo `secrets.defaults.properties` com as informações que você
+   deseja usar. Este arquivo contém segredos e configurações específicas do seu ambiente de
+   desenvolvimento:
+
+    ```properties
+    # Configurações da API da Marvel
+    BASE_URL_API="https://gateway.marvel.com/v1/public/"
+    PRIVATE_KEY="sua_chave_privada"
+    PUBLIC_KEY="sua_chave_publica"
+
+    # Configurações para assinatura do aplicativo em release
+    STORE_FILE_KEY=nome_do_seu_arquivo_jks_para_assinar_seu_app
+    STORE_PASSWORD_KEY=senha_da_chave_seu_arquivo_jks_para_assinar_seu_app
+    PASSWORD_KEY=senha_do_seu_arquivo_jks_para_assinar_seu_app
+    ALIAS_KEY=alias_do_seu_arquivo_jks_para_assinar_seu-app
+    ```
+
+    - **BASE_URL_API, PRIVATE_KEY e PUBLIC_KEY**: Estas são as informações necessárias para acessar
+      a API da Marvel.
+    - **STORE_FILE_KEY, STORE_PASSWORD_KEY, PASSWORD_KEY e ALIAS_KEY**: Estas informações são
+      necessárias para assinar o aplicativo em modo release.
+
+4. Com todas as configurações devidamente ajustadas, você pode buildar o projeto utilizando o
+   Android Studio ou a linha de comando:
+    ```bash
+    ./gradlew assembleDebug
+    ```
+
+Pronto! Agora você pode rodar o aplicativo em um dispositivo ou emulador.
+
 ## Motivação do Projeto
 
 A criação deste projeto foi motivada pelo meu interesse em aprofundar meus conhecimentos em
