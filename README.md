@@ -16,6 +16,7 @@ sobre os heróis em uma lista com suas respectivas fotos.
 * **Modo Offline:** Após o primeiro carregamento com internet, os dados dos heróis e favoritos são
   armazenados localmente utilizando a biblioteca Room em conjunto com o SQLite, permitindo o acesso
   offline ao conteúdo.
+* **CI/CD:** GitHub Actions para integração contínua e maior segurança do app.
 * **Offline First:** Utiliza o conceito de Offline First, permitindo que muitas ações do app sejam
   realizadas de forma offline, sem a necessidade de consumo de internet do dispositivo do usuário.
 
