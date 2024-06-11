@@ -29,8 +29,16 @@ sobre os heróis em uma lista com suas respectivas fotos.
 * **Arquitetura:** MVVM (Model-View-ViewModel).
 * **Testes:** Testes unitários e instrumentados.
 * **Gestão de Dependências:** Utilização de catálogo de versões.
-* **Offline First:
-  ** [Documentação Oficial](https://developer.android.com/topic/architecture/data-layer/offline-first)
+* **Offline First:** [Documentação Oficial](https://developer.android.com/topic/architecture/data-layer/offline-first)
+
+## Screenshots do Aplicativo
+
+<p align="center">
+    <img src="imgs/first.jpeg" title="Tela inicial do app" width="200"/>
+    <img src="imgs/second.jpeg" title="Filtrando heróis por nome" width="200"/>
+    <img src="imgs/third.jpeg" title="Detalhes do herói selecionado" width="200"/>
+    <img src="imgs/four.jpeg" title="Tela de heróis favoritados" width="200"/>
+</p>
 
 ## Motivação do Projeto
 
@@ -63,15 +71,6 @@ implementação do Offline First é feita através das seguintes práticas:
 
 Para mais detalhes sobre a abordagem Offline First, você pode consultar
 a [documentação oficial](https://developer.android.com/topic/architecture/data-layer/offline-first).
-
-## Screenshots do Aplicativo
-
-<p align="center">
-    <img src="imgs/first.jpeg" title="Tela inicial do app" width="200"/>
-    <img src="imgs/second.jpeg" title="Filtrando heróis por nome" width="200"/>
-    <img src="imgs/third.jpeg" title="Detalhes do herói selecionado" width="200"/>
-    <img src="imgs/four.jpeg" title="Tela de heróis favoritados" width="200"/>
-</p>
 
 ## Contribuições
 
