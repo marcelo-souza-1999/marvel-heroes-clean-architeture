@@ -63,16 +63,16 @@ implementação do Offline First é feita através das seguintes práticas:
 Para mais detalhes sobre a abordagem Offline First, você pode consultar
 a [documentação oficial](https://developer.android.com/topic/architecture/data-layer/offline-first).
 
+## Screenshots do Aplicativo
+
+<img src="imgs/first.jpeg" title="Tela inicial do app" width="200"/>
+<img src="imgs/second.jpeg" title="Filtrando heróis por nome" width="200"/>
+<img src="imgs/third.jpeg" title="Detalhes do herói selecionado" width="200"/>
+<img src="imgs/four.jpeg" title="Tela de heróis favoritados" width="200"/>
+
 ## Contribuições
 
 Caso deseje contribuir com o projeto, sinta-se à vontade para abrir issues ou enviar pull requests
 com sugestões de melhorias ou correções de bugs.
-
-## Screenshots do Aplicativo
-
-<img src="/home/madara/Área de Trabalho/Projetos/marvel-heroes-clean-architeture/imgs/first.jpeg" title="Tela inicial do app" width="200"/>
-<img src="/home/madara/Área de Trabalho/Projetos/marvel-heroes-clean-architeture/imgs/second.jpeg" title="Filtrando heróis por nome" width="200"/>
-<img src="/home/madara/Área de Trabalho/Projetos/marvel-heroes-clean-architeture/imgs/third.jpeg" title="Detalhes do herói selecionado" width="200"/>
-<img src="/home/madara/Área de Trabalho/Projetos/marvel-heroes-clean-architeture/imgs/four.jpeg" title="Tela de heróis favoritados" width="200"/>
 
 ---
