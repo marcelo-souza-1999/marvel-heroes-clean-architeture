@@ -29,8 +29,7 @@ sobre os heróis em uma lista com suas respectivas fotos.
 * **Arquitetura:** MVVM (Model-View-ViewModel).
 * **Testes:** Testes unitários e instrumentados.
 * **Gestão de Dependências:** Utilização de catálogo de versões.
-* **Offline First:
-  ** [Documentação Oficial](https://developer.android.com/topic/architecture/data-layer/offline-first)
+* **Offline First:** [Documentação Oficial](https://developer.android.com/topic/architecture/data-layer/offline-first)
 
 ## Motivação do Projeto
 
